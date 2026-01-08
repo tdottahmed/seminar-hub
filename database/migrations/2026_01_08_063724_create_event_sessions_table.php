@@ -11,9 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
+        // Drop table if it exists (from previous failed migration)
+        Schema::dropIfExists('event_sessions');
+        
         Schema::create('event_sessions', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('event_id')->constrained()->onDelete('cascade');
+            $table->unsignedBigInteger('event_id');
             $table->string('title');
             $table->text('description')->nullable();
             $table->string('speaker_name')->nullable();
@@ -22,6 +25,11 @@ return new class extends Migration
             $table->time('end_time')->nullable();
             $table->integer('sort_order')->default(0);
             $table->timestamps();
+            
+            $table->foreign('event_id')
+                  ->references('id')
+                  ->on('events')
+                  ->onDelete('cascade');
         });
     }
 
