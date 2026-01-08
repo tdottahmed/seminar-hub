@@ -11,9 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
+        // Drop table if it exists (from previous failed migration)
+        Schema::dropIfExists('questions');
+        
         Schema::create('questions', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('quiz_id')->constrained()->onDelete('cascade');
+            $table->unsignedBigInteger('quiz_id');
             $table->string('type')->default('multiple_choice'); // multiple_choice, true_false, short_answer
             $table->text('question_text');
             $table->json('options')->nullable(); // For MCQ
@@ -21,6 +24,11 @@ return new class extends Migration
             $table->integer('points')->default(1);
             $table->integer('sort_order')->default(0);
             $table->timestamps();
+            
+            $table->foreign('quiz_id')
+                  ->references('id')
+                  ->on('quizzes')
+                  ->onDelete('cascade');
         });
     }
 

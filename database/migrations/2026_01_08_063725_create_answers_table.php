@@ -11,14 +11,27 @@ return new class extends Migration
      */
     public function up(): void
     {
+        // Drop table if it exists (from previous failed migration)
+        Schema::dropIfExists('answers');
+        
         Schema::create('answers', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('quiz_attempt_id')->constrained()->onDelete('cascade');
-            $table->foreignId('question_id')->constrained()->onDelete('cascade');
+            $table->unsignedBigInteger('quiz_attempt_id');
+            $table->unsignedBigInteger('question_id');
             $table->text('answer_text')->nullable();
             $table->boolean('is_correct')->nullable();
             $table->integer('points_awarded')->default(0);
             $table->timestamps();
+            
+            $table->foreign('quiz_attempt_id')
+                  ->references('id')
+                  ->on('quiz_attempts')
+                  ->onDelete('cascade');
+            
+            $table->foreign('question_id')
+                  ->references('id')
+                  ->on('questions')
+                  ->onDelete('cascade');
         });
     }
 
