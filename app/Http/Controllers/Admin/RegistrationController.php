@@ -16,11 +16,38 @@ class RegistrationController extends Controller
     {
         $registrations = $event->registrations()
             ->latest()
-            ->paginate(10); // In real app, add search/filters here
+            ->paginate(10);
 
         return Inertia::render('Admin/Registrations/Index', [
             'event' => $event,
             'registrations' => $registrations
+        ]);
+    }
+
+    public function all(Request $request)
+    {
+        $registrations = Registration::with('event')
+            ->latest()
+            ->when($request->search, function ($query, $search) {
+                $query->where(function ($q) use ($search) {
+                    $q->where('name', 'like', "%{$search}%")
+                      ->orWhere('email', 'like', "%{$search}%");
+                });
+            })
+            ->when($request->status, function ($query, $status) {
+                $query->where('status', $status);
+            })
+            ->when($request->event_id, function ($query, $eventId) {
+                $query->where('event_id', $eventId);
+            })
+            ->paginate(15);
+
+        $events = \App\Models\Event::select('id', 'title')->orderBy('title')->get();
+
+        return Inertia::render('Admin/Registrations/All', [
+            'registrations' => $registrations,
+            'events' => $events,
+            'filters' => $request->only(['search', 'status', 'event_id'])
         ]);
     }
 

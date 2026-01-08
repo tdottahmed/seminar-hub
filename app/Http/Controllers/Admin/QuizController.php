@@ -14,10 +14,29 @@ class QuizController extends Controller
 {
     public function index(Event $event)
     {
-        $quizzes = $event->quizzes()->latest()->paginate(10);
+        $quizzes = $event->quizzes()
+            ->withCount('questions')
+            ->latest()
+            ->paginate(10);
         return Inertia::render('Admin/Quizzes/Index', [
             'event' => $event,
             'quizzes' => $quizzes
+        ]);
+    }
+
+    public function all(Request $request)
+    {
+        $quizzes = \App\Models\Quiz::with('event')
+            ->withCount('questions')
+            ->latest()
+            ->when($request->search, function ($query, $search) {
+                $query->where('title', 'like', "%{$search}%");
+            })
+            ->paginate(15);
+        
+        return Inertia::render('Admin/Quizzes/All', [
+            'quizzes' => $quizzes,
+            'filters' => $request->only(['search'])
         ]);
     }
 

@@ -12,6 +12,7 @@ class Event extends Model
         'start_date' => 'datetime',
         'end_date' => 'datetime',
         'meta_data' => 'array',
+        'topics' => 'array',
     ];
 
     public function sessions()
@@ -32,5 +33,10 @@ class Event extends Model
     public function notifications()
     {
         return $this->hasMany(EventNotification::class);
+    }
+
+    public function speakers()
+    {
+        return $this->belongsToMany(Speaker::class, 'event_speaker');
     }
 }

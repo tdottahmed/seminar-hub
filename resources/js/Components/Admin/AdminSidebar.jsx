@@ -1,5 +1,5 @@
 import { Link, usePage } from '@inertiajs/react';
-import { LayoutDashboard, Calendar, Users, FileQuestion, Settings, LogOut, X, Globe, Copy } from 'lucide-react';
+import { LayoutDashboard, Calendar, Users, FileQuestion, Settings, LogOut, X, Globe, Copy, Mic, UserCircle } from 'lucide-react';
 import ApplicationLogo from '@/Components/ApplicationLogo';
 import clsx from 'clsx';
 
@@ -16,8 +16,10 @@ export default function AdminSidebar({ open, setOpen }) {
         
         { label: 'Management', type: 'header' },
         { label: 'Events', href: route('admin.events.index'), icon: Calendar, active: isActive('admin.events.*') },
-        { label: 'Quizzes', href: route('admin.events.quizzes.index', { event: 'all' }), icon: FileQuestion, active: isActive('admin.events.quizzes.*') || isActive('admin.quizzes.*') }, // 'all' might need adjustment if routes strictly require event ID
-        { label: 'Registrations', href: route('admin.events.registrations.index', { event: 'all' }), icon: Users, active: isActive('admin.registrations.*') },
+        { label: 'Speakers', href: route('admin.speakers.index'), icon: Mic, active: isActive('admin.speakers.*') },
+        { label: 'Team', href: route('admin.teams.index'), icon: UserCircle, active: isActive('admin.teams.*') },
+        { label: 'Quizzes', href: route('admin.quizzes.index'), icon: FileQuestion, active: isActive('admin.quizzes.*') || isActive('admin.events.quizzes.*') },
+        { label: 'Registrations', href: route('admin.registrations.index'), icon: Users, active: isActive('admin.registrations.*') || isActive('admin.events.registrations.*') },
         
         { label: 'Content', type: 'header' },
         { label: 'Frontend', href: route('admin.frontend.index'), icon: Globe, active: isActive('admin.frontend.*') },
@@ -37,87 +39,80 @@ export default function AdminSidebar({ open, setOpen }) {
             {/* Sidebar Container */}
             <aside 
                 className={clsx(
-                    "fixed top-0 left-0 z-50 h-full w-72 bg-slate-900 text-slate-300 transform transition-transform duration-300 ease-in-out lg:translate-x-0 lg:static lg:block shadow-2xl",
+                    "fixed top-0 left-0 z-50 h-screen w-72 bg-gradient-to-b from-slate-900 via-slate-900 to-slate-950 text-slate-300 transform transition-transform duration-300 ease-in-out lg:translate-x-0 lg:sticky lg:top-0 lg:h-screen lg:block shadow-2xl border-r border-white/5 flex flex-col",
                     open ? "translate-x-0" : "-translate-x-full"
                 )}
             >
                 {/* Header / Logo */}
-                <div className="flex items-center justify-between h-16 px-6 bg-slate-950/50 border-b border-white/5">
-                    <Link href={route('admin.dashboard')} className="flex items-center gap-2 font-bold text-white text-xl">
-                        <div className="w-8 h-8 rounded bg-indigo-600 flex items-center justify-center">S</div>
-                       <span>SeminarHub</span>
+                <div className="flex items-center justify-between h-16 px-6 bg-gradient-to-r from-indigo-600/10 to-purple-600/10 border-b border-white/5 backdrop-blur-sm flex-shrink-0">
+                    <Link href={route('admin.dashboard')} className="flex items-center gap-2.5 font-bold text-white group">
+                        <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center shadow-lg shadow-indigo-500/30 group-hover:scale-110 transition-transform">
+                            <span className="text-white font-bold text-lg">S</span>
+                        </div>
+                        <div>
+                            <span className="text-lg">Seminar</span>
+                            <span className="text-indigo-400">Hub</span>
+                        </div>
                     </Link>
                     <button 
                         onClick={() => setOpen(false)}
-                        className="lg:hidden text-slate-400 hover:text-white transition"
+                        className="lg:hidden p-1.5 text-slate-400 hover:text-white hover:bg-white/10 rounded-lg transition"
                     >
-                        <X size={24} />
+                        <X size={20} />
                     </button>
                 </div>
 
-                {/* Navigation */}
-                <nav className="p-4 space-y-1 overflow-y-auto h-[calc(100vh-4rem)] custom-scrollbar">
+                {/* Navigation - Scrollable Area */}
+                <nav className="flex-1 overflow-y-auto overflow-x-hidden p-3 pb-4 space-y-1 custom-scrollbar min-h-0">
                     {navItems.map((item, idx) => {
                         if (item.type === 'header') {
                             return (
-                                <div key={idx} className="px-4 pt-6 pb-2 text-xs font-bold uppercase tracking-wider text-slate-500">
+                                <div key={idx} className="px-4 pt-5 pb-2 text-xs font-bold uppercase tracking-wider text-slate-400/70">
                                     {item.label}
                                 </div>
                             );
                         }
 
-                        // Handle potential route generation errors gracefully if needed, mostly handled by route()
-                        // Special case for 'all' dummy params if not handled by backend:
-                        // For now assuming the route helpers work or we adjust the NavLinks later.
-                        // Actually, route('admin.events.quizzes.index') requires {event}, let's patch it:
-                        // If it's the strict resource route, we might need a general route or handle it.
-                        // For now link to events index if sub-resources are strictly nested.
-                        // EDIT: The implementation plan implies a "best ux", maybe we should expose top-level access.
-                        // But let's stick to valid routes. 
-                        
-                        // Temporarily pointing nested resources to parent index or a valid workaround if 'all' isn't supported.
-                        // Dashboard usually has direct links. Let's use the valid routes we have.
                         let linkHref = item.href;
-                        
-                        // Fix for nested routes in sidebar if no "all" route exists:
-                        if (item.label === 'Quizzes' && !route().has('admin.quizzes.index')) {
-                             // If we don't have a standalone quizzes index, maybe just link to events for now or ignore this specific link issue?
-                             // But the user wants a "best UI". 
-                             // Let's assume for now we link to the dashboard or the specific event list.
-                             // Actually, let's keep it simple. If the route throws, we'll see.
-                             // Just correcting the logic:
-                        }
 
                         return (
                             <Link
                                 key={idx}
                                 href={linkHref}
                                 className={clsx(
-                                    "flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-medium transition-all duration-200 group",
+                                    "flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-medium transition-all duration-200 group relative",
                                     item.active 
-                                        ? "bg-indigo-600 text-white shadow-lg shadow-indigo-900/20" 
-                                        : "hover:bg-white/5 hover:text-white"
+                                        ? "bg-gradient-to-r from-indigo-600 to-purple-600 text-white shadow-lg shadow-indigo-500/30" 
+                                        : "hover:bg-white/5 hover:text-white text-slate-300"
                                 )}
                             >
-                                <item.icon size={20} className={clsx("transition-transform group-hover:scale-110", item.active ? "text-white" : "text-slate-500 group-hover:text-indigo-400")} />
-                                <span>{item.label}</span>
+                                {item.active && (
+                                    <div className="absolute left-0 top-1/2 -translate-y-1/2 w-1 h-6 bg-white rounded-r-full"></div>
+                                )}
+                                <item.icon 
+                                    size={20} 
+                                    className={clsx(
+                                        "transition-all duration-200",
+                                        item.active 
+                                            ? "text-white scale-110" 
+                                            : "text-slate-400 group-hover:text-indigo-400 group-hover:scale-110"
+                                    )} 
+                                />
+                                <span className="flex-1">{item.label}</span>
+                                {item.active && (
+                                    <div className="w-1.5 h-1.5 rounded-full bg-white animate-pulse"></div>
+                                )}
                             </Link>
                         );
                     })}
                 </nav>
 
-                {/* Footer User Profile (Desktop sticky bottom) */}
-                <div className="absolute bottom-0 left-0 w-full p-4 bg-slate-950/50 border-t border-white/5">
-                    <Link href={route('profile.edit')} className="flex items-center gap-3 px-2 py-2 rounded-lg hover:bg-white/5 transition">
-                        <div className="w-8 h-8 rounded-full bg-gradient-to-br from-indigo-500 to-purple-500 flex items-center justify-center text-xs font-bold text-white">
-                            A
-                        </div>
-                        <div className="flex-1 min-w-0">
-                            <p className="text-sm font-medium text-white truncate">Admin User</p>
-                            <p className="text-xs text-slate-500 truncate">admin@mail.com</p>
-                        </div>
-                        <Settings size={16} className="text-slate-500" />
-                    </Link>
+                {/* Footer - Fixed at Bottom */}
+                <div className="flex-shrink-0 mt-auto p-4 bg-gradient-to-t from-slate-950 via-slate-950 to-slate-950 border-t border-white/5">
+                    <div className="px-3 py-2.5 rounded-lg bg-white/5 border border-white/10 backdrop-blur-sm">
+                        <p className="text-xs text-slate-400 mb-0.5 font-medium">Admin Panel</p>
+                        <p className="text-xs font-bold text-white">v1.0.0</p>
+                    </div>
                 </div>
             </aside>
         </>

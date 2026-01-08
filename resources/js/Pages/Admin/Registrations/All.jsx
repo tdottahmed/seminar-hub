@@ -1,18 +1,39 @@
 import AdminLayout from "@/Layouts/AdminLayout";
-import { Head, Link } from "@inertiajs/react";
+import { Head, Link, router } from "@inertiajs/react";
 import {
     ArrowLeft,
+    Search,
+    Filter,
     Eye,
-    User,
-    Mail,
-    Calendar,
     CheckCircle,
     XCircle,
     Clock,
+    User,
+    Mail,
+    Calendar,
 } from "lucide-react";
+import { useState } from "react";
 import clsx from "clsx";
+import PrimaryButton from "@/Components/PrimaryButton";
 
-export default function Index({ auth, event, registrations }) {
+export default function All({ auth, registrations, events, filters = {} }) {
+    const [search, setSearch] = useState(filters.search || "");
+    const [statusFilter, setStatusFilter] = useState(filters.status || "");
+    const [eventFilter, setEventFilter] = useState(filters.event_id || "");
+
+    const handleFilter = (e) => {
+        e.preventDefault();
+        router.get(
+            route("admin.registrations.index"),
+            {
+                search,
+                status: statusFilter,
+                event_id: eventFilter,
+            },
+            { preserveState: true }
+        );
+    };
+
     const getStatusBadge = (status) => {
         const styles = {
             approved: "bg-green-100 text-green-800 border border-green-300",
@@ -39,36 +60,93 @@ export default function Index({ auth, event, registrations }) {
     };
 
     return (
-        <AdminLayout user={auth.user} title={`Registrations - ${event.title}`}>
-            <Head title={`Registrations - ${event.title}`} />
+        <AdminLayout user={auth.user} title="All Registrations">
+            <Head title="All Registrations" />
 
             <div className="space-y-6">
                 {/* Header */}
                 <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
                     <div>
-                        <Link
-                            href={route("admin.events.index")}
-                            className="inline-flex items-center gap-2 text-sm text-slate-600 hover:text-indigo-600 mb-2 transition"
-                        >
-                            <ArrowLeft size={16} />
-                            Back to Events
-                        </Link>
                         <h1 className="text-3xl font-bold text-slate-900">
-                            Registrations
+                            All Registrations
                         </h1>
                         <p className="text-slate-600 mt-1">
-                            For{" "}
-                            <span className="font-semibold text-indigo-600">
-                                {event.title}
-                            </span>
+                            View and manage all event registrations
                         </p>
                     </div>
                     <Link
-                        href={route("admin.registrations.index")}
-                        className="inline-flex items-center gap-2 px-4 py-2 text-sm font-medium text-slate-700 bg-white border border-slate-300 rounded-lg hover:bg-slate-50 transition"
+                        href={route("admin.events.index")}
+                        className="inline-flex items-center gap-2 px-4 py-2 text-sm font-medium text-slate-700 hover:text-indigo-600 transition"
                     >
-                        View All Registrations
+                        <ArrowLeft size={18} />
+                        Back to Events
                     </Link>
+                </div>
+
+                {/* Filters */}
+                <div className="bg-gradient-to-br from-slate-50 to-slate-100 rounded-xl shadow-sm border border-slate-200 p-6">
+                    <form onSubmit={handleFilter} className="space-y-4">
+                        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                            <div className="relative">
+                                <Search
+                                    className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400"
+                                    size={18}
+                                />
+                                <input
+                                    type="text"
+                                    value={search}
+                                    onChange={(e) => setSearch(e.target.value)}
+                                    placeholder="Search by name or email..."
+                                    className="w-full pl-10 pr-4 py-2.5 border border-slate-300 rounded-lg bg-white text-slate-900 placeholder-slate-400 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition"
+                                />
+                            </div>
+                            <select
+                                value={statusFilter}
+                                onChange={(e) =>
+                                    setStatusFilter(e.target.value)
+                                }
+                                className="px-4 py-2.5 border border-slate-300 rounded-lg bg-white text-slate-900 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition"
+                            >
+                                <option value="">All Statuses</option>
+                                <option value="pending">Pending</option>
+                                <option value="approved">Approved</option>
+                                <option value="rejected">Rejected</option>
+                                <option value="shortlisted">Shortlisted</option>
+                                <option value="attended">Attended</option>
+                            </select>
+                            <select
+                                value={eventFilter}
+                                onChange={(e) => setEventFilter(e.target.value)}
+                                className="px-4 py-2.5 border border-slate-300 rounded-lg bg-white text-slate-900 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition"
+                            >
+                                <option value="">All Events</option>
+                                {events.map((event) => (
+                                    <option key={event.id} value={event.id}>
+                                        {event.title}
+                                    </option>
+                                ))}
+                            </select>
+                        </div>
+                        <div className="flex gap-2">
+                            <PrimaryButton type="submit">
+                                Apply Filters
+                            </PrimaryButton>
+                            <button
+                                type="button"
+                                onClick={() => {
+                                    setSearch("");
+                                    setStatusFilter("");
+                                    setEventFilter("");
+                                    router.get(
+                                        route("admin.registrations.index")
+                                    );
+                                }}
+                                className="px-4 py-2 text-sm font-medium text-slate-700 bg-white border border-slate-300 rounded-lg hover:bg-slate-50 hover:border-slate-400 transition"
+                            >
+                                Clear
+                            </button>
+                        </div>
+                    </form>
                 </div>
 
                 {/* Registrations Table */}
@@ -81,7 +159,7 @@ export default function Index({ auth, event, registrations }) {
                                         Attendee
                                     </th>
                                     <th className="px-6 py-3 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">
-                                        Contact
+                                        Event
                                     </th>
                                     <th className="px-6 py-3 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">
                                         Status
@@ -107,21 +185,22 @@ export default function Index({ auth, event, registrations }) {
                                                         .charAt(0)
                                                         .toUpperCase()}
                                                 </div>
-                                                <div className="text-sm font-medium text-slate-900">
-                                                    {registration.name}
+                                                <div>
+                                                    <div className="text-sm font-medium text-slate-900">
+                                                        {registration.name}
+                                                    </div>
+                                                    <div className="text-sm text-slate-500 flex items-center gap-1">
+                                                        <Mail size={14} />
+                                                        {registration.email}
+                                                    </div>
                                                 </div>
                                             </div>
                                         </td>
-                                        <td className="px-6 py-4 whitespace-nowrap">
-                                            <div className="text-sm text-slate-500 flex items-center gap-1">
-                                                <Mail size={14} />
-                                                {registration.email}
+                                        <td className="px-6 py-4">
+                                            <div className="text-sm text-slate-900">
+                                                {registration.event?.title ||
+                                                    "N/A"}
                                             </div>
-                                            {registration.phone && (
-                                                <div className="text-sm text-slate-500 mt-1">
-                                                    {registration.phone}
-                                                </div>
-                                            )}
                                         </td>
                                         <td className="px-6 py-4 whitespace-nowrap">
                                             <span
@@ -179,8 +258,11 @@ export default function Index({ auth, event, registrations }) {
                                                 No registrations found
                                             </h3>
                                             <p className="text-slate-600">
-                                                No one has registered for this
-                                                event yet.
+                                                {search ||
+                                                statusFilter ||
+                                                eventFilter
+                                                    ? "Try adjusting your filters."
+                                                    : "No registrations have been submitted yet."}
                                             </p>
                                         </td>
                                     </tr>

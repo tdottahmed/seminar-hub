@@ -6,6 +6,8 @@ use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
 Route::get('/', [\App\Http\Controllers\Public\HomeController::class, 'index'])->name('home');
+Route::get('/events/{slug}', [\App\Http\Controllers\Public\EventController::class, 'show'])->name('events.show');
+Route::get('/teams/{id}', [\App\Http\Controllers\Public\TeamController::class, 'show'])->name('teams.show');
 Route::get('/events/{slug}/register', [\App\Http\Controllers\Public\EventRegistrationController::class, 'create'])->name('events.register');
 Route::post('/events/{slug}/register', [\App\Http\Controllers\Public\EventRegistrationController::class, 'store'])->name('events.register.store');
 Route::get('/events/{slug}/quiz/{quiz}', [\App\Http\Controllers\Public\QuizTakerController::class, 'show'])->name('events.quiz.show');
@@ -31,11 +33,19 @@ Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () 
     Route::get('/frontend/{section}/edit', [\App\Http\Controllers\Admin\FrontendSectionController::class, 'edit'])->name('frontend.edit');
     Route::put('/frontend/{section}', [\App\Http\Controllers\Admin\FrontendSectionController::class, 'update'])->name('frontend.update');
 
+    Route::post('/upload/image', [\App\Http\Controllers\Admin\UploadController::class, 'uploadImage'])->name('upload.image');
     Route::resource('events', \App\Http\Controllers\Admin\EventController::class);
+    Route::resource('speakers', \App\Http\Controllers\Admin\SpeakerController::class);
+    Route::resource('teams', \App\Http\Controllers\Admin\TeamController::class);
+    // Quizzes - both nested and standalone
     Route::resource('events.quizzes', \App\Http\Controllers\Admin\QuizController::class);
+    Route::get('/quizzes', [\App\Http\Controllers\Admin\QuizController::class, 'all'])->name('quizzes.index');
     Route::resource('quizzes.questions', \App\Http\Controllers\Admin\QuestionController::class)->except(['show', 'create', 'edit']);
     Route::post('quizzes/{quiz}/questions/reorder', [\App\Http\Controllers\Admin\QuestionController::class, 'reorder'])->name('quizzes.questions.reorder');
+    
+    // Registrations - both nested and standalone
     Route::resource('events.registrations', \App\Http\Controllers\Admin\RegistrationController::class)->only(['index']);
+    Route::get('/registrations', [\App\Http\Controllers\Admin\RegistrationController::class, 'all'])->name('registrations.index');
     Route::resource('registrations', \App\Http\Controllers\Admin\RegistrationController::class)->only(['show', 'update']);
     Route::resource('events.notifications', \App\Http\Controllers\Admin\NotificationController::class)->only(['index', 'create', 'store']);
 });

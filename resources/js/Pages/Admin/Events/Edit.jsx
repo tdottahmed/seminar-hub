@@ -4,17 +4,46 @@ import InputError from '@/Components/InputError';
 import InputLabel from '@/Components/InputLabel';
 import PrimaryButton from '@/Components/PrimaryButton';
 import TextInput from '@/Components/TextInput';
-import { ArrowLeft, Save, Calendar, MapPin } from 'lucide-react';
+import ImageUploader from '@/Components/ImageUploader';
+import { ArrowLeft, Save, Calendar, MapPin, Users, Link as LinkIcon, Plus, X } from 'lucide-react';
+import { useState, useEffect } from 'react';
 
-export default function Edit({ auth, event }) {
+export default function Edit({ auth, event, speakers = [] }) {
+    const [topics, setTopics] = useState(event.topics && event.topics.length > 0 ? event.topics : ['']);
+    
     const { data, setData, patch, processing, errors } = useForm({
-        title: event.title,
-        start_date: event.start_date,
-        end_date: event.end_date,
+        title: event.title || '',
+        short_description: event.short_description || '',
+        start_date: event.start_date ? event.start_date.substring(0, 16) : '',
+        end_date: event.end_date ? event.end_date.substring(0, 16) : '',
         venue: event.venue || '',
+        location: event.location || '',
+        meeting_link: event.meeting_link || '',
+        max_participants: event.max_participants || '',
         description: event.description || '',
+        topics: event.topics || [],
+        outline: event.outline || '',
+        banner_image: event.banner_image || '',
         status: event.status,
+        speaker_ids: event.speakers ? event.speakers.map(s => s.id) : [],
     });
+
+    const addTopic = () => {
+        setTopics([...topics, '']);
+    };
+
+    const removeTopic = (index) => {
+        const newTopics = topics.filter((_, i) => i !== index);
+        setTopics(newTopics);
+        setData('topics', newTopics.filter(t => t.trim() !== ''));
+    };
+
+    const updateTopic = (index, value) => {
+        const newTopics = [...topics];
+        newTopics[index] = value;
+        setTopics(newTopics);
+        setData('topics', newTopics.filter(t => t.trim() !== ''));
+    };
 
     const submit = (e) => {
         e.preventDefault();
@@ -52,6 +81,19 @@ export default function Edit({ auth, event }) {
                             <InputError message={errors.title} className="mt-2" />
                         </div>
 
+                        {/* Short Description */}
+                        <div>
+                            <InputLabel htmlFor="short_description" value="Short Description" />
+                            <textarea
+                                id="short_description"
+                                value={data.short_description}
+                                className="mt-1 block w-full border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-lg shadow-sm pl-4 pt-3 min-h-[80px]"
+                                placeholder="A brief summary (shown on event cards)..."
+                                onChange={(e) => setData('short_description', e.target.value)}
+                            ></textarea>
+                            <InputError message={errors.short_description} className="mt-2" />
+                        </div>
+
                         {/* Date & Time Grid */}
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                             <div>
@@ -85,10 +127,10 @@ export default function Edit({ auth, event }) {
                             </div>
                         </div>
 
-                        {/* Venue & Status Grid */}
+                        {/* Venue & Location Grid */}
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                             <div>
-                                <InputLabel htmlFor="venue" value="Venue / Location" />
+                                <InputLabel htmlFor="venue" value="Venue" />
                                 <div className="relative mt-1">
                                     <MapPin className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none" size={18} />
                                     <TextInput
@@ -102,30 +144,77 @@ export default function Edit({ auth, event }) {
                                 </div>
                                 <InputError message={errors.venue} className="mt-2" />
                             </div>
-                            
                             <div>
-                                <InputLabel htmlFor="status" value="Status" />
-                                <div className="relative mt-1">
-                                    <select
-                                        id="status"
-                                        value={data.status}
-                                        className="block w-full border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-lg shadow-sm pl-3 pr-10"
-                                        onChange={(e) => setData('status', e.target.value)}
-                                    >
-                                        <option value="draft">Draft</option>
-                                        <option value="published">Published</option>
-                                        <option value="ongoing">Ongoing</option>
-                                        <option value="completed">Completed</option>
-                                        <option value="cancelled">Cancelled</option>
-                                    </select>
-                                </div>
-                                <InputError message={errors.status} className="mt-2" />
+                                <InputLabel htmlFor="location" value="Full Address" />
+                                <TextInput
+                                    id="location"
+                                    type="text"
+                                    value={data.location}
+                                    className="mt-1 block w-full"
+                                    placeholder="Full address or coordinates"
+                                    onChange={(e) => setData('location', e.target.value)}
+                                />
+                                <InputError message={errors.location} className="mt-2" />
                             </div>
+                        </div>
+
+                        {/* Meeting Link & Max Participants */}
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div>
+                                <InputLabel htmlFor="meeting_link" value="Online Meeting Link" />
+                                <div className="relative mt-1">
+                                    <LinkIcon className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none" size={18} />
+                                    <TextInput
+                                        id="meeting_link"
+                                        type="url"
+                                        value={data.meeting_link}
+                                        className="pl-10 block w-full"
+                                        placeholder="https://zoom.us/j/..."
+                                        onChange={(e) => setData('meeting_link', e.target.value)}
+                                    />
+                                </div>
+                                <InputError message={errors.meeting_link} className="mt-2" />
+                            </div>
+                            <div>
+                                <InputLabel htmlFor="max_participants" value="Max Participants" />
+                                <div className="relative mt-1">
+                                    <Users className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none" size={18} />
+                                    <TextInput
+                                        id="max_participants"
+                                        type="number"
+                                        value={data.max_participants}
+                                        className="pl-10 block w-full"
+                                        placeholder="100"
+                                        onChange={(e) => setData('max_participants', e.target.value)}
+                                    />
+                                </div>
+                                <InputError message={errors.max_participants} className="mt-2" />
+                            </div>
+                        </div>
+
+                        {/* Status */}
+                        <div>
+                            <InputLabel htmlFor="status" value="Status" />
+                            <div className="relative mt-1">
+                                <select
+                                    id="status"
+                                    value={data.status}
+                                    className="block w-full border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-lg shadow-sm pl-3 pr-10"
+                                    onChange={(e) => setData('status', e.target.value)}
+                                >
+                                    <option value="draft">Draft</option>
+                                    <option value="published">Published</option>
+                                    <option value="ongoing">Ongoing</option>
+                                    <option value="completed">Completed</option>
+                                    <option value="cancelled">Cancelled</option>
+                                </select>
+                            </div>
+                            <InputError message={errors.status} className="mt-2" />
                         </div>
 
                         {/* Description */}
                         <div>
-                            <InputLabel htmlFor="description" value="Description" />
+                            <InputLabel htmlFor="description" value="Full Description" />
                             <textarea
                                 id="description"
                                 value={data.description}
@@ -135,6 +224,97 @@ export default function Edit({ auth, event }) {
                             ></textarea>
                             <InputError message={errors.description} className="mt-2" />
                         </div>
+
+                        {/* Topics */}
+                        <div>
+                            <InputLabel value="Topics Covered" />
+                            <div className="mt-1 space-y-2">
+                                {topics.map((topic, index) => (
+                                    <div key={index} className="flex gap-2">
+                                        <TextInput
+                                            type="text"
+                                            value={topic}
+                                            className="flex-1"
+                                            placeholder={`Topic ${index + 1}`}
+                                            onChange={(e) => updateTopic(index, e.target.value)}
+                                        />
+                                        {topics.length > 1 && (
+                                            <button
+                                                type="button"
+                                                onClick={() => removeTopic(index)}
+                                                className="px-3 py-2 text-red-600 hover:bg-red-50 rounded-lg transition"
+                                            >
+                                                <X size={18} />
+                                            </button>
+                                        )}
+                                    </div>
+                                ))}
+                                <button
+                                    type="button"
+                                    onClick={addTopic}
+                                    className="flex items-center gap-2 px-4 py-2 text-indigo-600 hover:bg-indigo-50 rounded-lg transition text-sm font-medium"
+                                >
+                                    <Plus size={16} />
+                                    Add Topic
+                                </button>
+                            </div>
+                            <InputError message={errors.topics} className="mt-2" />
+                        </div>
+
+                        {/* Outline */}
+                        <div>
+                            <InputLabel htmlFor="outline" value="Event Outline" />
+                            <textarea
+                                id="outline"
+                                value={data.outline}
+                                className="mt-1 block w-full border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-lg shadow-sm pl-4 pt-3 min-h-[150px]"
+                                placeholder="Detailed event schedule and outline..."
+                                onChange={(e) => setData('outline', e.target.value)}
+                            ></textarea>
+                            <InputError message={errors.outline} className="mt-2" />
+                        </div>
+
+                        {/* Banner Image */}
+                        <div>
+                            <ImageUploader
+                                value={data.banner_image}
+                                onChange={(url) => setData('banner_image', url)}
+                                label="Banner Image"
+                                error={errors.banner_image}
+                                folder="events"
+                            />
+                            <InputError message={errors.banner_image} className="mt-2" />
+                        </div>
+
+                        {/* Speakers */}
+                        {speakers.length > 0 && (
+                            <div>
+                                <InputLabel value="Select Speakers" />
+                                <div className="mt-2 space-y-2 max-h-60 overflow-y-auto border border-gray-200 rounded-lg p-4">
+                                    {speakers.map((speaker) => (
+                                        <label key={speaker.id} className="flex items-center gap-3 p-2 hover:bg-slate-50 rounded-lg cursor-pointer">
+                                            <input
+                                                type="checkbox"
+                                                checked={data.speaker_ids.includes(speaker.id)}
+                                                onChange={(e) => {
+                                                    if (e.target.checked) {
+                                                        setData('speaker_ids', [...data.speaker_ids, speaker.id]);
+                                                    } else {
+                                                        setData('speaker_ids', data.speaker_ids.filter(id => id !== speaker.id));
+                                                    }
+                                                }}
+                                                className="rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
+                                            />
+                                            <span className="text-sm text-slate-700">{speaker.name}</span>
+                                            {speaker.designation && (
+                                                <span className="text-xs text-slate-500">- {speaker.designation}</span>
+                                            )}
+                                        </label>
+                                    ))}
+                                </div>
+                                <InputError message={errors.speaker_ids} className="mt-2" />
+                            </div>
+                        )}
 
                         {/* Actions */}
                         <div className="flex items-center justify-end gap-4 pt-4 border-t border-slate-100">

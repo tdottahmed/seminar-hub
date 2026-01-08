@@ -1,102 +1,281 @@
-import AdminLayout from '@/Layouts/AdminLayout';
-import { Head, Link, useForm } from '@inertiajs/react';
-import PrimaryButton from '@/Components/PrimaryButton';
+import AdminLayout from "@/Layouts/AdminLayout";
+import { Head, Link, useForm } from "@inertiajs/react";
+import {
+    ArrowLeft,
+    User,
+    Mail,
+    Phone,
+    Building,
+    Briefcase,
+    Calendar,
+    CheckCircle,
+    XCircle,
+    Clock,
+    FileText,
+} from "lucide-react";
+import clsx from "clsx";
+import PrimaryButton from "@/Components/PrimaryButton";
+import InputLabel from "@/Components/InputLabel";
 
 export default function Show({ auth, registration }) {
     const { data, setData, put, processing } = useForm({
         status: registration.status,
     });
 
-    const updateStatus = (newStatus) => {
-        setData('status', newStatus);
-        // We need to use put with the new status immediately, or use a useEffect. 
-        // For simplicity, let's just make a manual visit or cleaner form usage.
-        // Actually, let's use the form submit but trigger it via button
-         // A better way for immediate action buttons:
-         // We can't use 'put' inside this function directly comfortably without state update lag.
-         // Let's us the Inertia router instead for direct actions if not using a form submit button.
-    };
-    
-    // Alternative: Just use a form for status update
-    
     const submitStatus = (e) => {
         e.preventDefault();
-        put(route('admin.registrations.update', registration.id));
+        put(route("admin.registrations.update", registration.id));
+    };
+
+    const getStatusBadge = (status) => {
+        const styles = {
+            approved: "bg-green-100 text-green-800 border border-green-300",
+            rejected: "bg-red-100 text-red-800 border border-red-300",
+            pending: "bg-yellow-100 text-yellow-800 border border-yellow-300",
+            shortlisted: "bg-blue-100 text-blue-800 border border-blue-300",
+            attended: "bg-purple-100 text-purple-800 border border-purple-300",
+        };
+        return (
+            styles[status] ||
+            "bg-slate-100 text-slate-800 border border-slate-300"
+        );
+    };
+
+    const getStatusIcon = (status) => {
+        switch (status) {
+            case "approved":
+                return <CheckCircle size={18} />;
+            case "rejected":
+                return <XCircle size={18} />;
+            default:
+                return <Clock size={18} />;
+        }
     };
 
     return (
         <AdminLayout
             user={auth.user}
-            header={<h2 className="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">Registration Details</h2>}
+            title={`Registration - ${registration.name}`}
         >
             <Head title={`Registration - ${registration.name}`} />
 
-            <div className="py-12">
-                <div className="max-w-7xl mx-auto sm:px-6 lg:px-8">
-                    <div className="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
-                        <div className="p-6 text-gray-900 dark:text-gray-100">
-                            <div className="flex justify-between items-center mb-6">
-                                <Link href={route('admin.events.registrations.index', registration.event.id)} className="text-gray-600 dark:text-gray-400 hover:underline">
-                                    &larr; Back to Registrations
-                                </Link>
-                                
-                                <span className={`px-2 inline-flex text-sm leading-5 font-semibold rounded-full ${
-                                    registration.status === 'approved' ? 'bg-green-100 text-green-800' : 
-                                    registration.status === 'rejected' ? 'bg-red-100 text-red-800' : 
-                                    registration.status === 'pending' ? 'bg-yellow-100 text-yellow-800' : 'bg-gray-100 text-gray-800'
-                                }`}>
-                                    Status: {registration.status.toUpperCase()}
-                                </span>
+            <div className="space-y-6">
+                {/* Header */}
+                <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+                    <div>
+                        <Link
+                            href={route(
+                                "admin.events.registrations.index",
+                                registration.event.id
+                            )}
+                            className="inline-flex items-center gap-2 text-sm text-slate-600 hover:text-indigo-600 mb-2 transition"
+                        >
+                            <ArrowLeft size={16} />
+                            Back to Registrations
+                        </Link>
+                        <h1 className="text-3xl font-bold text-slate-900">
+                            Registration Details
+                        </h1>
+                        <p className="text-slate-600 mt-1">
+                            View and manage registration information
+                        </p>
+                    </div>
+                    <span
+                        className={clsx(
+                            "inline-flex items-center gap-2 px-4 py-2 rounded-full text-sm font-semibold",
+                            getStatusBadge(registration.status)
+                        )}
+                    >
+                        {getStatusIcon(registration.status)}
+                        {registration.status.charAt(0).toUpperCase() +
+                            registration.status.slice(1)}
+                    </span>
+                </div>
+
+                <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                    {/* Main Info Card */}
+                    <div className="lg:col-span-2 space-y-6">
+                        {/* Attendee Information */}
+                        <div className="bg-white rounded-xl shadow-sm border border-slate-200 p-6">
+                            <div className="flex items-center gap-4 mb-6">
+                                <div className="h-16 w-16 rounded-full bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center text-white text-2xl font-bold">
+                                    {registration.name.charAt(0).toUpperCase()}
+                                </div>
+                                <div>
+                                    <h2 className="text-2xl font-bold text-slate-900">
+                                        {registration.name}
+                                    </h2>
+                                    <p className="text-slate-600">
+                                        {registration.email}
+                                    </p>
+                                </div>
                             </div>
 
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                                <div>
-                                    <h3 className="text-lg font-medium mb-4">Attendee Information</h3>
-                                    <dl className="grid grid-cols-1 gap-x-4 gap-y-4 sm:grid-cols-2">
-                                        <div className="sm:col-span-1">
-                                            <dt className="text-sm font-medium text-gray-500">Full Name</dt>
-                                            <dd className="mt-1 text-sm text-gray-900 dark:text-gray-100">{registration.name}</dd>
-                                        </div>
-                                        <div className="sm:col-span-1">
-                                            <dt className="text-sm font-medium text-gray-500">Email</dt>
-                                            <dd className="mt-1 text-sm text-gray-900 dark:text-gray-100">{registration.email}</dd>
-                                        </div>
-                                         <div className="sm:col-span-1">
-                                            <dt className="text-sm font-medium text-gray-500">Event</dt>
-                                            <dd className="mt-1 text-sm text-gray-900 dark:text-gray-100">{registration.event.title}</dd>
-                                        </div>
-                                         <div className="sm:col-span-1">
-                                            <dt className="text-sm font-medium text-gray-500">Registered At</dt>
-                                            <dd className="mt-1 text-sm text-gray-900 dark:text-gray-100">{new Date(registration.created_at).toLocaleString()}</dd>
-                                        </div>
-                                    </dl>
+                                <div className="flex items-start gap-3">
+                                    <div className="p-2 bg-indigo-100 rounded-lg">
+                                        <Mail
+                                            className="text-indigo-600"
+                                            size={20}
+                                        />
+                                    </div>
+                                    <div>
+                                        <p className="text-xs font-medium text-slate-500 uppercase tracking-wider mb-1">
+                                            Email
+                                        </p>
+                                        <p className="text-sm font-medium text-slate-900">
+                                            {registration.email}
+                                        </p>
+                                    </div>
                                 </div>
 
-                                <div className="border-t md:border-t-0 md:border-l border-gray-200 dark:border-gray-700 md:pl-6 pt-4 md:pt-0">
-                                    <h3 className="text-lg font-medium mb-4">Update Status</h3>
-                                    <form onSubmit={submitStatus}>
-                                        <div className="mb-4">
-                                            <label htmlFor="status" className="block text-sm font-medium text-gray-700 dark:text-gray-300">Change Status</label>
-                                            <select
-                                                id="status"
-                                                name="status"
-                                                className="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md"
-                                                value={data.status}
-                                                onChange={(e) => setData('status', e.target.value)}
-                                            >
-                                                <option value="pending">Pending</option>
-                                                <option value="approved">Approved</option>
-                                                <option value="rejected">Rejected</option>
-                                                <option value="shortlisted">Shortlisted</option>
-                                                <option value="attended">Attended</option>
-                                            </select>
+                                {registration.phone && (
+                                    <div className="flex items-start gap-3">
+                                        <div className="p-2 bg-purple-100 rounded-lg">
+                                            <Phone
+                                                className="text-purple-600"
+                                                size={20}
+                                            />
                                         </div>
-                                        <PrimaryButton disabled={processing}>
-                                            Update Status
-                                        </PrimaryButton>
-                                    </form>
+                                        <div>
+                                            <p className="text-xs font-medium text-slate-500 uppercase tracking-wider mb-1">
+                                                Phone
+                                            </p>
+                                            <p className="text-sm font-medium text-slate-900">
+                                                {registration.phone}
+                                            </p>
+                                        </div>
+                                    </div>
+                                )}
+
+                                {registration.organization && (
+                                    <div className="flex items-start gap-3">
+                                        <div className="p-2 bg-blue-100 rounded-lg">
+                                            <Building
+                                                className="text-blue-600"
+                                                size={20}
+                                            />
+                                        </div>
+                                        <div>
+                                            <p className="text-xs font-medium text-slate-500 uppercase tracking-wider mb-1">
+                                                Organization
+                                            </p>
+                                            <p className="text-sm font-medium text-slate-900">
+                                                {registration.organization}
+                                            </p>
+                                        </div>
+                                    </div>
+                                )}
+
+                                {registration.designation && (
+                                    <div className="flex items-start gap-3">
+                                        <div className="p-2 bg-green-100 rounded-lg">
+                                            <Briefcase
+                                                className="text-green-600"
+                                                size={20}
+                                            />
+                                        </div>
+                                        <div>
+                                            <p className="text-xs font-medium text-slate-500 uppercase tracking-wider mb-1">
+                                                Designation
+                                            </p>
+                                            <p className="text-sm font-medium text-slate-900">
+                                                {registration.designation}
+                                            </p>
+                                        </div>
+                                    </div>
+                                )}
+
+                                <div className="flex items-start gap-3">
+                                    <div className="p-2 bg-orange-100 rounded-lg">
+                                        <Calendar
+                                            className="text-orange-600"
+                                            size={20}
+                                        />
+                                    </div>
+                                    <div>
+                                        <p className="text-xs font-medium text-slate-500 uppercase tracking-wider mb-1">
+                                            Registered At
+                                        </p>
+                                        <p className="text-sm font-medium text-slate-900">
+                                            {new Date(
+                                                registration.created_at
+                                            ).toLocaleString()}
+                                        </p>
+                                    </div>
+                                </div>
+
+                                <div className="flex items-start gap-3">
+                                    <div className="p-2 bg-pink-100 rounded-lg">
+                                        <FileText
+                                            className="text-pink-600"
+                                            size={20}
+                                        />
+                                    </div>
+                                    <div>
+                                        <p className="text-xs font-medium text-slate-500 uppercase tracking-wider mb-1">
+                                            Event
+                                        </p>
+                                        <Link
+                                            href={route(
+                                                "admin.events.show",
+                                                registration.event.id
+                                            )}
+                                            className="text-sm font-medium text-indigo-600 hover:underline"
+                                        >
+                                            {registration.event.title}
+                                        </Link>
+                                    </div>
                                 </div>
                             </div>
+                        </div>
+                    </div>
+
+                    {/* Status Update Card */}
+                    <div className="lg:col-span-1">
+                        <div className="bg-white rounded-xl shadow-sm border border-slate-200 p-6 sticky top-6">
+                            <h3 className="text-lg font-semibold text-slate-900 mb-4">
+                                Update Status
+                            </h3>
+                            <form onSubmit={submitStatus} className="space-y-4">
+                                <div>
+                                    <InputLabel
+                                        htmlFor="status"
+                                        value="Status"
+                                    />
+                                    <select
+                                        id="status"
+                                        name="status"
+                                        className="mt-1 block w-full px-4 py-2 border border-slate-300 rounded-lg bg-white text-slate-900 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
+                                        value={data.status}
+                                        onChange={(e) =>
+                                            setData("status", e.target.value)
+                                        }
+                                    >
+                                        <option value="pending">Pending</option>
+                                        <option value="approved">
+                                            Approved
+                                        </option>
+                                        <option value="rejected">
+                                            Rejected
+                                        </option>
+                                        <option value="shortlisted">
+                                            Shortlisted
+                                        </option>
+                                        <option value="attended">
+                                            Attended
+                                        </option>
+                                    </select>
+                                </div>
+                                <PrimaryButton
+                                    disabled={processing}
+                                    className="w-full"
+                                >
+                                    {processing
+                                        ? "Updating..."
+                                        : "Update Status"}
+                                </PrimaryButton>
+                            </form>
                         </div>
                     </div>
                 </div>
