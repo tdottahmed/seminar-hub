@@ -1,0 +1,41 @@
+<?php
+
+use App\Http\Controllers\ProfileController;
+use Illuminate\Foundation\Application;
+use Illuminate\Support\Facades\Route;
+use Inertia\Inertia;
+
+Route::get('/', [\App\Http\Controllers\Public\HomeController::class, 'index'])->name('home');
+Route::get('/events/{slug}/register', [\App\Http\Controllers\Public\EventRegistrationController::class, 'create'])->name('events.register');
+Route::post('/events/{slug}/register', [\App\Http\Controllers\Public\EventRegistrationController::class, 'store'])->name('events.register.store');
+Route::get('/events/{slug}/quiz/{quiz}', [\App\Http\Controllers\Public\QuizTakerController::class, 'show'])->name('events.quiz.show');
+Route::post('/events/{slug}/quiz/{quiz}/submit', [\App\Http\Controllers\Public\QuizTakerController::class, 'store'])->name('events.quiz.submit');
+
+Route::get('/dashboard', function () {
+    return redirect()->route('admin.dashboard');
+})->middleware(['auth', 'verified'])->name('dashboard');
+
+Route::middleware('auth')->group(function () {
+    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
+    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
+    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+});
+
+require __DIR__.'/auth.php';
+
+Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () {
+    Route::get('/dashboard', [\App\Http\Controllers\Admin\AdminController::class, 'dashboard'])->name('dashboard');
+    
+    // Frontend Management
+    Route::get('/frontend', [\App\Http\Controllers\Admin\FrontendSectionController::class, 'index'])->name('frontend.index');
+    Route::get('/frontend/{section}/edit', [\App\Http\Controllers\Admin\FrontendSectionController::class, 'edit'])->name('frontend.edit');
+    Route::put('/frontend/{section}', [\App\Http\Controllers\Admin\FrontendSectionController::class, 'update'])->name('frontend.update');
+
+    Route::resource('events', \App\Http\Controllers\Admin\EventController::class);
+    Route::resource('events.quizzes', \App\Http\Controllers\Admin\QuizController::class);
+    Route::resource('quizzes.questions', \App\Http\Controllers\Admin\QuestionController::class)->except(['show', 'create', 'edit']);
+    Route::post('quizzes/{quiz}/questions/reorder', [\App\Http\Controllers\Admin\QuestionController::class, 'reorder'])->name('quizzes.questions.reorder');
+    Route::resource('events.registrations', \App\Http\Controllers\Admin\RegistrationController::class)->only(['index']);
+    Route::resource('registrations', \App\Http\Controllers\Admin\RegistrationController::class)->only(['show', 'update']);
+    Route::resource('events.notifications', \App\Http\Controllers\Admin\NotificationController::class)->only(['index', 'create', 'store']);
+});
