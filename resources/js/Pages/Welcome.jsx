@@ -33,6 +33,7 @@ import {
     Linkedin,
     Twitter,
     ExternalLink,
+    Image,
 } from "lucide-react";
 import { useState, useEffect } from "react";
 
@@ -176,6 +177,7 @@ export default function Welcome({
     upcomingEvents,
     teamLead,
     teamMembers = [],
+    galleryItems = [],
     canLogin,
     canRegister,
     frontendSections = {},
@@ -1041,54 +1043,74 @@ export default function Welcome({
             </section>
 
             {/* Gallery / Moments Section */}
-            <section className="py-24 bg-slate-900 relative overflow-hidden">
-                <div className="text-center mb-16 relative z-10">
-                    <h2 className="text-4xl font-bold font-display text-white mb-4">
-                        {lang === "bn"
-                            ? "আমাদের মুহূর্তগুলো"
-                            : "Captured Moments"}
-                    </h2>
-                    <p className="text-slate-400">
-                        {lang === "bn"
-                            ? "আমাদের ইভেন্টের কিছু ঝলক।"
-                            : "Glimpses from our recent events."}
-                    </p>
-                </div>
+            {galleryItems && galleryItems.length > 0 && (
+                <section id="gallery" className="py-24 bg-slate-900 relative overflow-hidden">
+                    <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-10 mix-blend-overlay pointer-events-none"></div>
+                    
+                    <div className="container mx-auto px-6 mb-16 text-center relative z-10">
+                        <motion.div
+                            initial={{ opacity: 0, y: 30 }}
+                            whileInView={{ opacity: 1, y: 0 }}
+                            viewport={{ once: true }}
+                            transition={{ duration: 0.6 }}
+                        >
+                            <h2 className="text-4xl md:text-6xl font-bold font-display text-white mb-6 bg-clip-text text-transparent bg-gradient-to-r from-indigo-400 via-purple-400 to-pink-400">
+                                {lang === "bn"
+                                    ? "আমাদের মুহূর্তগুলো"
+                                    : "Captured Moments"}
+                            </h2>
+                            <p className="text-slate-400 text-xl">
+                                {lang === "bn"
+                                    ? "আমাদের ইভেন্টের কিছু ঝলক।"
+                                    : "Glimpses from our recent events."}
+                            </p>
+                        </motion.div>
+                    </div>
 
-                {/* Marquee Gallery */}
-                <div className="flex gap-6 overflow-hidden relative opacity-60 hover:opacity-100 transition duration-500">
-                    <motion.div
-                        className="flex gap-6 min-w-full"
-                        animate={{ x: "-50%" }}
-                        transition={{
-                            duration: 40,
-                            repeat: Infinity,
-                            ease: "linear",
-                        }}
-                    >
-                        {[1, 2, 3, 4, 5, 1, 2, 3, 4, 5].map((item, idx) => (
-                            <div
-                                key={idx}
-                                className="w-80 h-56 flex-shrink-0 rounded-2xl overflow-hidden grayscale hover:grayscale-0 transition duration-500 relative"
-                            >
-                                <img
-                                    src={`https://images.unsplash.com/photo-${
-                                        [
-                                            "1540575467063-17e6fc8c62d8",
-                                            "1515187029135-18ee286d815b",
-                                            "1591115763816-cbd48e5e9b18",
-                                            "1505373872341-3d520630584b",
-                                            "1523580494863-6f3031224c94",
-                                        ][item - 1]
-                                    }?auto=format&fit=crop&q=80&w=600`}
-                                    alt="Gallery"
-                                    className="w-full h-full object-cover"
-                                />
-                            </div>
-                        ))}
-                    </motion.div>
-                </div>
-            </section>
+                    {/* Gallery Grid */}
+                    <div className="container mx-auto px-6 relative z-10">
+                        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+                            {galleryItems.map((item, idx) => (
+                                <motion.div
+                                    key={item.id}
+                                    initial={{ opacity: 0, y: 30 }}
+                                    whileInView={{ opacity: 1, y: 0 }}
+                                    viewport={{ once: true }}
+                                    transition={{ duration: 0.5, delay: idx * 0.1 }}
+                                    whileHover={{ y: -8, scale: 1.02 }}
+                                    className="group relative aspect-square rounded-2xl overflow-hidden cursor-pointer bg-slate-800 border border-white/10 hover:border-indigo-500/50 transition-all duration-300"
+                                >
+                                    {item.image ? (
+                                        <>
+                                            <img
+                                                src={item.image}
+                                                alt={item.title}
+                                                className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                                            />
+                                            <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                                                <div className="absolute bottom-0 left-0 right-0 p-4">
+                                                    <h3 className="text-white font-bold text-lg mb-1">
+                                                        {item.title}
+                                                    </h3>
+                                                    {item.category && (
+                                                        <span className="inline-block px-2 py-1 text-xs font-medium bg-indigo-500/80 backdrop-blur-sm text-white rounded-full">
+                                                            {item.category}
+                                                        </span>
+                                                    )}
+                                                </div>
+                                            </div>
+                                        </>
+                                    ) : (
+                                        <div className="w-full h-full flex items-center justify-center">
+                                            <Image className="w-12 h-12 text-slate-600" />
+                                        </div>
+                                    )}
+                                </motion.div>
+                            ))}
+                        </div>
+                    </div>
+                </section>
+            )}
 
             {/* Footer */}
             <footer className="bg-slate-950 pt-16 pb-8 border-t border-white/5">

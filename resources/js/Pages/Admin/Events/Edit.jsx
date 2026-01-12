@@ -1,53 +1,72 @@
-import AdminLayout from '@/Layouts/AdminLayout';
-import { Head, useForm, Link } from '@inertiajs/react';
-import InputError from '@/Components/InputError';
-import InputLabel from '@/Components/InputLabel';
-import PrimaryButton from '@/Components/PrimaryButton';
-import TextInput from '@/Components/TextInput';
-import ImageUploader from '@/Components/ImageUploader';
-import { ArrowLeft, Save, Calendar, MapPin, Users, Link as LinkIcon, Plus, X } from 'lucide-react';
-import { useState, useEffect } from 'react';
+import AdminLayout from "@/Layouts/AdminLayout";
+import { Head, useForm, Link } from "@inertiajs/react";
+import InputError from "@/Components/InputError";
+import InputLabel from "@/Components/InputLabel";
+import PrimaryButton from "@/Components/PrimaryButton";
+import TextInput from "@/Components/TextInput";
+import ImageUploader from "@/Components/ImageUploader";
+import {
+    ArrowLeft,
+    Save,
+    Calendar,
+    MapPin,
+    Users,
+    Link as LinkIcon,
+    Plus,
+    X,
+} from "lucide-react";
+import { useState, useEffect } from "react";
 
 export default function Edit({ auth, event, speakers = [] }) {
-    const [topics, setTopics] = useState(event.topics && event.topics.length > 0 ? event.topics : ['']);
-    
-    const { data, setData, patch, processing, errors } = useForm({
-        title: event.title || '',
-        short_description: event.short_description || '',
-        start_date: event.start_date ? event.start_date.substring(0, 16) : '',
-        end_date: event.end_date ? event.end_date.substring(0, 16) : '',
-        venue: event.venue || '',
-        location: event.location || '',
-        meeting_link: event.meeting_link || '',
-        max_participants: event.max_participants || '',
-        description: event.description || '',
+    const [topics, setTopics] = useState(
+        event.topics && event.topics.length > 0 ? event.topics : [""]
+    );
+
+    const { data, setData, post, processing, errors } = useForm({
+        _method: "patch",
+        title: event.title || "",
+        short_description: event.short_description || "",
+        start_date: event.start_date ? event.start_date.substring(0, 16) : "",
+        end_date: event.end_date ? event.end_date.substring(0, 16) : "",
+        venue: event.venue || "",
+        location: event.location || "",
+        meeting_link: event.meeting_link || "",
+        max_participants: event.max_participants || "",
+        description: event.description || "",
         topics: event.topics || [],
-        outline: event.outline || '',
-        banner_image: event.banner_image || '',
+        outline: event.outline || "",
+        banner_image: event.banner_image || "",
         status: event.status,
-        speaker_ids: event.speakers ? event.speakers.map(s => s.id) : [],
+        speaker_ids: event.speakers ? event.speakers.map((s) => s.id) : [],
     });
 
     const addTopic = () => {
-        setTopics([...topics, '']);
+        setTopics([...topics, ""]);
     };
 
     const removeTopic = (index) => {
         const newTopics = topics.filter((_, i) => i !== index);
         setTopics(newTopics);
-        setData('topics', newTopics.filter(t => t.trim() !== ''));
+        setData(
+            "topics",
+            newTopics.filter((t) => t.trim() !== "")
+        );
     };
 
     const updateTopic = (index, value) => {
         const newTopics = [...topics];
         newTopics[index] = value;
         setTopics(newTopics);
-        setData('topics', newTopics.filter(t => t.trim() !== ''));
+        setData(
+            "topics",
+            newTopics.filter((t) => t.trim() !== "")
+        );
     };
 
     const submit = (e) => {
         e.preventDefault();
-        patch(route('admin.events.update', event.id));
+        // Use post method from useForm which handles file uploads properly
+        post(route("admin.events.update", event.id));
     };
 
     return (
@@ -55,15 +74,17 @@ export default function Edit({ auth, event, speakers = [] }) {
             <Head title="Edit Event" />
 
             <div className="max-w-3xl mx-auto">
-                 <div className="mb-6">
+                <div className="mb-6">
                     <Link
-                        href={route('admin.events.index')}
+                        href={route("admin.events.index")}
                         className="flex items-center text-slate-500 hover:text-indigo-600 transition-colors mb-2 w-fit"
                     >
                         <ArrowLeft size={16} className="mr-1" />
                         Back to Events
                     </Link>
-                    <h2 className="text-2xl font-bold text-slate-800">Edit Event: {data.title}</h2>
+                    <h2 className="text-2xl font-bold text-slate-800">
+                        Edit Event: {data.title}
+                    </h2>
                 </div>
 
                 <div className="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
@@ -76,54 +97,103 @@ export default function Edit({ auth, event, speakers = [] }) {
                                 type="text"
                                 value={data.title}
                                 className="mt-1 block w-full"
-                                onChange={(e) => setData('title', e.target.value)}
+                                onChange={(e) =>
+                                    setData("title", e.target.value)
+                                }
                             />
-                            <InputError message={errors.title} className="mt-2" />
+                            <InputError
+                                message={errors.title}
+                                className="mt-2"
+                            />
                         </div>
 
                         {/* Short Description */}
                         <div>
-                            <InputLabel htmlFor="short_description" value="Short Description" />
+                            <InputLabel
+                                htmlFor="short_description"
+                                value="Short Description"
+                            />
                             <textarea
                                 id="short_description"
                                 value={data.short_description}
                                 className="mt-1 block w-full border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-lg shadow-sm pl-4 pt-3 min-h-[80px]"
                                 placeholder="A brief summary (shown on event cards)..."
-                                onChange={(e) => setData('short_description', e.target.value)}
+                                onChange={(e) =>
+                                    setData("short_description", e.target.value)
+                                }
                             ></textarea>
-                            <InputError message={errors.short_description} className="mt-2" />
+                            <InputError
+                                message={errors.short_description}
+                                className="mt-2"
+                            />
                         </div>
 
                         {/* Date & Time Grid */}
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                             <div>
-                                <InputLabel htmlFor="start_date" value="Start Date & Time" />
+                                <InputLabel
+                                    htmlFor="start_date"
+                                    value="Start Date & Time"
+                                />
                                 <div className="relative mt-1">
-                                    <Calendar className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none" size={18} />
+                                    <Calendar
+                                        className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none"
+                                        size={18}
+                                    />
                                     <TextInput
                                         id="start_date"
                                         type="datetime-local"
-                                        value={data.start_date ? data.start_date.substring(0, 16) : ''}
+                                        value={
+                                            data.start_date
+                                                ? data.start_date.substring(
+                                                      0,
+                                                      16
+                                                  )
+                                                : ""
+                                        }
                                         className="pl-10 block w-full"
-                                        onChange={(e) => setData('start_date', e.target.value)}
+                                        onChange={(e) =>
+                                            setData(
+                                                "start_date",
+                                                e.target.value
+                                            )
+                                        }
                                     />
                                 </div>
-                                <InputError message={errors.start_date} className="mt-2" />
+                                <InputError
+                                    message={errors.start_date}
+                                    className="mt-2"
+                                />
                             </div>
 
                             <div>
-                                <InputLabel htmlFor="end_date" value="End Date & Time" />
-                                 <div className="relative mt-1">
-                                    <Calendar className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none" size={18} />
+                                <InputLabel
+                                    htmlFor="end_date"
+                                    value="End Date & Time"
+                                />
+                                <div className="relative mt-1">
+                                    <Calendar
+                                        className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none"
+                                        size={18}
+                                    />
                                     <TextInput
                                         id="end_date"
                                         type="datetime-local"
-                                        value={data.end_date ? data.end_date.substring(0, 16) : ''}
+                                        value={
+                                            data.end_date
+                                                ? data.end_date.substring(0, 16)
+                                                : ""
+                                        }
                                         className="pl-10 block w-full"
-                                        onChange={(e) => setData('end_date', e.target.value)}
+                                        onChange={(e) =>
+                                            setData("end_date", e.target.value)
+                                        }
                                     />
                                 </div>
-                                <InputError message={errors.end_date} className="mt-2" />
+                                <InputError
+                                    message={errors.end_date}
+                                    className="mt-2"
+                                />
                             </div>
                         </div>
 
@@ -132,63 +202,107 @@ export default function Edit({ auth, event, speakers = [] }) {
                             <div>
                                 <InputLabel htmlFor="venue" value="Venue" />
                                 <div className="relative mt-1">
-                                    <MapPin className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none" size={18} />
+                                    <MapPin
+                                        className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none"
+                                        size={18}
+                                    />
                                     <TextInput
                                         id="venue"
                                         type="text"
                                         value={data.venue}
                                         className="pl-10 block w-full"
                                         placeholder="e.g. Grand Convention Center"
-                                        onChange={(e) => setData('venue', e.target.value)}
+                                        onChange={(e) =>
+                                            setData("venue", e.target.value)
+                                        }
                                     />
                                 </div>
-                                <InputError message={errors.venue} className="mt-2" />
+                                <InputError
+                                    message={errors.venue}
+                                    className="mt-2"
+                                />
                             </div>
                             <div>
-                                <InputLabel htmlFor="location" value="Full Address" />
+                                <InputLabel
+                                    htmlFor="location"
+                                    value="Full Address"
+                                />
                                 <TextInput
                                     id="location"
                                     type="text"
                                     value={data.location}
                                     className="mt-1 block w-full"
                                     placeholder="Full address or coordinates"
-                                    onChange={(e) => setData('location', e.target.value)}
+                                    onChange={(e) =>
+                                        setData("location", e.target.value)
+                                    }
                                 />
-                                <InputError message={errors.location} className="mt-2" />
+                                <InputError
+                                    message={errors.location}
+                                    className="mt-2"
+                                />
                             </div>
                         </div>
 
                         {/* Meeting Link & Max Participants */}
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                             <div>
-                                <InputLabel htmlFor="meeting_link" value="Online Meeting Link" />
+                                <InputLabel
+                                    htmlFor="meeting_link"
+                                    value="Online Meeting Link"
+                                />
                                 <div className="relative mt-1">
-                                    <LinkIcon className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none" size={18} />
+                                    <LinkIcon
+                                        className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none"
+                                        size={18}
+                                    />
                                     <TextInput
                                         id="meeting_link"
                                         type="url"
                                         value={data.meeting_link}
                                         className="pl-10 block w-full"
                                         placeholder="https://zoom.us/j/..."
-                                        onChange={(e) => setData('meeting_link', e.target.value)}
+                                        onChange={(e) =>
+                                            setData(
+                                                "meeting_link",
+                                                e.target.value
+                                            )
+                                        }
                                     />
                                 </div>
-                                <InputError message={errors.meeting_link} className="mt-2" />
+                                <InputError
+                                    message={errors.meeting_link}
+                                    className="mt-2"
+                                />
                             </div>
                             <div>
-                                <InputLabel htmlFor="max_participants" value="Max Participants" />
+                                <InputLabel
+                                    htmlFor="max_participants"
+                                    value="Max Participants"
+                                />
                                 <div className="relative mt-1">
-                                    <Users className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none" size={18} />
+                                    <Users
+                                        className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none"
+                                        size={18}
+                                    />
                                     <TextInput
                                         id="max_participants"
                                         type="number"
                                         value={data.max_participants}
                                         className="pl-10 block w-full"
                                         placeholder="100"
-                                        onChange={(e) => setData('max_participants', e.target.value)}
+                                        onChange={(e) =>
+                                            setData(
+                                                "max_participants",
+                                                e.target.value
+                                            )
+                                        }
                                     />
                                 </div>
-                                <InputError message={errors.max_participants} className="mt-2" />
+                                <InputError
+                                    message={errors.max_participants}
+                                    className="mt-2"
+                                />
                             </div>
                         </div>
 
@@ -200,7 +314,9 @@ export default function Edit({ auth, event, speakers = [] }) {
                                     id="status"
                                     value={data.status}
                                     className="block w-full border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-lg shadow-sm pl-3 pr-10"
-                                    onChange={(e) => setData('status', e.target.value)}
+                                    onChange={(e) =>
+                                        setData("status", e.target.value)
+                                    }
                                 >
                                     <option value="draft">Draft</option>
                                     <option value="published">Published</option>
@@ -209,20 +325,31 @@ export default function Edit({ auth, event, speakers = [] }) {
                                     <option value="cancelled">Cancelled</option>
                                 </select>
                             </div>
-                            <InputError message={errors.status} className="mt-2" />
+                            <InputError
+                                message={errors.status}
+                                className="mt-2"
+                            />
                         </div>
 
                         {/* Description */}
                         <div>
-                            <InputLabel htmlFor="description" value="Full Description" />
+                            <InputLabel
+                                htmlFor="description"
+                                value="Full Description"
+                            />
                             <textarea
                                 id="description"
                                 value={data.description}
                                 className="mt-1 block w-full border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-lg shadow-sm pl-4 pt-3 min-h-[120px]"
                                 rows="4"
-                                onChange={(e) => setData('description', e.target.value)}
+                                onChange={(e) =>
+                                    setData("description", e.target.value)
+                                }
                             ></textarea>
-                            <InputError message={errors.description} className="mt-2" />
+                            <InputError
+                                message={errors.description}
+                                className="mt-2"
+                            />
                         </div>
 
                         {/* Topics */}
@@ -236,12 +363,19 @@ export default function Edit({ auth, event, speakers = [] }) {
                                             value={topic}
                                             className="flex-1"
                                             placeholder={`Topic ${index + 1}`}
-                                            onChange={(e) => updateTopic(index, e.target.value)}
+                                            onChange={(e) =>
+                                                updateTopic(
+                                                    index,
+                                                    e.target.value
+                                                )
+                                            }
                                         />
                                         {topics.length > 1 && (
                                             <button
                                                 type="button"
-                                                onClick={() => removeTopic(index)}
+                                                onClick={() =>
+                                                    removeTopic(index)
+                                                }
                                                 className="px-3 py-2 text-red-600 hover:bg-red-50 rounded-lg transition"
                                             >
                                                 <X size={18} />
@@ -258,32 +392,46 @@ export default function Edit({ auth, event, speakers = [] }) {
                                     Add Topic
                                 </button>
                             </div>
-                            <InputError message={errors.topics} className="mt-2" />
+                            <InputError
+                                message={errors.topics}
+                                className="mt-2"
+                            />
                         </div>
 
                         {/* Outline */}
                         <div>
-                            <InputLabel htmlFor="outline" value="Event Outline" />
+                            <InputLabel
+                                htmlFor="outline"
+                                value="Event Outline"
+                            />
                             <textarea
                                 id="outline"
                                 value={data.outline}
                                 className="mt-1 block w-full border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-lg shadow-sm pl-4 pt-3 min-h-[150px]"
                                 placeholder="Detailed event schedule and outline..."
-                                onChange={(e) => setData('outline', e.target.value)}
+                                onChange={(e) =>
+                                    setData("outline", e.target.value)
+                                }
                             ></textarea>
-                            <InputError message={errors.outline} className="mt-2" />
+                            <InputError
+                                message={errors.outline}
+                                className="mt-2"
+                            />
                         </div>
 
                         {/* Banner Image */}
                         <div>
                             <ImageUploader
                                 value={data.banner_image}
-                                onChange={(url) => setData('banner_image', url)}
+                                onChange={(url) => setData("banner_image", url)}
                                 label="Banner Image"
                                 error={errors.banner_image}
                                 folder="events"
                             />
-                            <InputError message={errors.banner_image} className="mt-2" />
+                            <InputError
+                                message={errors.banner_image}
+                                className="mt-2"
+                            />
                         </div>
 
                         {/* Speakers */}
@@ -292,40 +440,65 @@ export default function Edit({ auth, event, speakers = [] }) {
                                 <InputLabel value="Select Speakers" />
                                 <div className="mt-2 space-y-2 max-h-60 overflow-y-auto border border-gray-200 rounded-lg p-4">
                                     {speakers.map((speaker) => (
-                                        <label key={speaker.id} className="flex items-center gap-3 p-2 hover:bg-slate-50 rounded-lg cursor-pointer">
+                                        <label
+                                            key={speaker.id}
+                                            className="flex items-center gap-3 p-2 hover:bg-slate-50 rounded-lg cursor-pointer"
+                                        >
                                             <input
                                                 type="checkbox"
-                                                checked={data.speaker_ids.includes(speaker.id)}
+                                                checked={data.speaker_ids.includes(
+                                                    speaker.id
+                                                )}
                                                 onChange={(e) => {
                                                     if (e.target.checked) {
-                                                        setData('speaker_ids', [...data.speaker_ids, speaker.id]);
+                                                        setData("speaker_ids", [
+                                                            ...data.speaker_ids,
+                                                            speaker.id,
+                                                        ]);
                                                     } else {
-                                                        setData('speaker_ids', data.speaker_ids.filter(id => id !== speaker.id));
+                                                        setData(
+                                                            "speaker_ids",
+                                                            data.speaker_ids.filter(
+                                                                (id) =>
+                                                                    id !==
+                                                                    speaker.id
+                                                            )
+                                                        );
                                                     }
                                                 }}
                                                 className="rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
                                             />
-                                            <span className="text-sm text-slate-700">{speaker.name}</span>
+                                            <span className="text-sm text-slate-700">
+                                                {speaker.name}
+                                            </span>
                                             {speaker.designation && (
-                                                <span className="text-xs text-slate-500">- {speaker.designation}</span>
+                                                <span className="text-xs text-slate-500">
+                                                    - {speaker.designation}
+                                                </span>
                                             )}
                                         </label>
                                     ))}
                                 </div>
-                                <InputError message={errors.speaker_ids} className="mt-2" />
+                                <InputError
+                                    message={errors.speaker_ids}
+                                    className="mt-2"
+                                />
                             </div>
                         )}
 
                         {/* Actions */}
                         <div className="flex items-center justify-end gap-4 pt-4 border-t border-slate-100">
                             <Link
-                                href={route('admin.events.index')}
+                                href={route("admin.events.index")}
                                 className="px-4 py-2 text-sm font-medium text-slate-600 hover:text-slate-800 hover:bg-slate-100 rounded-lg transition"
                             >
                                 Cancel
                             </Link>
 
-                            <PrimaryButton className="flex items-center gap-2" disabled={processing}>
+                            <PrimaryButton
+                                className="flex items-center gap-2"
+                                disabled={processing}
+                            >
                                 <Save size={18} />
                                 <span>Update Event</span>
                             </PrimaryButton>

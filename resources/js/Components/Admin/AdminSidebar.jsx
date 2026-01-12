@@ -1,5 +1,5 @@
 import { Link, usePage } from '@inertiajs/react';
-import { LayoutDashboard, Calendar, Users, FileQuestion, Settings, LogOut, X, Globe, Copy, Mic, UserCircle } from 'lucide-react';
+import { LayoutDashboard, Calendar, Users, FileQuestion, Settings, LogOut, X, Globe, Copy, Mic, UserCircle, Image } from 'lucide-react';
 import ApplicationLogo from '@/Components/ApplicationLogo';
 import clsx from 'clsx';
 
@@ -18,6 +18,7 @@ export default function AdminSidebar({ open, setOpen }) {
         { label: 'Events', href: route('admin.events.index'), icon: Calendar, active: isActive('admin.events.*') },
         { label: 'Speakers', href: route('admin.speakers.index'), icon: Mic, active: isActive('admin.speakers.*') },
         { label: 'Team', href: route('admin.teams.index'), icon: UserCircle, active: isActive('admin.teams.*') },
+        { label: 'Gallery', href: route('admin.galleries.index'), icon: Image, active: isActive('admin.galleries.*') },
         { label: 'Quizzes', href: route('admin.quizzes.index'), icon: FileQuestion, active: isActive('admin.quizzes.*') || isActive('admin.events.quizzes.*') },
         { label: 'Registrations', href: route('admin.registrations.index'), icon: Users, active: isActive('admin.registrations.*') || isActive('admin.events.registrations.*') },
         

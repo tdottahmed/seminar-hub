@@ -11,27 +11,53 @@ export default function ImageUploader({
     maxSize = 5 * 1024 * 1024, // 5MB
     folder = 'uploads'
 }) {
-    const [preview, setPreview] = useState(value || '');
+    // Helper function to check if value is a string URL
+    const isStringUrl = (val) => {
+        return typeof val === 'string' && val.trim() !== '' && val.startsWith('http');
+    };
+
+    // Helper function to get string value or empty string
+    const getStringValue = (val) => {
+        if (typeof val === 'string') return val;
+        if (val instanceof File) return ''; // File objects should not be used as preview
+        return '';
+    };
+
+    const [preview, setPreview] = useState(getStringValue(value) || '');
     const [uploading, setUploading] = useState(false);
-    const [uploadMode, setUploadMode] = useState(value && value.startsWith('http') ? 'url' : 'file');
-    const [urlInput, setUrlInput] = useState(value && value.startsWith('http') ? value : '');
+    const [uploadMode, setUploadMode] = useState(isStringUrl(value) ? 'url' : 'file');
+    const [urlInput, setUrlInput] = useState(isStringUrl(value) ? value : '');
+    const [selectedFile, setSelectedFile] = useState(null);
     const fileInputRef = useRef(null);
+    const objectUrlRef = useRef(null);
+
+    // Cleanup object URL on unmount
+    useEffect(() => {
+        return () => {
+            if (objectUrlRef.current) {
+                URL.revokeObjectURL(objectUrlRef.current);
+            }
+        };
+    }, []);
 
     // Sync preview with value prop
     useEffect(() => {
-        if (value) {
-            setPreview(value);
-            if (value.startsWith('http')) {
-                setUrlInput(value);
-                setUploadMode('url');
+        const stringValue = getStringValue(value);
+        if (stringValue && stringValue.trim() !== '') {
+            // Only update preview if we don't have a selected file
+            if (!selectedFile) {
+                setPreview(stringValue);
             }
-        } else {
+            if (isStringUrl(value)) {
+                setUrlInput(stringValue);
+            }
+        } else if (!selectedFile) {
             setPreview('');
             setUrlInput('');
         }
-    }, [value]);
+    }, [value, selectedFile]);
 
-    const handleFileSelect = async (e) => {
+    const handleFileSelect = (e) => {
         const file = e.target.files?.[0];
         if (!file) return;
 
@@ -47,54 +73,48 @@ export default function ImageUploader({
             return;
         }
 
-        setUploading(true);
-
-        try {
-            const formData = new FormData();
-            formData.append('image', file);
-            formData.append('folder', folder);
-
-            const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') || '';
-            
-            const response = await fetch('/admin/upload/image', {
-                method: 'POST',
-                headers: {
-                    'X-CSRF-TOKEN': csrfToken,
-                    'X-Requested-With': 'XMLHttpRequest',
-                },
-                body: formData,
-            });
-
-            if (!response.ok) {
-                throw new Error('Upload failed');
-            }
-
-            const data = await response.json();
-            const imageUrl = data.url || data.path;
-            
-            setPreview(imageUrl);
-            onChange(imageUrl);
-        } catch (error) {
-            console.error('Upload error:', error);
-            alert('Failed to upload image. Please try again.');
-        } finally {
-            setUploading(false);
-            if (fileInputRef.current) {
-                fileInputRef.current.value = '';
-            }
+        // Cleanup previous object URL
+        if (objectUrlRef.current) {
+            URL.revokeObjectURL(objectUrlRef.current);
         }
+
+        const objectUrl = URL.createObjectURL(file);
+        objectUrlRef.current = objectUrl;
+        setPreview(objectUrl);
+        setSelectedFile(file);
+        setUploadMode('file');
+        
+        // Pass the File object to parent
+        onChange(file);
     };
 
     const handleUrlChange = (url) => {
         setUrlInput(url);
-        setPreview(url);
-        onChange(url);
+        setSelectedFile(null);
+        // Cleanup file object URL if exists
+        if (objectUrlRef.current) {
+            URL.revokeObjectURL(objectUrlRef.current);
+            objectUrlRef.current = null;
+        }
+        if (url && url.trim() !== '') {
+            setPreview(url);
+            onChange(url); // Pass URL string to parent
+        } else {
+            setPreview('');
+            onChange(null);
+        }
     };
 
     const handleRemove = () => {
         setPreview('');
         setUrlInput('');
-        onChange('');
+        setSelectedFile(null);
+        // Cleanup object URL
+        if (objectUrlRef.current) {
+            URL.revokeObjectURL(objectUrlRef.current);
+            objectUrlRef.current = null;
+        }
+        onChange(null); // Pass null to indicate removal
         if (fileInputRef.current) {
             fileInputRef.current.value = '';
         }
@@ -136,6 +156,38 @@ export default function ImageUploader({
 
             {uploadMode === 'file' ? (
                 <div className="space-y-3">
+                    {/* Show preview if exists */}
+                    {preview && (
+                        <div className="relative w-full h-64 border-2 border-slate-200 rounded-xl overflow-hidden bg-slate-50">
+                            <img 
+                                src={preview} 
+                                alt="Image Preview" 
+                                className="w-full h-full object-cover"
+                                onError={(e) => {
+                                    e.target.style.display = 'none';
+                                    const errorDiv = e.target.nextElementSibling;
+                                    if (errorDiv) {
+                                        errorDiv.style.display = 'flex';
+                                    }
+                                }}
+                            />
+                            <div className="hidden w-full h-full bg-slate-100 items-center justify-center absolute inset-0">
+                                <div className="text-center">
+                                    <ImageIcon className="w-12 h-12 text-slate-400 mx-auto mb-2" />
+                                    <p className="text-sm text-slate-500">Invalid image</p>
+                                </div>
+                            </div>
+                            <button
+                                type="button"
+                                onClick={handleRemove}
+                                className="absolute top-2 right-2 p-2 bg-red-500 hover:bg-red-600 rounded-full text-white transition shadow-lg"
+                            >
+                                <X size={18} />
+                            </button>
+                        </div>
+                    )}
+                    
+                    {/* Upload area */}
                     <div className="relative">
                         <input
                             ref={fileInputRef}
@@ -152,9 +204,7 @@ export default function ImageUploader({
                                 "flex flex-col items-center justify-center w-full h-48 border-2 border-dashed rounded-xl cursor-pointer transition",
                                 uploading 
                                     ? "border-indigo-300 bg-indigo-50 cursor-wait" 
-                                    : preview 
-                                        ? "border-slate-300 hover:border-indigo-400 hover:bg-slate-50" 
-                                        : "border-slate-300 hover:border-indigo-400 hover:bg-slate-50"
+                                    : "border-slate-300 hover:border-indigo-400 hover:bg-slate-50"
                             )}
                         >
                             {uploading ? (
@@ -162,34 +212,15 @@ export default function ImageUploader({
                                     <Loader2 className="w-8 h-8 text-indigo-600 animate-spin mb-2" />
                                     <span className="text-sm text-slate-600">Uploading...</span>
                                 </div>
-                            ) : preview ? (
-                                <div className="relative w-full h-full group">
-                                    <img 
-                                        src={preview} 
-                                        alt="Preview" 
-                                        className="w-full h-full object-cover rounded-xl"
-                                    />
-                                    <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition rounded-xl flex items-center justify-center">
-                                        <button
-                                            type="button"
-                                            onClick={(e) => {
-                                                e.preventDefault();
-                                                e.stopPropagation();
-                                                handleRemove();
-                                            }}
-                                            className="p-2 bg-red-500 hover:bg-red-600 rounded-full text-white transition"
-                                        >
-                                            <X size={20} />
-                                        </button>
-                                    </div>
-                                </div>
                             ) : (
                                 <div className="flex flex-col items-center p-6">
                                     <div className="w-12 h-12 rounded-full bg-indigo-100 flex items-center justify-center mb-3">
                                         <ImageIcon className="w-6 h-6 text-indigo-600" />
                                     </div>
                                     <p className="text-sm text-slate-600 mb-1">
-                                        <span className="font-semibold text-indigo-600">Click to upload</span> or drag and drop
+                                        <span className="font-semibold text-indigo-600">
+                                            {preview ? 'Change image' : 'Click to upload'}
+                                        </span> or drag and drop
                                     </p>
                                     <p className="text-xs text-slate-500">PNG, JPG, GIF up to 5MB</p>
                                 </div>
@@ -218,23 +249,33 @@ export default function ImageUploader({
                             </button>
                         )}
                     </div>
-                    {urlInput && (
-                        <div className="relative w-full h-48 border-2 border-slate-200 rounded-xl overflow-hidden">
+                    {preview && (
+                        <div className="relative w-full h-64 border-2 border-slate-200 rounded-xl overflow-hidden bg-slate-50">
                             <img 
-                                src={urlInput} 
-                                alt="Preview" 
+                                src={preview} 
+                                alt="Image Preview" 
                                 className="w-full h-full object-cover"
                                 onError={(e) => {
                                     e.target.style.display = 'none';
-                                    e.target.nextSibling.style.display = 'flex';
+                                    const errorDiv = e.target.nextElementSibling;
+                                    if (errorDiv) {
+                                        errorDiv.style.display = 'flex';
+                                    }
                                 }}
                             />
-                            <div className="hidden w-full h-full bg-slate-100 items-center justify-center">
+                            <div className="hidden w-full h-full bg-slate-100 items-center justify-center absolute inset-0">
                                 <div className="text-center">
                                     <ImageIcon className="w-12 h-12 text-slate-400 mx-auto mb-2" />
                                     <p className="text-sm text-slate-500">Invalid image URL</p>
                                 </div>
                             </div>
+                            <button
+                                type="button"
+                                onClick={handleRemove}
+                                className="absolute top-2 right-2 p-2 bg-red-500 hover:bg-red-600 rounded-full text-white transition shadow-lg"
+                            >
+                                <X size={18} />
+                            </button>
                         </div>
                     )}
                 </div>
