@@ -21,6 +21,68 @@
 </head>
 
 <body class="font-sans antialiased">
+  <!-- Server-side Preloader -->
+  <style>
+    #global-loader {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: #ffffff;
+      z-index: 9999;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      transition: opacity 0.5s ease;
+    }
+    .loader-content {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    .loader-logo {
+      height: 80px;
+      width: auto;
+      margin-bottom: 24px;
+      animation: pulse-logo 2s infinite ease-in-out;
+    }
+    .loader-progress-bar {
+      width: 240px;
+      height: 4px;
+      background-color: #f3f4f6;
+      border-radius: 4px;
+      overflow: hidden;
+      position: relative;
+    }
+    .loader-progress {
+      width: 40%;
+      height: 100%;
+      background: linear-gradient(90deg, #6366f1, #9333ea);
+      position: absolute;
+      left: -40%;
+      animation: progress-bar 1.5s infinite ease-in-out;
+      border-radius: 4px;
+    }
+    @keyframes pulse-logo {
+      0%, 100% { transform: scale(1); opacity: 1; }
+      50% { transform: scale(0.95); opacity: 0.8; }
+    }
+    @keyframes progress-bar {
+      0% { left: -50%; width: 50%; }
+      50% { width: 30%; }
+      100% { left: 100%; width: 50%; }
+    }
+  </style>
+  <div id="global-loader">
+    <div class="loader-content">
+      <img src="/assets/logo/Logo-prochesta-IT-dark-1.png" alt="Prochesta IT" class="loader-logo" />
+      <div class="loader-progress-bar">
+        <div class="loader-progress"></div>
+      </div>
+    </div>
+  </div>
+
   @inertia
 </body>
 

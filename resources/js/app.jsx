@@ -17,10 +17,18 @@ createInertiaApp({
     setup({ el, App, props }) {
         if (import.meta.env.SSR) {
             hydrateRoot(el, <App {...props} />);
-            return;
+        } else {
+            createRoot(el).render(<App {...props} />);
         }
 
-        createRoot(el).render(<App {...props} />);
+        // Remove the server-side preloader
+        const loader = document.getElementById('global-loader');
+        if (loader) {
+            loader.style.opacity = '0';
+            setTimeout(() => {
+                loader.remove();
+            }, 500);
+        }
     },
     progress: {
         color: '#4B5563',
