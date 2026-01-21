@@ -554,26 +554,28 @@ export const staticHeroImages = [
     "https://images.unsplash.com/photo-1531482615713-2afd69097998?auto=format&fit=crop&q=80&w=2000",
 ];
 
+import { GoogleLogo, MicrosoftLogo, AmazonLogo, AdobeLogo, IBMLogo, MetaLogo } from "./CompanyLogos";
+
 // Trusted companies logos
 export const trustedCompanies = [
     {
         name: "Google",
-        logo: "https://cdn.worldvectorlogo.com/logos/google-2015.svg",
+        Logo: GoogleLogo,
     },
     {
         name: "Microsoft",
-        logo: "https://cdn.worldvectorlogo.com/logos/microsoft-5.svg",
+        Logo: MicrosoftLogo,
     },
     {
         name: "Amazon",
-        logo: "https://cdn.worldvectorlogo.com/logos/amazon-2.svg",
+        Logo: AmazonLogo,
     },
     {
         name: "Adobe",
-        logo: "https://cdn.worldvectorlogo.com/logos/adobe-creative-cloud-cc.svg",
+        Logo: AdobeLogo,
     },
-    { name: "IBM", logo: "https://cdn.worldvectorlogo.com/logos/ibm-logo.svg" },
-    { name: "Meta", logo: "https://cdn.worldvectorlogo.com/logos/meta-1.svg" },
+    { name: "IBM", Logo: IBMLogo },
+    { name: "Meta", Logo: MetaLogo },
 ];
 
 // Testimonials data
@@ -584,7 +586,7 @@ export const testimonialsData = [
         company: "TechCorp",
         content:
             "SeminarHub transformed my career. The hands-on workshops gave me the confidence to switch to a senior developer role.",
-        avatar: "https://images.unsplash.com/photo-1494790108755-2616b612b786?auto=format&fit=crop&q=80&w=200",
+        avatar: null,
         rating: 5,
     },
     {
@@ -642,7 +644,7 @@ export const staticTeamMembers = [
         name: "Maria Garcia",
         designation: "Head of Learning",
         organization: "Education First",
-        photo: "https://images.unsplash.com/photo-1494790108755-2616b612b786?auto=format&fit=crop&q=80&w=400",
+        photo: null,
     },
     {
         id: 3,

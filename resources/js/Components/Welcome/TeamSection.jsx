@@ -92,11 +92,18 @@ export default function TeamSection({ t, teamLead, teamMembers, isBn }) {
                                         whileHover={{ y: -8 }}
                                         className="h-full"
                                     >
-                                        <Link href={member.id ? route("teams.show", member.id) : "#"}>
-                                            <div className="bg-white/5 backdrop-blur-md border border-white/10 rounded-2xl p-6 hover:bg-white/10 transition-all duration-300 cursor-pointer h-full">
+                                        <div className="relative group bg-white/5 backdrop-blur-md border border-white/10 rounded-2xl p-6 hover:bg-white/10 transition-all duration-300 cursor-pointer h-full">
+                                            <Link 
+                                                href={member.id ? route("teams.show", member.id) : "#"} 
+                                                className="absolute inset-0 z-0 rounded-2xl focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                                                aria-label={`View details for ${member.name}`}
+                                            >
+                                                <span className="sr-only">View details for {member.name}</span>
+                                            </Link>
+                                            
                                                 {/* Badge for Team Lead */}
                                                 {member.isTeamLead && (
-                                                    <div className="absolute top-4 right-4 z-10">
+                                                    <div className="absolute top-4 right-4 z-10 pointer-events-none">
                                                         <div className="px-3 py-1 bg-gradient-to-r from-yellow-500/90 to-orange-500/90 backdrop-blur-md rounded-full">
                                                             <Crown className="w-4 h-4 text-white inline mr-1" />
                                                             <span className="text-white text-xs font-bold">
@@ -107,7 +114,7 @@ export default function TeamSection({ t, teamLead, teamMembers, isBn }) {
                                                 )}
 
                                                 {/* Member Image - Fixed Height Rectangle */}
-                                                <div className="relative mb-6 overflow-hidden rounded-xl h-72 w-full group-hover:shadow-lg transition-all duration-500 border border-white/10 group-hover:border-indigo-500/30">
+                                                <div className="relative mb-6 overflow-hidden rounded-xl h-72 w-full group-hover:shadow-lg transition-all duration-500 border border-white/10 group-hover:border-indigo-500/30 pointer-events-none">
                                                     <div className="absolute inset-0 bg-gradient-to-t from-slate-900/80 to-transparent opacity-60 z-10 transition-opacity duration-300 group-hover:opacity-40"></div>
                                                     <img
                                                         src={member.photo || `https://ui-avatars.com/api/?name=${encodeURIComponent(member.name)}&background=6366f1&color=fff&size=512`}
@@ -117,7 +124,7 @@ export default function TeamSection({ t, teamLead, teamMembers, isBn }) {
                                                 </div>
 
                                                 {/* Member Info */}
-                                                <div className="text-center">
+                                                <div className="text-center relative z-10">
                                                     <h4 className="text-xl font-bold text-white mb-2 group-hover:text-indigo-300 transition">
                                                         {member.name}
                                                     </h4>
@@ -139,16 +146,16 @@ export default function TeamSection({ t, teamLead, teamMembers, isBn }) {
 
                                                     {/* Social Links for ALL Members (Team Lead + Normal Members) */}
                                                     {(member.social_links && (member.social_links.linkedin || member.social_links.twitter || member.social_links.website)) && (
-                                                        <div className="flex items-center justify-center gap-2 mb-4">
+                                                        <div className="flex items-center justify-center gap-2 mb-4 relative z-20">
                                                             {member.social_links.linkedin && (
                                                                 <a
                                                                     href={member.social_links.linkedin}
                                                                     target="_blank"
                                                                     rel="noopener noreferrer"
                                                                     onClick={(e) => e.stopPropagation()}
-                                                                    className="w-7 h-7 rounded-full bg-white/10 hover:bg-indigo-500/30 border border-white/20 flex items-center justify-center transition group"
+                                                                    className="w-7 h-7 rounded-full bg-white/10 hover:bg-indigo-500/30 border border-white/20 flex items-center justify-center transition group-hover/social:scale-110"
                                                                 >
-                                                                    <Linkedin size={12} className="text-slate-300 group-hover:text-white" />
+                                                                    <Linkedin size={12} className="text-slate-300 hover:text-white" />
                                                                 </a>
                                                             )}
                                                             {member.social_links.twitter && (
@@ -157,9 +164,9 @@ export default function TeamSection({ t, teamLead, teamMembers, isBn }) {
                                                                     target="_blank"
                                                                     rel="noopener noreferrer"
                                                                     onClick={(e) => e.stopPropagation()}
-                                                                    className="w-7 h-7 rounded-full bg-white/10 hover:bg-indigo-500/30 border border-white/20 flex items-center justify-center transition group"
+                                                                    className="w-7 h-7 rounded-full bg-white/10 hover:bg-indigo-500/30 border border-white/20 flex items-center justify-center transition group-hover/social:scale-110"
                                                                 >
-                                                                    <Twitter size={12} className="text-slate-300 group-hover:text-white" />
+                                                                    <Twitter size={12} className="text-slate-300 hover:text-white" />
                                                                 </a>
                                                             )}
                                                             {member.social_links.website && (
@@ -168,21 +175,20 @@ export default function TeamSection({ t, teamLead, teamMembers, isBn }) {
                                                                     target="_blank"
                                                                     rel="noopener noreferrer"
                                                                     onClick={(e) => e.stopPropagation()}
-                                                                    className="w-7 h-7 rounded-full bg-white/10 hover:bg-indigo-500/30 border border-white/20 flex items-center justify-center transition group"
+                                                                    className="w-7 h-7 rounded-full bg-white/10 hover:bg-indigo-500/30 border border-white/20 flex items-center justify-center transition group-hover/social:scale-110"
                                                                 >
-                                                                    <ExternalLink size={12} className="text-slate-300 group-hover:text-white" />
+                                                                    <ExternalLink size={12} className="text-slate-300 hover:text-white" />
                                                                 </a>
                                                             )}
                                                         </div>
                                                     )}
 
-                                                    <div className="inline-flex items-center gap-2 text-sm text-indigo-300 font-semibold group-hover:gap-3 transition-all">
+                                                    <div className="inline-flex items-center gap-2 text-sm text-indigo-300 font-semibold group-hover:gap-3 transition-all pointer-events-none">
                                                         <span>{t.team.viewDetails}</span>
                                                         <ArrowRight size={16} className="group-hover:translate-x-1 transition" />
                                                     </div>
                                                 </div>
                                             </div>
-                                        </Link>
                                     </motion.div>
                                 </SwiperSlide>
                             ))}

@@ -29,7 +29,7 @@ export default function Footer({ t }) {
                         </div>
                     </div>
 
-                    <div>
+                    <div className="hidden md:block">
                         <h4 className="text-white font-bold mb-6">{t.footer.quickLinks}</h4>
                         <ul className="space-y-3">
                             <li><a href="#programs" className="text-slate-500 hover:text-indigo-400 transition">{t.footer.programs}</a></li>
@@ -39,7 +39,7 @@ export default function Footer({ t }) {
                         </ul>
                     </div>
 
-                    <div>
+                    <div className="hidden md:block">
                         <h4 className="text-white font-bold mb-6">{t.footer.company}</h4>
                         <ul className="space-y-3">
                             <li><a href="#about" className="text-slate-500 hover:text-indigo-400 transition">{t.footer.about}</a></li>
@@ -49,7 +49,7 @@ export default function Footer({ t }) {
                         </ul>
                     </div>
 
-                    <div>
+                    <div className="hidden md:block">
                         <h4 className="text-white font-bold mb-6">{t.footer.support}</h4>
                         <ul className="space-y-3">
                             <li><a href="#" className="text-slate-500 hover:text-indigo-400 transition">{t.footer.help}</a></li>

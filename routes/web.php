@@ -53,8 +53,9 @@ Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () 
 
 Route::get('/system/reset', function () {
     \Illuminate\Support\Facades\Artisan::call('optimize:clear');
-    \Illuminate\Support\Facades\Artisan::call('migrate');
-    \Illuminate\Support\Facades\Artisan::call('db:seed');
+    // \Illuminate\Support\Facades\Artisan::call('migrate');
+    // \Illuminate\Support\Facades\Artisan::call('db:seed');
+    \Illuminate\Support\Facades\Artisan::call('storage:link');
 
     return 'System optimization cleared, migration run, and database seeded successfully.';
 });
