@@ -127,6 +127,15 @@ export default function EventDetails({ event }) {
                                 </Section>
                             )}
 
+                            {/* Event Outline */}
+                            {event.outline && (
+                                <Section title="Event Outline">
+                                    <div className="prose prose-lg prose-invert max-w-none text-slate-300">
+                                        <p className="whitespace-pre-line leading-loose">{event.outline}</p>
+                                    </div>
+                                </Section>
+                            )}
+
                             {/* Topics */}
                             {event.topics && event.topics.length > 0 && (
                                 <Section title="What You'll Learn">

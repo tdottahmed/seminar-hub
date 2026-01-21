@@ -21,6 +21,7 @@ export default function Create({ auth, speakers = [] }) {
     const [topics, setTopics] = useState([""]);
     const { data, setData, post, processing, errors } = useForm({
         title: "",
+        slug: "",
         short_description: "",
         start_date: "",
         end_date: "",
@@ -99,6 +100,26 @@ export default function Create({ auth, speakers = [] }) {
                             />
                             <InputError
                                 message={errors.title}
+                                className="mt-2"
+                            />
+                        </div>
+
+                        {/* Slug */}
+                        <div>
+                            <InputLabel htmlFor="slug" value="Event Slug (URL)" />
+                            <TextInput
+                                id="slug"
+                                type="text"
+                                value={data.slug}
+                                className="mt-1 block w-full placeholder-slate-300"
+                                placeholder="custom-event-slug (optional)"
+                                onChange={(e) =>
+                                    setData("slug", e.target.value)
+                                }
+                            />
+                            <p className="text-xs text-slate-500 mt-1">Leave blank to auto-generate from title.</p>
+                            <InputError
+                                message={errors.slug}
                                 className="mt-2"
                             />
                         </div>

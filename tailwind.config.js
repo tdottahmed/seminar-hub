@@ -14,7 +14,7 @@ export default {
         extend: {
             fontFamily: {
                 sans: ['Inter', ...defaultTheme.fontFamily.sans],
-                bengali: ['Hind Siliguri', 'sans-serif'],
+                bengali: ['"Noto Sans Bengali"', '"Tiro Bangla"', 'sans-serif'],
                 display: ['Poppins', 'sans-serif'],
             },
             colors: {

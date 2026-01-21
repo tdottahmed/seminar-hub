@@ -25,6 +25,7 @@ export default function Edit({ auth, event, speakers = [] }) {
     const { data, setData, post, processing, errors } = useForm({
         _method: "patch",
         title: event.title || "",
+        slug: event.slug || "",
         short_description: event.short_description || "",
         start_date: event.start_date ? event.start_date.substring(0, 16) : "",
         end_date: event.end_date ? event.end_date.substring(0, 16) : "",
@@ -103,6 +104,26 @@ export default function Edit({ auth, event, speakers = [] }) {
                             />
                             <InputError
                                 message={errors.title}
+                                className="mt-2"
+                            />
+                        </div>
+
+                        {/* Slug */}
+                        <div>
+                            <InputLabel htmlFor="slug" value="Event Slug (URL)" />
+                            <TextInput
+                                id="slug"
+                                type="text"
+                                value={data.slug}
+                                className="mt-1 block w-full"
+                                placeholder="custom-event-slug"
+                                onChange={(e) =>
+                                    setData("slug", e.target.value)
+                                }
+                            />
+                             <p className="text-xs text-slate-500 mt-1">Leave blank to auto-generate from title.</p>
+                            <InputError
+                                message={errors.slug}
                                 className="mt-2"
                             />
                         </div>

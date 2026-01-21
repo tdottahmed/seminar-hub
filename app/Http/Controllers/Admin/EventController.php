@@ -46,6 +46,7 @@ class EventController extends Controller
             'banner_image' => 'nullable', // Allow file or string
             'speaker_ids' => 'nullable|array',
             'speaker_ids.*' => 'exists:speakers,id',
+            'slug' => 'nullable|string|max:255|unique:events,slug',
         ]);
 
         // Handle Image Upload
@@ -56,7 +57,12 @@ class EventController extends Controller
             $validated['banner_image'] = Storage::url($path);
         }
 
-        $validated['slug'] = Str::slug($validated['title']) . '-' . Str::random(6);
+        if (!empty($validated['slug'])) {
+            $validated['slug'] = Str::slug($validated['slug']);
+        } else {
+            $validated['slug'] = Str::slug($validated['title']) . '-' . Str::random(6);
+        }
+
         $validated['status'] = 'draft';
 
         $event = Event::create($validated);
@@ -96,6 +102,7 @@ class EventController extends Controller
             'status' => 'required|string',
             'speaker_ids' => 'nullable|array',
             'speaker_ids.*' => 'exists:speakers,id',
+            'slug' => 'nullable|string|max:255|unique:events,slug,' . $event->id,
         ];
 
         // Add banner_image validation - handle file uploads, URLs, or null/empty
@@ -147,6 +154,15 @@ class EventController extends Controller
         } else {
             // banner_image not in request - keep existing value
             $validated['banner_image'] = $event->banner_image;
+        }
+
+        if (array_key_exists('slug', $validated)) {
+            if (!empty($validated['slug'])) {
+                $validated['slug'] = Str::slug($validated['slug']);
+            } else {
+                // If slug is cleared/empty, regenerate from title
+                $validated['slug'] = Str::slug($validated['title']) . '-' . Str::random(6);
+            }
         }
 
         $event->update($validated);
