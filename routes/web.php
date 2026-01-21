@@ -14,7 +14,10 @@ Route::get('/events/{slug}/quiz/{quiz}', [\App\Http\Controllers\Public\QuizTaker
 Route::post('/events/{slug}/quiz/{quiz}/submit', [\App\Http\Controllers\Public\QuizTakerController::class, 'store'])->name('events.quiz.submit');
 
 Route::get('/dashboard', function () {
-    return redirect()->route('admin.dashboard');
+    if (auth()->user()->user_type === 'admin') {
+        return redirect()->route('admin.dashboard');
+    }
+    return Inertia::render('User/Dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::middleware('auth')->group(function () {

@@ -25,6 +25,11 @@ export default function Register() {
         <GuestLayout>
             <Head title="Register" />
 
+            <div className="mb-6 text-center">
+                <h2 className="text-2xl font-bold text-gray-900">Create an account</h2>
+                <p className="text-sm text-gray-600 mt-2">Get started with Prochesta IT Event Management</p>
+            </div>
+
             <form onSubmit={submit}>
                 <div>
                     <InputLabel htmlFor="name" value="Name" />
@@ -33,10 +38,11 @@ export default function Register() {
                         id="name"
                         name="name"
                         value={data.name}
-                        className="mt-1 block w-full"
+                        className="mt-1 block w-full px-4 py-2 border-gray-300 rounded-lg focus:ring-indigo-500 focus:border-indigo-500 shadow-sm transition-all"
                         autoComplete="name"
                         isFocused={true}
                         onChange={(e) => setData('name', e.target.value)}
+                        placeholder="Enter your full name"
                         required
                     />
 
@@ -51,9 +57,10 @@ export default function Register() {
                         type="email"
                         name="email"
                         value={data.email}
-                        className="mt-1 block w-full"
+                        className="mt-1 block w-full px-4 py-2 border-gray-300 rounded-lg focus:ring-indigo-500 focus:border-indigo-500 shadow-sm transition-all"
                         autoComplete="username"
                         onChange={(e) => setData('email', e.target.value)}
+                        placeholder="Enter your email"
                         required
                     />
 
@@ -68,9 +75,10 @@ export default function Register() {
                         type="password"
                         name="password"
                         value={data.password}
-                        className="mt-1 block w-full"
+                        className="mt-1 block w-full px-4 py-2 border-gray-300 rounded-lg focus:ring-indigo-500 focus:border-indigo-500 shadow-sm transition-all"
                         autoComplete="new-password"
                         onChange={(e) => setData('password', e.target.value)}
+                        placeholder="Create a password"
                         required
                     />
 
@@ -88,11 +96,12 @@ export default function Register() {
                         type="password"
                         name="password_confirmation"
                         value={data.password_confirmation}
-                        className="mt-1 block w-full"
+                        className="mt-1 block w-full px-4 py-2 border-gray-300 rounded-lg focus:ring-indigo-500 focus:border-indigo-500 shadow-sm transition-all"
                         autoComplete="new-password"
                         onChange={(e) =>
                             setData('password_confirmation', e.target.value)
                         }
+                        placeholder="Confirm your password"
                         required
                     />
 
@@ -102,17 +111,17 @@ export default function Register() {
                     />
                 </div>
 
-                <div className="mt-4 flex items-center justify-end">
-                    <Link
-                        href={route('login')}
-                        className="rounded-md text-sm text-gray-600 underline hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
-                    >
-                        Already registered?
-                    </Link>
-
-                    <PrimaryButton className="ms-4" disabled={processing}>
-                        Register
+                <div className="mt-6">
+                    <PrimaryButton className="w-full justify-center py-3 bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 transition-all rounded-lg shadow-lg shadow-indigo-500/30 text-base font-semibold" disabled={processing}>
+                        Create Account
                     </PrimaryButton>
+                </div>
+
+                <div className="mt-6 text-center text-sm text-gray-600">
+                    Already have an account?{' '}
+                    <Link href={route('login')} className="text-indigo-600 hover:text-indigo-800 font-medium hover:underline">
+                        Sign in
+                    </Link>
                 </div>
             </form>
         </GuestLayout>

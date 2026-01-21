@@ -21,7 +21,8 @@ class DatabaseSeeder extends Seeder
         User::factory()->create([
             'name' => 'Admin User',
             'email' => 'admin@mail.com',
-            'password'=>Hash::make('12345678')
+            'password'=>Hash::make('12345678'),
+            'user_type' => 'admin',
         ]);
 
         $event = \App\Models\Event::create([
