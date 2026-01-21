@@ -43,7 +43,7 @@ class FrontendSectionSeeder extends Seeder
                         'title' => "Why Choose SeminarHub?",
                         'desc' => "We curate experiences that go beyond traditional learning.",
                         'features' => [
-                            ['title' => "World-Class Mentors", 'desc' => "Learn from industry experts."],
+                            ['title' => "Industry Experts Mentors", 'desc' => "Learn from industry experts with real-world experience."],
                             ['title' => "Hands-on Projects", 'desc' => "Build a portfolio that stands out."],
                             ['title' => "Global Community", 'desc' => "Network with peers worldwide."]
                         ]
@@ -59,7 +59,7 @@ class FrontendSectionSeeder extends Seeder
                     ]
                 ]
             ],
-             [
+            [
                 'slug' => 'programs',
                 'title' => 'Featured Programs',
                 'content' => [
@@ -91,7 +91,7 @@ class FrontendSectionSeeder extends Seeder
                     ]
                 ]
             ],
-             [
+            [
                 'slug' => 'quotes',
                 'title' => 'Quotes Section',
                 'content' => [
