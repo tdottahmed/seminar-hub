@@ -1,19 +1,37 @@
 import { motion } from "framer-motion";
+import * as Icons from "lucide-react"; 
 
-export default function StatsSection({ t }) {
+export default function StatsSection({ t, content, lang }) {
+    // Determine source data
+    const statsData = content ? content[lang] : t.stats;
+    
+    // Safety check
+    if (!statsData) return null;
+
+    // Helper to get Icon component from string name or direct component
+    const getIcon = (iconSource) => {
+        if (typeof iconSource === 'string') {
+             // Dynamic data supplies string name (e.g., 'Calendar')
+             const IconComponent = Icons[iconSource];
+             return IconComponent || Icons.HelpCircle;
+        }
+        // Static data supplies component directly
+        return iconSource || Icons.HelpCircle; 
+    };
+
     return (
         <section className="py-20 bg-gradient-to-b from-slate-900 to-slate-950">
             <div className="container mx-auto px-6">
                 <div className="text-center mb-16">
                     <h2 className="text-4xl md:text-5xl font-bold font-display text-white mb-6">
-                        {t.stats.title}
+                        {statsData.title}
                     </h2>
                     <div className="w-24 h-1 bg-gradient-to-r from-indigo-500 to-purple-500 mx-auto rounded-full"></div>
                 </div>
 
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
-                    {t.stats.stats.map((stat, idx) => {
-                        const Icon = stat.icon;
+                    {statsData.stats.map((stat, idx) => {
+                        const Icon = getIcon(stat.icon);
                         return (
                             <motion.div
                                 key={idx}

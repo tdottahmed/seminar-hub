@@ -25,6 +25,18 @@ export default function Welcome({
     galleryItems = [],
     canLogin,
     canRegister,
+    heroSection,
+    statsSection,
+    aboutSection,
+    testimonialsSection,
+    testimonials = [],
+    programsSection,
+    programs = [],
+    howItWorksSection,
+    gallerySection,
+    teamSection,
+    faqSection,
+    faqs = []
 }) {
     const [lang, setLang] = useState("en");
     const t = translations[lang];
@@ -43,36 +55,36 @@ export default function Welcome({
                 setLang={setLang}
             />
 
-            <HeroSection t={t} isBn={isBn} lang={lang} />
+            <HeroSection t={t} isBn={isBn} lang={lang} content={heroSection?.content} />
 
-            <TrustedBySection t={t} />
 
-            <StatsSection t={t} />
+            <StatsSection t={t} content={statsSection?.content} lang={lang} />
 
-            <AboutSection t={t} isBn={isBn} />
+            <AboutSection t={t} isBn={isBn} content={aboutSection?.content} lang={lang} />
 
             <EventsSection t={t} upcomingEvents={upcomingEvents} isBn={isBn} />
 
-            <TestimonialsSection t={t} isBn={isBn} />
+            <TestimonialsSection t={t} isBn={isBn} content={testimonialsSection?.content} testimonials={testimonials} lang={lang} />
 
-            <ProgramsSection t={t} isBn={isBn} />
+            <ProgramsSection t={t} isBn={isBn} content={programsSection?.content} programs={programs} lang={lang} />
 
-            <HowItWorksSection t={t} />
+            <HowItWorksSection t={t} content={howItWorksSection?.content} lang={lang} />
 
             <TeamSection
                 t={t}
-                teamLead={teamLead}
+                leader={teamLead}
                 teamMembers={teamMembers}
+                content={teamSection?.content}
                 isBn={isBn}
+                lang={lang}
             />
 
-            <GallerySection t={t} galleryItems={galleryItems} isBn={isBn} />
+            <GallerySection t={t} isBn={isBn} content={gallerySection?.content} galleryItems={galleryItems} lang={lang} />
 
-            <FAQSection t={t} />
+            <FAQSection t={t} isBn={isBn} content={faqSection?.content} faqs={faqs} lang={lang} />
 
             <CTASection t={t} />
 
-            {/* <NewsletterSection t={t} /> */}
 
             <Footer t={t} />
         </div>

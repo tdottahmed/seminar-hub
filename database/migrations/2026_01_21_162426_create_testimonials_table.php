@@ -11,11 +11,16 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('galleries', function (Blueprint $table) {
+        Schema::create('testimonials', function (Blueprint $table) {
             $table->id();
-            $table->string('image')->nullable();
-            $table->boolean('is_active')->default(true);
+            $table->string('name');
+            $table->json('role')->nullable();
+            $table->json('company')->nullable();
+            $table->json('content');
+            $table->string('avatar_path')->nullable();
+            $table->integer('rating')->default(5);
             $table->integer('order')->default(0);
+            $table->boolean('is_active')->default(true);
             $table->timestamps();
         });
     }
@@ -25,6 +30,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('galleries');
+        Schema::dropIfExists('testimonials');
     }
 };

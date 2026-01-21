@@ -36,9 +36,6 @@ class GalleryController extends Controller
     public function store(Request $request)
     {
         $rules = [
-            'title' => 'required|string|max:255',
-            'description' => 'nullable|string',
-            'category' => 'nullable|string|max:255',
             'is_active' => 'boolean',
             'order' => 'nullable|integer|min:0',
         ];
@@ -57,7 +54,7 @@ class GalleryController extends Controller
             $file = $request->file('image');
             $filename = Str::uuid() . '.' . $file->getClientOriginalExtension();
             $path = $file->storeAs('gallery', $filename, 'public');
-            $validated['image'] = Storage::url($path);
+            $validated['image'] = 'gallery/' . $filename;
         } elseif ($request->has('image')) {
             $imageValue = $request->input('image');
             if (empty($imageValue) || $imageValue === null) {
@@ -98,9 +95,6 @@ class GalleryController extends Controller
     public function update(Request $request, Gallery $gallery)
     {
         $rules = [
-            'title' => 'required|string|max:255',
-            'description' => 'nullable|string',
-            'category' => 'nullable|string|max:255',
             'is_active' => 'boolean',
             'order' => 'nullable|integer|min:0',
         ];
@@ -120,11 +114,16 @@ class GalleryController extends Controller
             $file = $request->file('image');
             $filename = Str::uuid() . '.' . $file->getClientOriginalExtension();
             $path = $file->storeAs('gallery', $filename, 'public');
-            $validated['image'] = Storage::url($path);
+            $validated['image'] = 'gallery/' . $filename;
 
-            // Delete old image if it exists and is stored locally
-            if ($gallery->image && strpos($gallery->image, '/storage/') !== false) {
-                $oldPath = str_replace('/storage/', '', parse_url($gallery->image, PHP_URL_PATH));
+            // Delete old image if it exists
+            if ($gallery->image) {
+                $oldPath = $gallery->image;
+                if (strpos($gallery->image, '/storage/') !== false) {
+                   $oldPath = str_replace('/storage/', '', parse_url($gallery->image, PHP_URL_PATH));
+                }
+                $oldPath = ltrim($oldPath, '/');
+                
                 if (Storage::disk('public')->exists($oldPath)) {
                     Storage::disk('public')->delete($oldPath);
                 }
@@ -137,9 +136,14 @@ class GalleryController extends Controller
                 // Image was removed - clear it
                 $validated['image'] = null;
 
-                // Delete old image if it exists and is stored locally
-                if ($gallery->image && strpos($gallery->image, '/storage/') !== false) {
-                    $oldPath = str_replace('/storage/', '', parse_url($gallery->image, PHP_URL_PATH));
+                // Delete old image if it exists
+                if ($gallery->image) {
+                    $oldPath = $gallery->image;
+                    if (strpos($gallery->image, '/storage/') !== false) {
+                        $oldPath = str_replace('/storage/', '', parse_url($gallery->image, PHP_URL_PATH));
+                    }
+                    $oldPath = ltrim($oldPath, '/');
+
                     if (Storage::disk('public')->exists($oldPath)) {
                         Storage::disk('public')->delete($oldPath);
                     }
@@ -164,8 +168,13 @@ class GalleryController extends Controller
     public function destroy(Gallery $gallery)
     {
         // Delete image file if exists
-        if ($gallery->image && strpos($gallery->image, '/storage/') !== false) {
-            $oldPath = str_replace('/storage/', '', parse_url($gallery->image, PHP_URL_PATH));
+        if ($gallery->image) {
+            $oldPath = $gallery->image;
+            if (strpos($gallery->image, '/storage/') !== false) {
+                $oldPath = str_replace('/storage/', '', parse_url($gallery->image, PHP_URL_PATH));
+            }
+            $oldPath = ltrim($oldPath, '/');
+
             if (Storage::disk('public')->exists($oldPath)) {
                 Storage::disk('public')->delete($oldPath);
             }

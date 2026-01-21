@@ -17,8 +17,61 @@ export default function Edit({ auth, section }) {
 
     const submit = (e) => {
         e.preventDefault();
-        put(route('admin.frontend.update', section.id));
+        put(route('admin.frontend.update', section.slug)); // Use slug for route binding
     };
+
+    // Helper to upload image
+    const handleImageUpload = async (file, onSuccess) => {
+        const formData = new FormData();
+        formData.append('image', file);
+        formData.append('folder', `frontend/${section.slug}`);
+
+        try {
+            const response = await axios.post(route('admin.upload.image'), formData, {
+                headers: { 'Content-Type': 'multipart/form-data' }
+            });
+            onSuccess(response.data.url);
+        } catch (error) {
+            console.error('Upload failed:', error);
+            alert('Image upload failed. Please try again.');
+        }
+    };
+
+    const renderImageInput = (value, onChange, label) => (
+        <div className="mb-4">
+            <InputLabel value={label} />
+            <div className="flex items-start gap-4 mt-1">
+                <div className="flex-1">
+                    <TextInput
+                        className="w-full"
+                        value={value}
+                        onChange={(e) => onChange(e.target.value)}
+                        placeholder="Image URL"
+                    />
+                </div>
+                <div className="flex flex-col gap-2">
+                    <label className="cursor-pointer bg-indigo-50 text-indigo-600 px-4 py-2.5 rounded-lg text-sm font-medium hover:bg-indigo-100 transition text-center whitespace-nowrap">
+                        Upload Image
+                        <input
+                            type="file"
+                            className="hidden"
+                            accept="image/*"
+                            onChange={(e) => {
+                                if (e.target.files?.[0]) {
+                                    handleImageUpload(e.target.files[0], onChange);
+                                }
+                            }}
+                        />
+                    </label>
+                </div>
+            </div>
+            {value && (
+                <div className="mt-2 relative group w-fit">
+                    <img src={value} alt="Preview" className="h-24 w-auto rounded border border-slate-200 object-cover bg-slate-50" />
+                </div>
+            )}
+        </div>
+    );
 
     // Helper to render inputs recursively or for specific keys
     const renderInputs = (lang) => {
@@ -28,29 +81,47 @@ export default function Edit({ auth, section }) {
         return Object.keys(content).map((key) => {
             const value = content[key];
             const fieldKey = `content.${lang}.${key}`;
+            const label = key.charAt(0).toUpperCase() + key.slice(1).replace(/([A-Z])/g, ' $1').trim();
 
             if (Array.isArray(value)) {
                 // Determine if it's a list of strings or list of objects
                 if (value.length > 0 && typeof value[0] === 'string') {
-                    // List of strings (e.g., words)
+                    // Check if it's likely an image array
+                    const isImageArray = key.toLowerCase().includes('image') || key.toLowerCase().includes('photo');
+                    
+                    // List of strings (e.g., words, images)
                      return (
-                        <div key={key} className="mb-4">
-                            <InputLabel value={key.charAt(0).toUpperCase() + key.slice(1)} />
+                        <div key={key} className="mb-4 bg-slate-50/50 p-4 rounded-xl border border-slate-200">
+                            <InputLabel value={label} className="mb-3 font-semibold text-lg text-slate-700" />
                             {value.map((item, idx) => (
-                                <div key={idx} className="mb-2">
-                                    <TextInput
-                                        className="w-full"
-                                        value={item}
-                                        onChange={(e) => {
+                                <div key={idx} className="mb-3 last:mb-0">
+                                    {isImageArray ? renderImageInput(
+                                        item,
+                                        (newUrl) => {
                                             const newArray = [...data.content[lang][key]];
-                                            newArray[idx] = e.target.value;
+                                            newArray[idx] = newUrl;
                                             const newContent = {
                                                 ...data.content,
                                                 [lang]: { ...data.content[lang], [key]: newArray }
                                             };
                                             setData('content', newContent);
-                                        }}
-                                    />
+                                        },
+                                        `Image ${idx + 1}`
+                                    ) : (
+                                        <TextInput
+                                            className="w-full"
+                                            value={item}
+                                            onChange={(e) => {
+                                                const newArray = [...data.content[lang][key]];
+                                                newArray[idx] = e.target.value;
+                                                const newContent = {
+                                                    ...data.content,
+                                                    [lang]: { ...data.content[lang], [key]: newArray }
+                                                };
+                                                setData('content', newContent);
+                                            }}
+                                        />
+                                    )}
                                 </div>
                             ))}
                         </div>
@@ -58,29 +129,56 @@ export default function Edit({ auth, section }) {
                 } else if (value.length > 0 && typeof value[0] === 'object') {
                     // List of objects (e.g., features)
                      return (
-                        <div key={key} className="mb-6 border p-4 rounded-lg bg-slate-50">
-                            <InputLabel value={key.charAt(0).toUpperCase() + key.slice(1)} className="mb-2 font-bold text-lg" />
+                        <div key={key} className="mb-6 border p-4 rounded-xl bg-slate-50/50">
+                            <InputLabel value={label} className="mb-4 font-bold text-lg text-slate-800" />
                             {value.map((item, idx) => (
-                                <div key={idx} className="mb-4 pb-4 border-b last:border-0 border-slate-200">
-                                    <p className="text-xs font-bold text-slate-400 mb-2 uppercase">Item {idx + 1}</p>
-                                    {Object.keys(item).map((subKey) => (
-                                        <div key={subKey} className="mb-2">
-                                            <InputLabel value={subKey} className="text-xs" />
-                                            <TextInput
-                                                className="w-full text-sm"
-                                                value={item[subKey]}
-                                                onChange={(e) => {
-                                                    const newArray = [...data.content[lang][key]];
-                                                    newArray[idx] = { ...newArray[idx], [subKey]: e.target.value };
-                                                    const newContent = {
-                                                        ...data.content,
-                                                        [lang]: { ...data.content[lang], [key]: newArray }
-                                                    };
-                                                    setData('content', newContent);
-                                                }}
-                                            />
-                                        </div>
-                                    ))}
+                                <div key={idx} className="mb-4 p-4 bg-white rounded-lg border border-slate-200 shadow-sm">
+                                    <p className="text-xs font-bold text-slate-400 mb-3 uppercase tracking-wider">Item {idx + 1}</p>
+                                    <div className="grid gap-4">
+                                        {Object.keys(item).map((subKey) => {
+                                            const isImageField = subKey.toLowerCase().includes('url') || subKey.toLowerCase().includes('image') || subKey.toLowerCase().includes('photo') || subKey.toLowerCase().includes('avatar');
+                                            const subLabel = subKey.charAt(0).toUpperCase() + subKey.slice(1).replace(/([A-Z])/g, ' $1').trim();
+                                            
+                                            if (isImageField) {
+                                                return (
+                                                    <div key={subKey}>
+                                                        {renderImageInput(
+                                                            item[subKey],
+                                                            (newUrl) => {
+                                                                const newArray = [...data.content[lang][key]];
+                                                                newArray[idx] = { ...newArray[idx], [subKey]: newUrl };
+                                                                const newContent = {
+                                                                    ...data.content,
+                                                                    [lang]: { ...data.content[lang], [key]: newArray }
+                                                                };
+                                                                setData('content', newContent);
+                                                            },
+                                                            subLabel
+                                                        )}
+                                                    </div>
+                                                );
+                                            }
+
+                                            return (
+                                                <div key={subKey}>
+                                                    <InputLabel value={subLabel} className="text-xs mb-1 text-slate-500" />
+                                                    <TextInput
+                                                        className="w-full text-sm"
+                                                        value={item[subKey]}
+                                                        onChange={(e) => {
+                                                            const newArray = [...data.content[lang][key]];
+                                                            newArray[idx] = { ...newArray[idx], [subKey]: e.target.value };
+                                                            const newContent = {
+                                                                ...data.content,
+                                                                [lang]: { ...data.content[lang], [key]: newArray }
+                                                            };
+                                                            setData('content', newContent);
+                                                        }}
+                                                    />
+                                                </div>
+                                            );
+                                        })}
+                                    </div>
                                 </div>
                             ))}
                         </div>
@@ -88,21 +186,57 @@ export default function Edit({ auth, section }) {
                 }
             }
 
+            // Single Value
+            const isImageKey = key.toLowerCase().includes('image') || key.toLowerCase().includes('photo') || key.toLowerCase().includes('url') || key.toLowerCase().includes('bg');
+            if (isImageKey) {
+                 return (
+                    <div key={key}>
+                        {renderImageInput(
+                            value,
+                            (newUrl) => {
+                                const newContent = {
+                                    ...data.content,
+                                    [lang]: { ...data.content[lang], [key]: newUrl }
+                                };
+                                setData('content', newContent);
+                            },
+                            label
+                        )}
+                    </div>
+                 );
+            }
+
             return (
                 <div key={key} className="mb-4">
-                    <InputLabel htmlFor={fieldKey} value={key.charAt(0).toUpperCase() + key.slice(1)} />
-                    <TextInput
-                        id={fieldKey}
-                        className="mt-1 block w-full"
-                        value={value}
-                        onChange={(e) => {
-                            const newContent = {
-                                ...data.content,
-                                [lang]: { ...data.content[lang], [key]: e.target.value }
-                            };
-                            setData('content', newContent);
-                        }}
-                    />
+                    <InputLabel htmlFor={fieldKey} value={label} />
+                    {value.length > 100 ? (
+                         <textarea
+                            id={fieldKey}
+                            rows={3}
+                            className="mt-1 block w-full border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm"
+                            value={value}
+                            onChange={(e) => {
+                                const newContent = {
+                                    ...data.content,
+                                    [lang]: { ...data.content[lang], [key]: e.target.value }
+                                };
+                                setData('content', newContent);
+                            }}
+                        />
+                    ) : (
+                        <TextInput
+                            id={fieldKey}
+                            className="mt-1 block w-full"
+                            value={value}
+                            onChange={(e) => {
+                                const newContent = {
+                                    ...data.content,
+                                    [lang]: { ...data.content[lang], [key]: e.target.value }
+                                };
+                                setData('content', newContent);
+                            }}
+                        />
+                    )}
                 </div>
             );
         });

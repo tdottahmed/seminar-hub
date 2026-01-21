@@ -1,147 +1,199 @@
 import { Link } from "@inertiajs/react";
 import { motion } from "framer-motion";
-import { Calendar, MapPin, Users, ArrowRight } from "lucide-react";
+import { Calendar, MapPin, Users, ArrowRight, Sparkles, Clock, Ticket } from "lucide-react";
+import clsx from "clsx";
 
 export default function EventsSection({ t, upcomingEvents, isBn }) {
-    return (
-        <section id="events" className="py-24 bg-slate-900 relative overflow-hidden">
-            <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-indigo-900/10 via-slate-900 to-slate-900 pointer-events-none"></div>
+    
+    // Helper for date formatting
+    const formatDate = (dateString, format = 'short') => {
+        const date = new Date(dateString);
+        if (format === 'day') return date.getDate();
+        if (format === 'month') return date.toLocaleString("default", { month: "short" });
+        if (format === 'full') return date.toLocaleDateString(undefined, { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
+        if (format === 'time') return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+        return date.toLocaleDateString();
+    };
 
-            <div className="container mx-auto px-6 mb-16 text-center relative z-10">
-                <motion.div
-                    initial={{ opacity: 0, y: 30 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true }}
-                    transition={{ duration: 0.6 }}
-                >
-                    <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-gradient-to-r from-pink-500/10 to-rose-500/10 border border-pink-500/30 mb-6">
-                        <Calendar className="w-4 h-4 text-pink-400" />
-                        <span className="text-sm font-semibold text-pink-300 uppercase tracking-wider">
-                            {isBn ? "আসন্ন ইভেন্ট" : "Upcoming Events"}
-                        </span>
-                    </div>
-                    <h2 className="text-4xl md:text-5xl font-bold font-display text-white mb-6">
-                        {t.events.title}
-                    </h2>
-                    <p className="text-slate-400 text-xl max-w-2xl mx-auto">
-                        {t.events.subtitle}
-                    </p>
-                </motion.div>
+    return (
+        <section id="events" className="py-24 bg-[#0B0F19] relative overflow-hidden">
+             {/* Background Effects */}
+            <div className="absolute top-0 left-0 w-full h-full overflow-hidden pointer-events-none">
+                 <div className="absolute top-[10%] left-[20%] w-[30%] h-[30%] bg-indigo-900/10 rounded-full blur-[120px]"></div>
+                 <div className="absolute bottom-[20%] right-[10%] w-[40%] h-[40%] bg-purple-900/10 rounded-full blur-[120px]"></div>
             </div>
 
             <div className="container mx-auto px-6 relative z-10">
+                {/* Section Header */}
+                <div className="text-center mb-24">
+                    <motion.div
+                        initial={{ opacity: 0, y: 20 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        viewport={{ once: true }}
+                        transition={{ duration: 0.6 }}
+                        className="inline-block"
+                    >
+                         <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-indigo-500/10 border border-indigo-500/30 mb-6 backdrop-blur-md">
+                            <Sparkles className="w-3.5 h-3.5 text-indigo-400" />
+                            <span className="text-xs font-bold text-indigo-300 uppercase tracking-widest">
+                                {isBn ? "আসন্ন ইভেন্ট" : "Upcoming Events"}
+                            </span>
+                        </div>
+                        <h2 className="text-4xl md:text-5xl lg:text-7xl font-black font-display text-white mb-6 tracking-tight">
+                            {t.events.title}
+                        </h2>
+                        <div className="h-1 w-24 mx-auto bg-gradient-to-r from-indigo-500 to-purple-600 rounded-full"></div>
+                    </motion.div>
+                </div>
+
                 {upcomingEvents.length > 0 ? (
-                    <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-                        {upcomingEvents.slice(0, 6).map((event, index) => (
-                            <motion.div
-                                key={event.id}
-                                initial={{ opacity: 0, y: 30 }}
-                                whileInView={{ opacity: 1, y: 0 }}
-                                viewport={{ once: true }}
-                                transition={{ duration: 0.5, delay: index * 0.1 }}
-                                whileHover={{ y: -8 }}
-                                className="group"
-                            >
-                                <Link href={route("events.show", event.slug)}>
-                                    <div className="bg-white/5 backdrop-blur-md border border-white/10 rounded-2xl overflow-hidden hover:border-indigo-500/50 transition-all duration-300 h-full">
-                                        {/* Event Image */}
-                                        <div className="relative h-48 overflow-hidden">
-                                            <img
-                                                src={event.banner_image || `https://ui-avatars.com/api/?name=${encodeURIComponent(event.title)}&background=6366f1&color=fff&size=800`}
-                                                alt={event.title}
-                                                className="w-full h-full object-cover group-hover:scale-110 transition duration-500"
-                                            />
-                                            <div className="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-slate-950/40 to-transparent"></div>
-                                            <div className="absolute top-4 left-4">
-                                                <div className="px-3 py-1.5 bg-white/10 backdrop-blur-md border border-white/20 rounded-lg text-white text-center min-w-[80px]">
-                                                    <div className="text-xl font-bold leading-none">
-                                                        {new Date(event.start_date).getDate()}
-                                                    </div>
-                                                    <div className="text-xs uppercase font-medium">
-                                                        {new Date(event.start_date).toLocaleString("default", { month: "short" })}
+                    <div className="space-y-32">
+                        {upcomingEvents.map((event, index) => {
+                            const isEven = index % 2 === 0;
+                            return (
+                                <motion.div
+                                    key={event.id}
+                                    initial={{ opacity: 0, y: 50 }}
+                                    whileInView={{ opacity: 1, y: 0 }}
+                                    viewport={{ once: true, margin: "-100px" }}
+                                    transition={{ duration: 0.8 }}
+                                    className="relative group"
+                                >
+                                    {/* Connector Line (except for last item) */}
+                                    {index !== upcomingEvents.length - 1 && (
+                                        <div className="absolute left-1/2 bottom-[-128px] w-px h-32 bg-gradient-to-b from-white/10 to-transparent hidden lg:block"></div>
+                                    )}
+
+                                    <div className={clsx(
+                                        "grid lg:grid-cols-2 gap-12 lg:gap-20 items-center",
+                                        !isEven && "lg:grid-flow-col-dense" // Swap logic for odd items
+                                    )}>
+                                        
+                                        {/* Image Side */}
+                                        <div className={clsx(
+                                            "relative",
+                                            !isEven && "lg:col-start-2"
+                                        )}>
+                                            <Link href={route("events.show", event.slug)} className="block relative aspect-[4/3] lg:aspect-square rounded-[2.5rem] overflow-hidden border border-white/10 shadow-2xl group-hover:border-indigo-500/30 transition-all duration-500">
+                                                <img
+                                                    src={event.banner_image || `https://ui-avatars.com/api/?name=${encodeURIComponent(event.title)}&background=1e293b&color=fff`}
+                                                    alt={event.title}
+                                                    className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                                                />
+                                                <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-transparent to-transparent opacity-80"></div>
+                                            
+                                                {/* Floating Badges on Image */}
+                                                <div className="absolute bottom-8 left-8 right-8 flex items-end justify-between">
+                                                     <div className="bg-white/10 backdrop-blur-md border border-white/20 p-4 rounded-2xl text-center min-w-[80px]">
+                                                         <span className="block text-3xl font-bold text-white leading-none">
+                                                             {formatDate(event.start_date, 'day')}
+                                                         </span>
+                                                         <span className="block text-xs font-bold text-indigo-300 uppercase tracking-wider mt-1">
+                                                             {formatDate(event.start_date, 'month')}
+                                                         </span>
+                                                     </div>
+
+                                                     <div className={clsx(
+                                                        "px-4 py-2 rounded-xl backdrop-blur-md border font-bold text-xs uppercase tracking-wider shadow-lg",
+                                                        event.is_free 
+                                                            ? "bg-emerald-500/20 border-emerald-500/30 text-emerald-300" 
+                                                            : "bg-indigo-500/20 border-indigo-500/30 text-indigo-300"
+                                                    )}>
+                                                        {event.is_free ? t.events.free : t.events.paid}
                                                     </div>
                                                 </div>
-                                            </div>
-                                            <div className="absolute top-4 right-4">
-                                                <div className={`px-3 py-1 rounded-full text-sm font-semibold ${event.is_free ? 'bg-green-500/20 text-green-300' : 'bg-indigo-500/20 text-indigo-300'}`}>
-                                                    {event.is_free ? t.events.free : t.events.paid}
-                                                </div>
-                                            </div>
+                                            </Link>
                                         </div>
 
-                                        {/* Event Content */}
-                                        <div className="p-6">
-                                            <div className="flex items-center gap-3 mb-4">
-                                                <span className="flex items-center gap-1 text-sm text-slate-400">
-                                                    <Calendar size={14} />
-                                                    {new Date(event.start_date).toLocaleDateString()}
-                                                </span>
-                                                {event.venue && (
-                                                    <span className="flex items-center gap-1 text-sm text-slate-400">
-                                                        <MapPin size={14} />
-                                                        {event.venue}
-                                                    </span>
-                                                )}
-                                            </div>
-
-                                            <h3 className="text-xl font-bold text-white mb-3 line-clamp-2 group-hover:text-indigo-300 transition">
-                                                {event.title}
-                                            </h3>
-
-                                            <p className="text-slate-400 text-sm mb-4 line-clamp-2">
-                                                {event.short_description || event.description || "Join us for an immersive experience designed to elevate your skills."}
-                                            </p>
-
-                                            <div className="flex items-center justify-between mt-6">
-                                                <div className="flex items-center gap-2">
-                                                    <Users size={16} className="text-slate-400" />
-                                                    <span className="text-sm text-slate-400">
-                                                        {event.max_participants ? `${event.max_participants} ${t.events.seatsLeft}` : 'Unlimited Seats'}
-                                                    </span>
+                                        {/* Content Side */}
+                                        <div className={clsx(
+                                            "relative",
+                                            !isEven && "lg:col-start-1 text-right lg:text-right" // Align text appropriately
+                                        )}>
+                                            <div className={clsx(
+                                                "flex flex-col gap-6",
+                                                !isEven ? "items-end" : "items-start"
+                                            )}>
+                                                <div className="flex flex-wrap gap-4 text-sm font-medium text-slate-400">
+                                                    <div className="flex items-center gap-2">
+                                                        <Clock className="w-4 h-4 text-indigo-400" />
+                                                        {formatDate(event.start_date, 'time')}
+                                                    </div>
+                                                    {event.venue && (
+                                                        <div className="flex items-center gap-2">
+                                                            <MapPin className="w-4 h-4 text-pink-400" />
+                                                            {event.venue}
+                                                        </div>
+                                                    )}
                                                 </div>
-                                                <div className="inline-flex items-center gap-2 text-indigo-300 font-semibold text-sm group-hover:gap-3 transition-all">
-                                                    {t.events.viewDetails}
-                                                    <ArrowRight size={16} className="group-hover:translate-x-1 transition" />
+
+                                                <h3 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white leading-[1.1] group-hover:text-indigo-200 transition-colors">
+                                                    <Link href={route("events.show", event.slug)}>
+                                                        {event.title}
+                                                    </Link>
+                                                </h3>
+
+                                                <p className="text-slate-400 text-lg leading-relaxed max-w-xl">
+                                                    {event.short_description || event.description || "Join us for an immersive experience designed to elevate your skills and connect you with industry leaders."}
+                                                </p>
+
+                                                <div className="pt-4 flex flex-wrap gap-4">
+                                                     {event.max_participants && (
+                                                        <div className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-white/5 border border-white/10 text-slate-300 text-sm">
+                                                            <Users className="w-4 h-4 text-emerald-400" />
+                                                            <span>
+                                                                {event.max_participants} Seats Available
+                                                            </span>
+                                                        </div>
+                                                     )}
+                                                </div>
+
+                                                <div className="pt-6">
+                                                    <Link 
+                                                        href={route("events.show", event.slug)}
+                                                        className="inline-flex items-center gap-3 px-8 py-4 bg-white text-slate-950 rounded-full font-bold text-lg hover:bg-indigo-50 transition-all shadow-[0_0_20px_rgba(255,255,255,0.3)] hover:shadow-[0_0_30px_rgba(99,102,241,0.5)] group/btn"
+                                                    >
+                                                        {t.events.viewDetails}
+                                                        <ArrowRight className="w-5 h-5 group-hover/btn:translate-x-1 transition-transform" />
+                                                    </Link>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
-                                </Link>
-                            </motion.div>
-                        ))}
+                                </motion.div>
+                            );
+                        })}
                     </div>
                 ) : (
-                    <motion.div
+                    // Empty State
+                     <motion.div
                         initial={{ opacity: 0, scale: 0.95 }}
                         whileInView={{ opacity: 1, scale: 1 }}
                         viewport={{ once: true }}
-                        className="text-center py-20 bg-white/5 rounded-3xl border border-dashed border-white/10 backdrop-blur-sm"
+                        className="text-center py-32 bg-white/5 rounded-[3rem] border border-dashed border-white/10 backdrop-blur-sm max-w-3xl mx-auto"
                     >
-                        <Calendar className="w-16 h-16 text-slate-600 mx-auto mb-4" />
-                        <p className="text-slate-400 text-xl">
-                            {isBn ? "কোনো আসন্ন ইভেন্ট নেই" : "No upcoming events scheduled."}
-                        </p>
-                        <p className="text-slate-500 text-sm mt-2">
-                            {isBn ? "শীঘ্রই চমৎকার ইভেন্টের জন্য চেক করুন!" : "Check back soon for exciting events!"}
+                        <div className="w-24 h-24 mx-auto bg-slate-800/50 rounded-full flex items-center justify-center mb-8 border border-white/10 shadow-xl">
+                            <Sparkles className="w-10 h-10 text-indigo-400" />
+                        </div>
+                        <h3 className="text-3xl font-bold text-white mb-4">
+                            {isBn ? "কোনো আসন্ন ইভেন্ট নেই" : "Curating Experiences..."}
+                        </h3>
+                        <p className="text-slate-400 text-lg max-w-md mx-auto">
+                            {isBn ? "শীঘ্রই চমৎকার ইভেন্টের জন্য চেক করুন!" : "We are diligently planning our next lineup of exclusive events. Check back soon."}
                         </p>
                     </motion.div>
                 )}
 
                 {upcomingEvents.length > 0 && (
-                    <motion.div
-                        initial={{ opacity: 0 }}
-                        whileInView={{ opacity: 1 }}
-                        viewport={{ once: true }}
-                        className="text-center mt-12"
-                    >
+                     <div className="text-center mt-32">
                         <Link
                             href='/events'
-                            className="inline-flex items-center gap-2 px-8 py-3 rounded-full bg-gradient-to-r from-indigo-500/10 to-purple-500/10 border border-indigo-500/30 text-indigo-300 font-bold hover:from-indigo-500/20 hover:to-purple-500/20 transition transform hover:-translate-y-0.5"
+                            className="inline-flex items-center gap-2 text-slate-400 hover:text-white transition-colors font-medium tracking-widest uppercase text-sm border-b border-transparent hover:border-white pb-1"
                         >
-                            {t.events.viewAll}
-                            <ArrowRight size={18} />
+                            {isBn ? "সব ইভেন্ট দেখুন" : "View All Events"}
+                            <ArrowRight className="w-4 h-4" />
                         </Link>
-                    </motion.div>
+                     </div>
                 )}
             </div>
         </section>

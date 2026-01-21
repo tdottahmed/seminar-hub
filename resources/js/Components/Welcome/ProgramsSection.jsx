@@ -1,7 +1,34 @@
 import { motion } from "framer-motion";
 import { ArrowRight } from "lucide-react";
+import * as Icons from "lucide-react";
 
-export default function ProgramsSection({ t, isBn }) {
+export default function ProgramsSection({ t, isBn, content, programs, lang }) {
+    // Determine source data for Section Header
+    const sectionData = content ? content[lang] : t.programs;
+    
+    // Determine source data for Programs List
+    // Map dynamic data to match the component's expected structure
+    const list = (programs && programs.length > 0) 
+        ? programs.map(item => ({
+            title: item.title[lang] || item.title['en'],
+            desc: item.description[lang] || item.description['en'],
+            icon: item.icon, // String name from DB
+            color: item.color_class || 'from-indigo-500 to-purple-500', // Allow dynamic colors
+            count: item.count_label ? (item.count_label[lang] || item.count_label['en']) : "Open"
+        }))
+        : t.programs.categories;
+
+    // Helper to get Icon
+    const getIcon = (iconSource) => {
+        if (typeof iconSource === 'string') {
+             const IconComponent = Icons[iconSource];
+             return IconComponent || Icons.Box;
+        }
+        return iconSource || Icons.Box; 
+    };
+
+    if (!sectionData) return null;
+
     return (
         <section id="programs" className="py-24 bg-slate-900 relative">
             <div className="container mx-auto px-6 mb-16 text-center">
@@ -12,18 +39,18 @@ export default function ProgramsSection({ t, isBn }) {
                     transition={{ duration: 0.6 }}
                 >
                     <h2 className="text-4xl md:text-5xl font-bold font-display text-white mb-6">
-                        {t.programs.title}
+                        {sectionData.title}
                     </h2>
                     <p className="text-slate-400 text-xl max-w-2xl mx-auto">
-                        {t.programs.subtitle}
+                        {sectionData.subtitle}
                     </p>
                 </motion.div>
             </div>
 
             <div className="container mx-auto px-6">
                 <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
-                    {t.programs.categories.map((category, idx) => {
-                        const Icon = category.icon;
+                    {list.map((category, idx) => {
+                        const Icon = getIcon(category.icon);
                         return (
                             <motion.div
                                 key={idx}
@@ -34,7 +61,8 @@ export default function ProgramsSection({ t, isBn }) {
                                 whileHover={{ y: -8 }}
                                 className="group"
                             >
-                                <div className={`bg-gradient-to-br ${category.color}/10 to-transparent backdrop-blur-md border border-white/10 rounded-2xl p-8 h-full hover:border-white/20 transition duration-300`}>
+                                <div className={`bg-gradient-to-br ${category.color.replace('from-', 'from-').replace('to-', 'to-')}/10 to-transparent backdrop-blur-md border border-white/10 rounded-2xl p-8 h-full hover:border-white/20 transition duration-300`}>
+                                    {/* Note: The gradient logic here assumes simple tailwind classes. For more complex dynamic colors, might need style prop */}
                                     <div className={`w-16 h-16 rounded-xl bg-gradient-to-br ${category.color} flex items-center justify-center mb-6 group-hover:scale-110 transition duration-300`}>
                                         <Icon className="w-8 h-8 text-white" />
                                     </div>
@@ -68,7 +96,7 @@ export default function ProgramsSection({ t, isBn }) {
                     className="text-center mt-12"
                 >
                     <button className="inline-flex items-center gap-2 px-8 py-3 rounded-full bg-gradient-to-r from-indigo-500 to-purple-500 text-white font-bold hover:from-indigo-600 hover:to-purple-600 transition transform hover:-translate-y-0.5 shadow-lg shadow-indigo-500/30">
-                        {t.programs.viewAll}
+                        {sectionData.viewAll}
                         <ArrowRight size={18} />
                     </button>
                 </motion.div>

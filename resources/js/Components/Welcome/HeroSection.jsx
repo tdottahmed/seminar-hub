@@ -7,19 +7,31 @@ import "swiper/css/effect-fade";
 import { ArrowRight, BookOpen } from "lucide-react";
 import { staticHeroImages } from "./data";
 
-export default function HeroSection({ t, isBn, lang }) { // Added lang as it's used in dependency array
+export default function HeroSection({ t, isBn, lang, content }) { 
+    // Use dynamic content if available, otherwise fallback to static translation
+    const heroData = content ? content[lang] : t.hero;
+    
+    // Ensure words is an array (API might return it as object or array)
+    const words = Array.isArray(heroData?.words) ? heroData.words : [];
+    const images = Array.isArray(heroData?.images) ? heroData.images : staticHeroImages;
+
     const [wordIndex, setWordIndex] = useState(0);
 
     useEffect(() => {
-        const interval = setInterval(() => {
-            setWordIndex((prev) => (prev + 1) % t.hero.words.length);
-        }, 3000);
-        return () => clearInterval(interval);
-    }, [lang, t.hero.words.length]);
+        if (words.length > 0) {
+            const interval = setInterval(() => {
+                setWordIndex((prev) => (prev + 1) % words.length);
+            }, 3000);
+            return () => clearInterval(interval);
+        }
+    }, [lang, words.length]);
+
+    // Safety check if data is missing
+    if (!heroData) return null;
 
     return (
         <section id="home" className="relative min-h-screen flex items-center justify-center overflow-hidden pt-20">
-            {/* Static Hero Background Slider */}
+            {/* Background Slider */}
             <div className="absolute inset-0 z-0">
                 <Swiper
                     modules={[Autoplay, EffectFade]}
@@ -28,7 +40,7 @@ export default function HeroSection({ t, isBn, lang }) { // Added lang as it's u
                     loop={true}
                     className="h-full w-full"
                 >
-                    {staticHeroImages.map((img, i) => (
+                    {images.map((img, i) => (
                         <SwiperSlide key={i}>
                             <div className="absolute inset-0 bg-gradient-to-b from-slate-950/70 via-slate-950/50 to-slate-950/80 z-10"></div>
                             <motion.img
@@ -51,18 +63,21 @@ export default function HeroSection({ t, isBn, lang }) { // Added lang as it's u
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 1 }}
                 >
-                    <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-gradient-to-r from-indigo-500/20 to-purple-500/20 border border-indigo-500/30 backdrop-blur-xl mb-8">
-                        <span className="flex h-2 w-2 relative">
-                            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-indigo-400 opacity-75"></span>
-                            <span className="relative inline-flex rounded-full h-2 w-2 bg-indigo-500"></span>
-                        </span>
-                        <span className="text-sm font-medium text-indigo-300">
-                            {t.hero.badge}
-                        </span>
-                    </div>
+                    {/* Badge */}
+                    {heroData.badge && (
+                        <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-gradient-to-r from-indigo-500/20 to-purple-500/20 border border-indigo-500/30 backdrop-blur-xl mb-8">
+                            <span className="flex h-2 w-2 relative">
+                                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-indigo-400 opacity-75"></span>
+                                <span className="relative inline-flex rounded-full h-2 w-2 bg-indigo-500"></span>
+                            </span>
+                            <span className="text-sm font-medium text-indigo-300">
+                                {heroData.badge}
+                            </span>
+                        </div>
+                    )}
 
                     <h1 className="text-5xl md:text-7xl lg:text-8xl font-black font-display tracking-tight text-white mb-6 leading-[1.1]">
-                        {t.hero.titlePrefix} <br />
+                        {heroData.titlePrefix} <br />
                         <div className="h-[1.2em] overflow-hidden">
                             <AnimatePresence mode="wait">
                                 <motion.span
@@ -73,14 +88,14 @@ export default function HeroSection({ t, isBn, lang }) { // Added lang as it's u
                                     transition={{ duration: 0.5 }}
                                     className="block text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 via-purple-400 to-pink-400"
                                 >
-                                    {t.hero.words[wordIndex]}
+                                    {words[wordIndex] || '...'}
                                 </motion.span>
                             </AnimatePresence>
                         </div>
                     </h1>
 
                     <p className="text-xl md:text-2xl text-slate-300 font-light mb-10 max-w-2xl mx-auto leading-relaxed">
-                        {t.hero.subtext}
+                        {heroData.subtext}
                     </p>
 
                     <div className="flex flex-col sm:flex-row gap-5 justify-center">
@@ -88,10 +103,10 @@ export default function HeroSection({ t, isBn, lang }) { // Added lang as it's u
                             href="#events"
                             className="px-8 py-4 rounded-full bg-gradient-to-r from-white to-slate-100 text-slate-900 font-bold text-lg hover:from-indigo-50 hover:to-purple-50 transition transform hover:-translate-y-1 shadow-2xl hover:shadow-indigo-500/30 flex items-center gap-2 justify-center"
                         >
-                            {t.hero.ctaPrimary} <ArrowRight size={20} />
+                            {heroData.ctaPrimary} <ArrowRight size={20} />
                         </a>
                         <button className="px-8 py-4 rounded-full backdrop-blur-xl bg-white/10 border border-white/20 text-white font-semibold text-lg hover:bg-white/20 transition transform hover:-translate-y-1 shadow-lg flex items-center gap-2 justify-center">
-                            {t.hero.ctaSecondary} <BookOpen size={20} />
+                            {heroData.ctaSecondary} <BookOpen size={20} />
                         </button>
                     </div>
                 </motion.div>

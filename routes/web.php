@@ -38,6 +38,9 @@ Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () 
     Route::resource('speakers', \App\Http\Controllers\Admin\SpeakerController::class);
     Route::resource('teams', \App\Http\Controllers\Admin\TeamController::class);
     Route::resource('galleries', \App\Http\Controllers\Admin\GalleryController::class);
+    Route::resource('testimonials', \App\Http\Controllers\Admin\TestimonialController::class);
+    Route::resource('faqs', \App\Http\Controllers\Admin\FaqController::class);
+    Route::resource('programs', \App\Http\Controllers\Admin\ProgramController::class);
     // Quizzes - both nested and standalone
     Route::resource('events.quizzes', \App\Http\Controllers\Admin\QuizController::class);
     Route::get('/quizzes', [\App\Http\Controllers\Admin\QuizController::class, 'all'])->name('quizzes.index');

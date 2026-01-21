@@ -40,7 +40,7 @@ export default function Index({ auth, sections }) {
                                     
                                     <div className="flex items-center gap-3 pt-4 border-t border-slate-100">
                                         <Link 
-                                            href={route('admin.frontend.edit', section.id)}
+                                            href={route('admin.frontend.edit', section.slug)}
                                             className="flex-1 flex items-center justify-center gap-2 py-2 px-4 rounded-lg bg-slate-900 text-white font-medium hover:bg-slate-800 transition"
                                         >
                                            <span className='sr-only'>Edit</span>

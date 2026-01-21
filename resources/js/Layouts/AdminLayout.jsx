@@ -2,6 +2,7 @@ import { useState } from 'react';
 import AdminSidebar from '@/Components/Admin/AdminSidebar';
 import AdminHeader from '@/Components/Admin/AdminHeader';
 import { Head } from '@inertiajs/react';
+import Toast from '@/Components/Toast';
 
 export default function AdminLayout({ user, title, header, children }) {
     const [sidebarOpen, setSidebarOpen] = useState(false);
@@ -10,6 +11,8 @@ export default function AdminLayout({ user, title, header, children }) {
         <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-slate-50 flex font-sans">
             <Head title={`${title} - Admin Panel`} />
             
+            <Toast />
+
             {/* Sidebar */}
             <AdminSidebar open={sidebarOpen} setOpen={setSidebarOpen} />
 

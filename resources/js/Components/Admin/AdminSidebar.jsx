@@ -1,12 +1,22 @@
 import { Link, usePage } from '@inertiajs/react';
-import { LayoutDashboard, Calendar, Users, FileQuestion, Settings, LogOut, X, Globe, Copy, Mic, UserCircle, Image } from 'lucide-react';
+import { 
+    LayoutDashboard, Calendar, Users, FileQuestion, Settings, LogOut, X, 
+    Globe, Copy, Mic, UserCircle, Image, LayoutTemplate, BarChart, Info, 
+    BookOpen, GitMerge, Star, Shield, Megaphone, FileText 
+} from 'lucide-react';
 import ApplicationLogo from '@/Components/ApplicationLogo';
 import clsx from 'clsx';
 
 export default function AdminSidebar({ open, setOpen }) {
     const { url } = usePage();
 
-    const isActive = (routePattern) => {
+    const isActive = (routePattern, param = null) => {
+        // Simple check + optional param check if needed (naive implementation)
+        // Inertia's route().current() handles params if passed as second arg? 
+        // Ziggy's route().current() : route().current('name', params)
+        if (param) {
+            return route().current(routePattern, param);
+        }
         return route().current(routePattern);
     };
 
@@ -17,13 +27,16 @@ export default function AdminSidebar({ open, setOpen }) {
         { label: 'Management', type: 'header' },
         { label: 'Events', href: route('admin.events.index'), icon: Calendar, active: isActive('admin.events.*') },
         { label: 'Speakers', href: route('admin.speakers.index'), icon: Mic, active: isActive('admin.speakers.*') },
-        { label: 'Team', href: route('admin.teams.index'), icon: UserCircle, active: isActive('admin.teams.*') },
-        { label: 'Gallery', href: route('admin.galleries.index'), icon: Image, active: isActive('admin.galleries.*') },
         { label: 'Quizzes', href: route('admin.quizzes.index'), icon: FileQuestion, active: isActive('admin.quizzes.*') || isActive('admin.events.quizzes.*') },
         { label: 'Registrations', href: route('admin.registrations.index'), icon: Users, active: isActive('admin.registrations.*') || isActive('admin.events.registrations.*') },
         
-        { label: 'Content', type: 'header' },
-        { label: 'Frontend', href: route('admin.frontend.index'), icon: Globe, active: isActive('admin.frontend.*') },
+        { label: 'Frontend CMS', type: 'header' },
+        { label: 'Page Contents', href: route('admin.frontend.index'), icon: LayoutTemplate, active: isActive('admin.frontend.index') || isActive('admin.frontend.edit') },
+        { label: 'Programs', href: route('admin.programs.index'), icon: BookOpen, active: isActive('admin.programs.*') },
+        { label: 'Testimonials', href: route('admin.testimonials.index'), icon: Star, active: isActive('admin.testimonials.*') },
+        { label: 'FAQs', href: route('admin.faqs.index'), icon: FileQuestion, active: isActive('admin.faqs.*') },
+        { label: 'Team', href: route('admin.teams.index'), icon: UserCircle, active: isActive('admin.teams.*') },
+        { label: 'Gallery', href: route('admin.galleries.index'), icon: Image, active: isActive('admin.galleries.*') },
     ];
 
     return (

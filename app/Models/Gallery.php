@@ -13,6 +13,8 @@ class Gallery extends Model
         'order' => 'integer',
     ];
 
+    protected $appends = ['image_url'];
+
     public function scopeActive($query)
     {
         return $query->where('is_active', true);
@@ -21,5 +23,24 @@ class Gallery extends Model
     public function scopeOrdered($query)
     {
         return $query->orderBy('order')->orderBy('created_at', 'desc');
+    }
+
+    public function getImageUrlAttribute()
+    {
+        if (!$this->image) {
+            return null;
+        }
+        
+        if (filter_var($this->image, FILTER_VALIDATE_URL)) {
+            return $this->image;
+        }
+
+        // Clean any potential leading slashes or existing storage prefix
+        $path = ltrim($this->image, '/');
+        if (str_starts_with($path, 'storage/')) {
+            return '/' . $path;
+        }
+
+        return '/storage/' . $path;
     }
 }
