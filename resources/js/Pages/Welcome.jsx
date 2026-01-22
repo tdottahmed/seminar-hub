@@ -15,6 +15,7 @@ import FAQSection from "../Components/Welcome/FAQSection";
 import CTASection from "../Components/Welcome/CTASection";
 import NewsletterSection from "../Components/Welcome/NewsletterSection";
 import Footer from "../Components/Welcome/Footer";
+import FloatingActions from "../Components/Welcome/FloatingActions";
 import { translations } from "../Components/Welcome/data";
 
 export default function Welcome({
@@ -64,7 +65,7 @@ export default function Welcome({
 
             <EventsSection t={t} upcomingEvents={upcomingEvents} isBn={isBn} />
 
-            <TestimonialsSection t={t} isBn={isBn} content={testimonialsSection?.content} testimonials={testimonials} lang={lang} />
+            {/* <TestimonialsSection t={t} isBn={isBn} content={testimonialsSection?.content} testimonials={testimonials} lang={lang} /> */}
 
             <ProgramsSection t={t} isBn={isBn} content={programsSection?.content} programs={programs} lang={lang} />
 
@@ -85,6 +86,7 @@ export default function Welcome({
 
             <CTASection t={t} />
 
+            <FloatingActions />
 
             <Footer t={t} />
         </div>

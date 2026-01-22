@@ -16,9 +16,7 @@ class TeamController extends Controller
      */
     public function index()
     {
-        $teams = Team::orderBy('is_team_lead', 'desc')
-            ->orderBy('order')
-            ->orderBy('name')
+        $teams = Team::orderBy('name')
             ->paginate(15);
         
         return Inertia::render('Admin/Teams/Index', [
@@ -39,22 +37,15 @@ class TeamController extends Controller
      */
     public function store(Request $request)
     {
+        // Validation rules
         $rules = [
             'name' => 'required|string|max:255',
-            'email' => 'nullable|email|max:255',
             'phone' => 'nullable|string|max:20',
             'bio' => 'nullable|string',
             'designation' => 'required|string|max:255',
-            'organization' => 'nullable|string|max:255',
-            'portfolio_url' => 'nullable|url|max:255',
-            'social_links' => 'nullable|array',
-            'expertise' => 'nullable|string',
-            'is_team_lead' => 'boolean',
-            'order' => 'nullable|integer|min:0',
-            'is_active' => 'boolean',
         ];
 
-        // Add photo validation - handle file uploads or string URLs
+        // Add photo validation
         if ($request->hasFile('photo')) {
             $rules['photo'] = 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:5120';
         } else {
@@ -78,10 +69,11 @@ class TeamController extends Controller
             }
         }
 
-        // If setting as team lead, unset other team leads
-        if ($validated['is_team_lead'] ?? false) {
-            Team::where('is_team_lead', true)->update(['is_team_lead' => false]);
-        }
+        // Set default values
+        $validated['organization'] = 'Prochesta It';
+        $validated['is_active'] = true;
+        $validated['is_team_lead'] = false;
+        $validated['order'] = 0;
 
         Team::create($validated);
 
@@ -113,22 +105,15 @@ class TeamController extends Controller
      */
     public function update(Request $request, Team $team)
     {
+        // Validation rules
         $rules = [
             'name' => 'required|string|max:255',
-            'email' => 'nullable|email|max:255',
             'phone' => 'nullable|string|max:20',
             'bio' => 'nullable|string',
             'designation' => 'required|string|max:255',
-            'organization' => 'nullable|string|max:255',
-            'portfolio_url' => 'nullable|url|max:255',
-            'social_links' => 'nullable|array',
-            'expertise' => 'nullable|string',
-            'is_team_lead' => 'boolean',
-            'order' => 'nullable|integer|min:0',
-            'is_active' => 'boolean',
         ];
 
-        // Add photo validation - handle file uploads or string URLs
+        // Add photo validation
         if ($request->hasFile('photo')) {
             $rules['photo'] = 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:5120';
         } else {
@@ -176,10 +161,8 @@ class TeamController extends Controller
             $validated['photo'] = $team->photo;
         }
 
-        // If setting as team lead, unset other team leads
-        if ($validated['is_team_lead'] ?? false && !$team->is_team_lead) {
-            Team::where('is_team_lead', true)->where('id', '!=', $team->id)->update(['is_team_lead' => false]);
-        }
+        // Ensure defaults are maintained or updated
+        $validated['organization'] = 'Prochesta It';
 
         $team->update($validated);
 

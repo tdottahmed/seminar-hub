@@ -1,6 +1,6 @@
 import AdminLayout from "@/Layouts/AdminLayout";
 import { Head, Link, router } from "@inertiajs/react";
-import { Plus, Edit, Trash2, User, Mail, Phone, Briefcase, Crown } from "lucide-react";
+import { Plus, Edit, Trash2, User, Phone, Briefcase } from "lucide-react";
 
 export default function Index({ auth, teams }) {
     const handleDelete = (team) => {
@@ -36,52 +36,30 @@ export default function Index({ auth, teams }) {
                     {teams.data.map((team) => (
                         <div
                             key={team.id}
-                            className={`bg-white rounded-2xl shadow-sm border overflow-hidden hover:shadow-xl transition-all duration-300 group ${
-                                team.is_team_lead
-                                    ? "border-2 border-indigo-300 shadow-lg shadow-indigo-500/20"
-                                    : "border-slate-200 hover:border-indigo-200"
-                            }`}
+                            className="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden hover:shadow-xl transition-all duration-300 group hover:border-indigo-200"
                         >
                             <div className="p-6">
                                 <div className="flex items-start justify-between mb-4">
                                     <div className="flex items-start gap-4 flex-1">
-                                        <div
-                                            className={`w-16 h-16 rounded-full flex items-center justify-center text-white font-bold text-xl flex-shrink-0 ${
-                                                team.is_team_lead
-                                                    ? "bg-gradient-to-br from-indigo-500 to-purple-600 ring-4 ring-indigo-200"
-                                                    : "bg-gradient-to-br from-slate-500 to-slate-600"
-                                            }`}
-                                        >
+                                        <div className="w-12 h-12 rounded-full flex items-center justify-center text-white font-bold text-lg flex-shrink-0 bg-gradient-to-br from-indigo-500 to-purple-600 overflow-hidden">
                                             {team.photo ? (
                                                 <img
                                                     src={team.photo}
                                                     alt={team.name}
-                                                    className="w-full h-full rounded-full object-cover"
+                                                    className="w-full h-full object-cover"
                                                 />
                                             ) : (
                                                 team.name.charAt(0).toUpperCase()
                                             )}
                                         </div>
                                         <div className="flex-1 min-w-0">
-                                            <div className="flex items-center gap-2 mb-1">
-                                                <h3 className="text-lg font-bold text-slate-800 truncate">
-                                                    {team.name}
-                                                </h3>
-                                                {team.is_team_lead && (
-                                                    <Crown
-                                                        size={18}
-                                                        className="text-indigo-600 flex-shrink-0"
-                                                    />
-                                                )}
-                                            </div>
+                                            <h3 className="text-lg font-bold text-slate-800 truncate mb-1">
+                                                {team.name}
+                                            </h3>
                                             {team.designation && (
-                                                <p className="text-sm text-indigo-600 font-medium">
+                                                <p className="text-sm text-indigo-600 font-medium flex items-center gap-1.5">
+                                                    <Briefcase size={14} />
                                                     {team.designation}
-                                                </p>
-                                            )}
-                                            {team.organization && (
-                                                <p className="text-xs text-slate-500 truncate">
-                                                    {team.organization}
                                                 </p>
                                             )}
                                         </div>
@@ -89,40 +67,17 @@ export default function Index({ auth, teams }) {
                                 </div>
 
                                 {team.bio && (
-                                    <p className="text-sm text-slate-600 mb-4 line-clamp-2">
+                                    <p className="text-sm text-slate-600 mb-4 line-clamp-2 min-h-[40px]">
                                         {team.bio}
                                     </p>
                                 )}
 
-                                <div className="space-y-2 mb-4">
-                                    {team.email && (
-                                        <div className="flex items-center gap-2 text-xs text-slate-500">
-                                            <Mail size={14} />
-                                            <span className="truncate">{team.email}</span>
-                                        </div>
-                                    )}
+                                <div className="space-y-2 mb-2">
                                     {team.phone && (
-                                        <div className="flex items-center gap-2 text-xs text-slate-500">
+                                        <div className="flex items-center gap-2 text-xs text-slate-500 bg-slate-50 p-2 rounded-lg">
                                             <Phone size={14} />
-                                            <span>{team.phone}</span>
+                                            <span className="font-medium">{team.phone}</span>
                                         </div>
-                                    )}
-                                </div>
-
-                                <div className="flex items-center justify-between pt-4 border-t border-slate-100">
-                                    <span
-                                        className={`px-2.5 py-1 rounded-full text-xs font-semibold ${
-                                            team.is_active
-                                                ? "bg-emerald-50 text-emerald-700"
-                                                : "bg-slate-100 text-slate-600"
-                                        }`}
-                                    >
-                                        {team.is_active ? "Active" : "Inactive"}
-                                    </span>
-                                    {team.is_team_lead && (
-                                        <span className="px-2.5 py-1 rounded-full text-xs font-bold bg-indigo-100 text-indigo-700">
-                                            Team Lead
-                                        </span>
                                     )}
                                 </div>
                             </div>
