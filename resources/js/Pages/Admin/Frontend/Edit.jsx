@@ -1,6 +1,6 @@
 import AdminLayout from '@/Layouts/AdminLayout';
 import { Head, useForm, Link } from '@inertiajs/react';
-import { Save, ArrowLeft, Globe } from 'lucide-react';
+import { Save, ArrowLeft, Globe, Plus, Trash2 } from 'lucide-react';
 import { useState } from 'react';
 import clsx from 'clsx';
 import InputLabel from '@/Components/InputLabel';
@@ -37,9 +37,21 @@ export default function Edit({ auth, section }) {
         }
     };
 
-    const renderImageInput = (value, onChange, label) => (
+    const renderImageInput = (value, onChange, label, onRemove = null) => (
         <div className="mb-4">
-            <InputLabel value={label} />
+            <div className="flex items-center justify-between">
+                <InputLabel value={label} />
+                {onRemove && (
+                    <button
+                        type="button"
+                        onClick={onRemove}
+                        className="text-red-500 hover:text-red-700 transition"
+                        title="Remove Image"
+                    >
+                        <Trash2 size={16} />
+                    </button>
+                )}
+            </div>
             <div className="flex items-start gap-4 mt-1">
                 <div className="flex-1">
                     <TextInput
@@ -51,7 +63,7 @@ export default function Edit({ auth, section }) {
                 </div>
                 <div className="flex flex-col gap-2">
                     <label className="cursor-pointer bg-indigo-50 text-indigo-600 px-4 py-2.5 rounded-lg text-sm font-medium hover:bg-indigo-100 transition text-center whitespace-nowrap">
-                        Upload Image
+                        Upload
                         <input
                             type="file"
                             className="hidden"
@@ -106,24 +118,64 @@ export default function Edit({ auth, section }) {
                                             };
                                             setData('content', newContent);
                                         },
-                                        `Image ${idx + 1}`
+                                        `Image ${idx + 1}`,
+                                        value.length > 1 ? () => {
+                                            const newArray = data.content[lang][key].filter((_, i) => i !== idx);
+                                            const newContent = {
+                                                ...data.content,
+                                                [lang]: { ...data.content[lang], [key]: newArray }
+                                            };
+                                            setData('content', newContent);
+                                        } : null
                                     ) : (
-                                        <TextInput
-                                            className="w-full"
-                                            value={item}
-                                            onChange={(e) => {
-                                                const newArray = [...data.content[lang][key]];
-                                                newArray[idx] = e.target.value;
-                                                const newContent = {
-                                                    ...data.content,
-                                                    [lang]: { ...data.content[lang], [key]: newArray }
-                                                };
-                                                setData('content', newContent);
-                                            }}
-                                        />
+                                        <div className="flex items-center gap-2">
+                                            <TextInput
+                                                className="w-full"
+                                                value={item}
+                                                onChange={(e) => {
+                                                    const newArray = [...data.content[lang][key]];
+                                                    newArray[idx] = e.target.value;
+                                                    const newContent = {
+                                                        ...data.content,
+                                                        [lang]: { ...data.content[lang], [key]: newArray }
+                                                    };
+                                                    setData('content', newContent);
+                                                }}
+                                            />
+                                            {value.length > 1 && (
+                                                <button
+                                                    type="button"
+                                                    onClick={() => {
+                                                        const newArray = data.content[lang][key].filter((_, i) => i !== idx);
+                                                        const newContent = {
+                                                            ...data.content,
+                                                            [lang]: { ...data.content[lang], [key]: newArray }
+                                                        };
+                                                        setData('content', newContent);
+                                                    }}
+                                                    className="text-slate-400 hover:text-red-500 transition p-2"
+                                                >
+                                                    <Trash2 size={18} />
+                                                </button>
+                                            )}
+                                        </div>
                                     )}
                                 </div>
                             ))}
+                            <button
+                                type="button"
+                                onClick={() => {
+                                    const newArray = [...data.content[lang][key], ''];
+                                    const newContent = {
+                                        ...data.content,
+                                        [lang]: { ...data.content[lang], [key]: newArray }
+                                    };
+                                    setData('content', newContent);
+                                }}
+                                className="mt-2 text-sm font-medium text-indigo-600 hover:text-indigo-700 flex items-center gap-1"
+                            >
+                                <Plus size={16} /> Add Item
+                            </button>
                         </div>
                     );
                 } else if (value.length > 0 && typeof value[0] === 'object') {
