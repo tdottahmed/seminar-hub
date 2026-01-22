@@ -6,6 +6,24 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="csrf-token" content="{{ csrf_token() }}">
 
+  <meta name="description" content="Prochesta IT - Empowering your digital journey with expert IT training and solutions.">
+  <meta name="keywords" content="Prochesta IT, IT Training, Web Development, Graphics Design, Digital Marketing, Bangladesh">
+  <meta name="author" content="Prochesta IT">
+
+  <!-- Open Graph / Facebook -->
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="{{ url()->current() }}">
+  <meta property="og:title" content="Prochesta IT - Leading IT Training Institute">
+  <meta property="og:description" content="Empowering your digital journey with expert IT training and solutions. Join Prochesta IT today.">
+  <meta property="og:image" content="{{ asset('assets/logo/Logo-prochesta-IT-dark-1.png') }}">
+
+  <!-- Twitter -->
+  <meta property="twitter:card" content="summary_large_image">
+  <meta property="twitter:url" content="{{ url()->current() }}">
+  <meta property="twitter:title" content="Prochesta IT - Leading IT Training Institute">
+  <meta property="twitter:description" content="Empowering your digital journey with expert IT training and solutions. Join Prochesta IT today.">
+  <meta property="twitter:image" content="{{ asset('assets/logo/Logo-prochesta-IT-dark-1.png') }}">
+
   <title inertia>Prochesta IT</title>
   <link rel="icon" type="image/png" href="/assets/logo/Logo-prochesta-IT-light-1.png">
 

@@ -182,6 +182,54 @@ export default function EventDetails({ event }) {
                         {/* Right Column: Sidebar (Sticky) */}
                         <div className="lg:col-span-1">
                             <div className="sticky top-24 space-y-6">
+                                {/* Host Partner Card */}
+                                {(event.host_name || event.host_logo) && (
+                                    <div className="bg-slate-800/80 backdrop-blur-xl rounded-3xl p-6 border border-white/10 shadow-xl flex items-center gap-4">
+                                        {event.host_logo && (
+                                            <div className="w-16 h-16 rounded-full bg-white p-2 flex items-center justify-center overflow-hidden shrink-0">
+                                                <img 
+                                                    src={event.host_logo} 
+                                                    alt={event.host_name} 
+                                                    className="w-full h-full object-contain"
+                                                />
+                                            </div>
+                                        )}
+                                        <div>
+                                            <div className="text-xs text-slate-400 uppercase tracking-widest font-semibold mb-1">
+                                                Hosted By
+                                            </div>
+                                            {event.host_name && (
+                                                <h3 className="text-lg font-bold text-white leading-tight">
+                                                    {event.host_name}
+                                                </h3>
+                                            )}
+                                        </div>
+                                    </div>
+                                )}
+
+                                {/* Organizer Card (Prochesta IT) */}
+                                <div className="bg-slate-800/95 backdrop-blur-xl rounded-2xl p-6 border border-white/20 shadow-xl flex items-center gap-4 relative overflow-hidden">
+                                     <div className="absolute top-0 right-0 w-24 h-24 bg-gradient-to-br from-indigo-500/10 to-purple-500/10 rounded-full blur-2xl -mr-6 -mt-6"></div>
+                                    <div className="w-16 h-16 rounded-xl bg-slate-800 p-2 flex items-center justify-center overflow-hidden shrink-0 shadow-sm border border-slate-100 z-10">
+                                        <img 
+                                            src="/assets/logo/Logo-prochesta-IT-light-1.png" 
+                                            alt="Prochesta IT" 
+                                            className="w-full h-full object-contain"
+                                        />
+                                    </div>
+                                    <div className="z-10">
+                                        <div className="text-[10px] text-slate-100 uppercase tracking-widest font-bold mb-1">
+                                            Organized By
+                                        </div>
+                                        <h3 className="text-lg font-bold text-slate-100 leading-tight">
+                                            Prochesta IT
+                                        </h3>
+                                        <a href="https://prochestait.com" target="_blank" className="text-xs text-indigo-600 hover:text-indigo-700 font-medium mt-1 inline-flex items-center gap-1">
+                                            Visit Website <ArrowRight size={10} />
+                                        </a>
+                                    </div>
+                                </div>
+
                                 {/* Registration Box */}
                                 <div className="bg-slate-800/80 backdrop-blur-xl rounded-3xl p-8 border border-white/10 shadow-2xl relative overflow-hidden group">
                                     <div className="absolute top-0 right-0 -mt-8 -mr-8 w-32 h-32 bg-indigo-500/10 rounded-full blur-3xl group-hover:bg-indigo-500/20 transition-all"></div>

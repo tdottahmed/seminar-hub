@@ -65,3 +65,6 @@ Route::get('/system/reset', function () {
 
     return 'System optimization cleared, migration run, and database seeded successfully.';
 });
+
+Route::get('/sitemap.xml', [\App\Http\Controllers\SitemapController::class, 'index']);
+

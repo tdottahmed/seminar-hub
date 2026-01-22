@@ -45,7 +45,12 @@ export default function Welcome({
 
     return (
         <div className="bg-slate-900 min-h-screen text-slate-200 selection:bg-indigo-500/30">
-            <Head title="Welcome to Prochesta IT" />
+            <Head>
+                <title>Welcome to Prochesta IT - Leading IT Training Institute</title>
+                <meta name="description" content="Welcome to Prochesta IT. We offer top-notch training in Web Development, Graphics Design, and more. Start your tech career with us." />
+                <meta property="og:title" content="Welcome to Prochesta IT - Leading IT Training Institute" />
+                <meta property="og:description" content="Welcome to Prochesta IT. We offer top-notch training in Web Development, Graphics Design, and more. Start your tech career with us." />
+            </Head>
 
             <NavBar
                 auth={auth}

@@ -44,6 +44,8 @@ class EventController extends Controller
             'topics' => 'nullable|array',
             'outline' => 'nullable|string',
             'banner_image' => 'nullable', // Allow file or string
+            'host_name' => 'nullable|string|max:255',
+            'host_logo' => 'nullable', // Allow file or string
             'speaker_ids' => 'nullable|array',
             'speaker_ids.*' => 'exists:speakers,id',
             'slug' => 'nullable|string|max:255|unique:events,slug',
@@ -55,6 +57,14 @@ class EventController extends Controller
             $filename = Str::uuid() . '.' . $file->getClientOriginalExtension();
             $path = $file->storeAs('events', $filename, 'public');
             $validated['banner_image'] = Storage::url($path);
+        }
+
+        // Handle Host Logo Upload
+        if ($request->hasFile('host_logo')) {
+            $file = $request->file('host_logo');
+            $filename = Str::uuid() . '_host.' . $file->getClientOriginalExtension();
+            $path = $file->storeAs('events/hosts', $filename, 'public');
+            $validated['host_logo'] = Storage::url($path);
         }
 
         if (!empty($validated['slug'])) {
@@ -115,6 +125,14 @@ class EventController extends Controller
             $rules['banner_image'] = 'nullable';
         }
 
+        if ($request->hasFile('host_logo')) {
+            $rules['host_logo'] = 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:2048';
+        } else {
+            $rules['host_logo'] = 'nullable';
+        }
+        
+        $rules['host_name'] = 'nullable|string|max:255';
+
         $validated = $request->validate($rules);
 
         // Handle Image Upload/Update
@@ -154,6 +172,36 @@ class EventController extends Controller
         } else {
             // banner_image not in request - keep existing value
             $validated['banner_image'] = $event->banner_image;
+        }
+
+        // Handle Host Logo Upload/Update
+        if ($request->hasFile('host_logo')) {
+            $file = $request->file('host_logo');
+            $filename = Str::uuid() . '_host.' . $file->getClientOriginalExtension();
+            $path = $file->storeAs('events/hosts', $filename, 'public');
+            $validated['host_logo'] = Storage::url($path);
+
+            if ($event->host_logo && strpos($event->host_logo, '/storage/') !== false) {
+                $oldPath = str_replace('/storage/', '', parse_url($event->host_logo, PHP_URL_PATH));
+                if (Storage::disk('public')->exists($oldPath)) {
+                    Storage::disk('public')->delete($oldPath);
+                }
+            }
+        } elseif ($request->has('host_logo')) {
+            $hostLogo = $request->input('host_logo');
+            if (empty($hostLogo) || $hostLogo === null) {
+                $validated['host_logo'] = null;
+                if ($event->host_logo && strpos($event->host_logo, '/storage/') !== false) {
+                    $oldPath = str_replace('/storage/', '', parse_url($event->host_logo, PHP_URL_PATH));
+                    if (Storage::disk('public')->exists($oldPath)) {
+                        Storage::disk('public')->delete($oldPath);
+                    }
+                }
+            } else {
+                $validated['host_logo'] = $hostLogo;
+            }
+        } else {
+            $validated['host_logo'] = $event->host_logo;
         }
 
         if (array_key_exists('slug', $validated)) {

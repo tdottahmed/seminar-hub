@@ -9,7 +9,8 @@ export default function ImageUploader({
     error,
     accept = 'image/*',
     maxSize = 5 * 1024 * 1024, // 5MB
-    folder = 'uploads'
+    folder = 'uploads',
+    id = 'image-upload' // Default ID, but should be overridden if multiple instances exist
 }) {
     // Helper function to check if value is a string URL
     const isStringUrl = (val) => {
@@ -195,11 +196,11 @@ export default function ImageUploader({
                             accept={accept}
                             onChange={handleFileSelect}
                             className="hidden"
-                            id="image-upload"
+                            id={id}
                             disabled={uploading}
                         />
                         <label
-                            htmlFor="image-upload"
+                            htmlFor={id}
                             className={clsx(
                                 "flex flex-col items-center justify-center w-full h-48 border-2 border-dashed rounded-xl cursor-pointer transition",
                                 uploading 

@@ -114,6 +114,39 @@ export default function EventsSection({ t, upcomingEvents, isBn }) {
                                                 "flex flex-col gap-6",
                                                 !isEven ? "items-end" : "items-start"
                                             )}>
+                                                {/* Host & Organizer Badges */}
+                                                <div className="flex flex-wrap items-center gap-3 mb-2">
+                                                    {(event.host_name || event.host_logo) && (
+                                                        <div className="flex items-center gap-2 px-3 py-1 rounded-full bg-white/5 border border-white/10 w-fit backdrop-blur-sm">
+                                                            {event.host_logo && (
+                                                                <img 
+                                                                    src={event.host_logo} 
+                                                                    alt={event.host_name || "Host"} 
+                                                                    className="w-6 h-6 rounded-full object-cover"
+                                                                />
+                                                            )}
+                                                            {event.host_name && (
+                                                                <span className="text-xs font-semibold text-indigo-300 uppercase tracking-wider">
+                                                                    Hosted by {event.host_name}
+                                                                </span>
+                                                            )}
+                                                        </div>
+                                                    )}
+                                                    
+                                                    {/* Organizer Badge */}
+                                                    <div className="flex items-center gap-2 px-3 py-1 rounded-full bg-white/5 border border-white/10 w-fit backdrop-blur-sm">
+                                                        <img 
+                                                            src="/assets/logo/Logo-prochesta-IT-light-1.png" 
+                                                            alt="Prochesta IT" 
+                                                            className="h-4 w-auto object-contain"
+                                                        />
+                                                        <span className="text-xs font-semibold text-indigo-300 uppercase tracking-wider">
+                                                            Organized By Prochesta IT
+                                                        </span>
+                                                       
+                                                    </div>
+                                                </div>
+
                                                 <div className="flex flex-wrap gap-4 text-sm font-medium text-slate-400">
                                                     <div className="flex items-center gap-2">
                                                         <Clock className="w-4 h-4 text-indigo-400" />

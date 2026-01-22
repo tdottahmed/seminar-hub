@@ -14,6 +14,7 @@ import {
     Link as LinkIcon,
     Plus,
     X,
+    Clock,
 } from "lucide-react";
 import { useState } from "react";
 
@@ -33,6 +34,8 @@ export default function Create({ auth, speakers = [] }) {
         topics: [],
         outline: "",
         banner_image: "",
+        host_name: "",
+        host_logo: "",
         speaker_ids: [],
     });
 
@@ -145,61 +148,87 @@ export default function Create({ auth, speakers = [] }) {
                             />
                         </div>
 
-                        {/* Date & Time Grid */}
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        {/* Date and Time Configuration */}
+                        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                            {/* Event Date */}
                             <div>
-                                <InputLabel
-                                    htmlFor="start_date"
-                                    value="Start Date & Time"
-                                />
+                                <InputLabel htmlFor="event_date" value="Event Date" />
                                 <div className="relative mt-1">
                                     <Calendar
                                         className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none"
                                         size={18}
                                     />
                                     <TextInput
-                                        id="start_date"
-                                        type="datetime-local"
-                                        value={data.start_date}
+                                        id="event_date"
+                                        type="date"
+                                        value={data.start_date ? data.start_date.split('T')[0] : ''}
                                         className="pl-10 block w-full"
-                                        onChange={(e) =>
-                                            setData(
-                                                "start_date",
-                                                e.target.value
-                                            )
-                                        }
+                                        onChange={(e) => {
+                                            const newDate = e.target.value;
+                                            const startTime = data.start_date ? data.start_date.split('T')[1] : '09:00';
+                                            const endTime = data.end_date ? data.end_date.split('T')[1] : '17:00';
+                                            
+                                            // Update both start and end dates with new date part
+                                            setData((prev) => ({
+                                                ...prev,
+                                                start_date: `${newDate}T${startTime}`,
+                                                end_date: `${newDate}T${endTime}`
+                                            }));
+                                        }}
                                     />
                                 </div>
-                                <InputError
-                                    message={errors.start_date}
-                                    className="mt-2"
-                                />
+                                <InputError message={errors.start_date} className="mt-2" />
                             </div>
 
+                            {/* Start Time */}
                             <div>
-                                <InputLabel
-                                    htmlFor="end_date"
-                                    value="End Date & Time"
-                                />
+                                <InputLabel htmlFor="start_time" value="Start Time" />
                                 <div className="relative mt-1">
-                                    <Calendar
+                                    <Clock
                                         className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none"
                                         size={18}
                                     />
                                     <TextInput
-                                        id="end_date"
-                                        type="datetime-local"
-                                        value={data.end_date}
+                                        id="start_time"
+                                        type="time"
+                                        value={data.start_date ? data.start_date.split('T')[1] : ''}
                                         className="pl-10 block w-full"
-                                        onChange={(e) =>
-                                            setData("end_date", e.target.value)
-                                        }
+                                        onChange={(e) => {
+                                            const newTime = e.target.value;
+                                            const date = data.start_date ? data.start_date.split('T')[0] : '';
+                                            if (date) {
+                                                setData("start_date", `${date}T${newTime}`);
+                                            }
+                                        }}
                                     />
                                 </div>
-                                <InputError
-                                    message={errors.end_date}
-                                    className="mt-2"
-                                />
+                                <InputError message={errors.start_date} className="mt-2" />
+                            </div>
+
+                            {/* End Time */}
+                            <div>
+                                <InputLabel htmlFor="end_time" value="End Time" />
+                                <div className="relative mt-1">
+                                    <Clock
+                                        className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none"
+                                        size={18}
+                                    />
+                                    <TextInput
+                                        id="end_time"
+                                        type="time"
+                                        value={data.end_date ? data.end_date.split('T')[1] : ''}
+                                        className="pl-10 block w-full"
+                                        onChange={(e) => {
+                                            const newTime = e.target.value;
+                                            // Ensure end date uses same date as start date
+                                            const date = data.start_date ? data.start_date.split('T')[0] : '';
+                                            if (date) {
+                                                setData("end_date", `${date}T${newTime}`);
+                                            }
+                                        }}
+                                    />
+                                </div>
+                                <InputError message={errors.end_date} className="mt-2" />
                             </div>
                         </div>
 
@@ -408,11 +437,47 @@ export default function Create({ auth, speakers = [] }) {
                                 label="Banner Image"
                                 error={errors.banner_image}
                                 folder="events"
+                                id="banner-image-upload"
                             />
                             <InputError
                                 message={errors.banner_image}
                                 className="mt-2"
                             />
+                        </div>
+
+                        {/* Host Partner */}
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div>
+                                <InputLabel htmlFor="host_name" value="Host Partner Name" />
+                                <TextInput
+                                    id="host_name"
+                                    type="text"
+                                    value={data.host_name}
+                                    className="mt-1 block w-full placeholder-slate-300"
+                                    placeholder="e.g. Acme Corp"
+                                    onChange={(e) =>
+                                        setData("host_name", e.target.value)
+                                    }
+                                />
+                                <InputError
+                                    message={errors.host_name}
+                                    className="mt-2"
+                                />
+                            </div>
+                            <div>
+                                <ImageUploader
+                                    value={data.host_logo}
+                                    onChange={(url) => setData("host_logo", url)}
+                                    label="Host Partner Logo"
+                                    error={errors.host_logo}
+                                    folder="events/hosts"
+                                    id="host-logo-upload"
+                                />
+                                <InputError
+                                    message={errors.host_logo}
+                                    className="mt-2"
+                                />
+                            </div>
                         </div>
 
                         {/* Speakers */}

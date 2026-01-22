@@ -62,7 +62,7 @@ export default function NavBar({
                 {navLinks.map((item) => (
                     <a
                         key={item}
-                        href={`#${item}`}
+                        href={route().current('home') ? `#${item}` : `/#${item}`}
                         className="hover:text-white transition relative hover:scale-105 group"
                     >
                         {t.nav[item]}
@@ -166,7 +166,7 @@ export default function NavBar({
                                 {navLinks.map((item, index) => (
                                     <motion.a
                                         key={item}
-                                        href={`#${item}`}
+                                        href={route().current('home') ? `#${item}` : `/#${item}`}
                                         onClick={() => setIsOpen(false)}
                                         initial={{ opacity: 0, x: 20 }}
                                         animate={{ opacity: 1, x: 0 }}
