@@ -60,13 +60,11 @@ export default function AdminSidebar({ open, setOpen }) {
                 {/* Header / Logo */}
                 <div className="flex items-center justify-between h-16 px-6 bg-gradient-to-r from-indigo-600/10 to-purple-600/10 border-b border-white/5 backdrop-blur-sm flex-shrink-0">
                     <Link href={route('admin.dashboard')} className="flex items-center gap-2.5 font-bold text-white group">
-                        <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center shadow-lg shadow-indigo-500/30 group-hover:scale-110 transition-transform">
-                            <span className="text-white font-bold text-lg">S</span>
-                        </div>
-                        <div>
-                            <span className="text-lg">Seminar</span>
-                            <span className="text-indigo-400">Hub</span>
-                        </div>
+                         <img 
+                            src="/assets/logo/Logo-prochesta-IT-light-1.png" 
+                            alt="Prochesta IT" 
+                            className="h-10 w-auto object-contain transition-transform duration-300 group-hover:scale-105" 
+                        />
                     </Link>
                     <button 
                         onClick={() => setOpen(false)}

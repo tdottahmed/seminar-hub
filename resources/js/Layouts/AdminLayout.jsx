@@ -8,7 +8,7 @@ export default function AdminLayout({ user, title, header, children }) {
     const [sidebarOpen, setSidebarOpen] = useState(false);
 
     return (
-        <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-slate-50 flex font-sans">
+        <div className="h-screen w-full bg-gradient-to-br from-slate-50 via-white to-slate-50 flex font-sans overflow-hidden">
             <Head title={`${title} - Admin Panel`} />
             
             <Toast />
