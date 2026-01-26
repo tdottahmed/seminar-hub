@@ -4,6 +4,8 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use App\Services\GeminiService;
+
 
 use App\Models\Quiz;
 use App\Models\Question;
@@ -18,6 +20,21 @@ class QuestionController extends Controller
         return Inertia::render('Admin/Questions/Index', [
             'quiz' => $quiz->load('event'),
             'questions' => $questions
+        ]);
+    }
+
+    public function create(Quiz $quiz)
+    {
+        return Inertia::render('Admin/Questions/Create', [
+            'quiz' => $quiz->load('event')
+        ]);
+    }
+
+    public function edit(Quiz $quiz, Question $question)
+    {
+        return Inertia::render('Admin/Questions/Edit', [
+            'quiz' => $quiz->load('event'),
+            'question' => $question
         ]);
     }
 
@@ -70,5 +87,38 @@ class QuestionController extends Controller
         }
         
         return redirect()->back()->with('success', 'Questions reordered successfully.');
+    }
+
+    public function generate(Request $request, Quiz $quiz, GeminiService $gemini)
+    {
+        $request->validate([
+            'topic' => 'required|string',
+            'count' => 'required|integer|min:1|max:20',
+            'difficulty' => 'required|in:easy,medium,hard',
+        ]);
+
+        try {
+            $questions = $gemini->generateQuestions(
+                $request->topic, 
+                $request->count, 
+                $request->difficulty
+            );
+
+            foreach ($questions as $q) {
+                $quiz->questions()->create([
+                    'type' => 'multiple_choice',
+                    'question_text' => $q['question_text'],
+                    'options' => json_encode($q['options']),
+                    'correct_answer' => $q['correct_answer'],
+                    'points' => $q['points'] ?? 1,
+                    'sort_order' => 0
+                ]);
+            }
+
+            return redirect()->back()->with('success', count($questions) . ' questions generated successfully.');
+
+        } catch (\Exception $e) {
+            return redirect()->back()->with('error', 'Failed to generate questions: ' . $e->getMessage());
+        }
     }
 }

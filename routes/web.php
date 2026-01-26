@@ -13,6 +13,15 @@ Route::post('/events/{slug}/register', [\App\Http\Controllers\Public\EventRegist
 Route::get('/events/{slug}/quiz/{quiz}', [\App\Http\Controllers\Public\QuizTakerController::class, 'show'])->name('events.quiz.show');
 Route::post('/events/{slug}/quiz/{quiz}/submit', [\App\Http\Controllers\Public\QuizTakerController::class, 'store'])->name('events.quiz.submit');
 
+// Public Quiz Routes (New Module)
+Route::prefix('q')->name('quiz.public.')->group(function () {
+    Route::get('/{quiz}', [\App\Http\Controllers\Public\QuizController::class, 'show'])->name('show');
+    Route::post('/{quiz}/join', [\App\Http\Controllers\Public\QuizController::class, 'join'])->name('join');
+    Route::get('/{quiz}/attempt', [\App\Http\Controllers\Public\QuizController::class, 'attempt'])->name('attempt');
+    Route::post('/{quiz}/submit', [\App\Http\Controllers\Public\QuizController::class, 'submit'])->name('submit');
+    Route::get('/{quiz}/result', [\App\Http\Controllers\Public\QuizController::class, 'result'])->name('result');
+});
+
 Route::get('/dashboard', function () {
     if (auth()->user()->user_type === 'admin') {
         return redirect()->route('admin.dashboard');
@@ -47,8 +56,9 @@ Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () 
     // Quizzes - both nested and standalone
     Route::resource('events.quizzes', \App\Http\Controllers\Admin\QuizController::class);
     Route::get('/quizzes', [\App\Http\Controllers\Admin\QuizController::class, 'all'])->name('quizzes.index');
-    Route::resource('quizzes.questions', \App\Http\Controllers\Admin\QuestionController::class)->except(['show', 'create', 'edit']);
+    Route::resource('quizzes.questions', \App\Http\Controllers\Admin\QuestionController::class)->except(['show']);
     Route::post('quizzes/{quiz}/questions/reorder', [\App\Http\Controllers\Admin\QuestionController::class, 'reorder'])->name('quizzes.questions.reorder');
+    Route::post('quizzes/{quiz}/questions/generate', [\App\Http\Controllers\Admin\QuestionController::class, 'generate'])->name('quizzes.questions.generate');
     
     // Registrations - both nested and standalone
     Route::resource('events.registrations', \App\Http\Controllers\Admin\RegistrationController::class)->only(['index']);

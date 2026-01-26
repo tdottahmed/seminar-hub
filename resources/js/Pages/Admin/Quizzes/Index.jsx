@@ -123,6 +123,13 @@ export default function Index({ auth, event, quizzes }) {
                                         >
                                             Questions
                                         </Link>
+                                        <button
+                                            onClick={() => window.open(route('quiz.public.show', quiz.id), '_blank')}
+                                            className="p-2 text-slate-600 hover:text-indigo-600 hover:bg-indigo-50 rounded-lg transition"
+                                            title="View Public Link / QR"
+                                        >
+                                            <Eye size={18} />
+                                        </button>
                                         <Link
                                             href={route(
                                                 "admin.events.quizzes.edit",
