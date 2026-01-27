@@ -1,10 +1,11 @@
 import { Head, useForm } from '@inertiajs/react';
-import { ArrowRight, User, Mail, Sparkles, Smartphone } from 'lucide-react';
+import { ArrowRight, User, Mail, Sparkles, Copy, Link as LinkIcon } from 'lucide-react';
 
-export default function Welcome({ quiz, qrCode }) {
+export default function Welcome({ quiz, quizUrl }) {
     const { data, setData, post, processing, errors } = useForm({
         participant_name: '',
         participant_email: '',
+        participant_phone: '',
     });
 
     const submit = (e) => {
@@ -82,6 +83,28 @@ export default function Welcome({ quiz, qrCode }) {
                                         <p className="mt-1 text-sm text-red-500 pl-1 font-medium">{errors.participant_email}</p>
                                     )}
                                 </div>
+
+                                <div>
+                                    <label htmlFor="phone" className="block text-sm font-semibold text-slate-700 mb-2 ml-1">
+                                        Phone Number <span className="text-slate-400 font-normal">(Optional)</span>
+                                    </label>
+                                    <div className="relative group">
+                                        <div className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 flex items-center justify-center text-slate-400 group-focus-within:text-indigo-600 transition-colors">
+                                           <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect width="14" height="20" x="5" y="2" rx="2" ry="2"/><path d="M12 18h.01"/></svg>
+                                        </div>
+                                        <input
+                                            id="phone"
+                                            type="tel"
+                                            value={data.participant_phone}
+                                            onChange={(e) => setData('participant_phone', e.target.value)}
+                                            className="w-full bg-slate-50 border border-slate-200 rounded-xl py-4 pl-12 pr-4 text-slate-900 placeholder-slate-400 focus:outline-none focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 transition-all font-medium"
+                                            placeholder="Enter your phone number"
+                                        />
+                                    </div>
+                                    {errors.participant_phone && (
+                                        <p className="mt-1 text-sm text-red-500 pl-1 font-medium">{errors.participant_phone}</p>
+                                    )}
+                                </div>
                             </div>
 
                             <button
@@ -95,15 +118,35 @@ export default function Welcome({ quiz, qrCode }) {
                         </form>
                     </div>
 
-                    {/* QR Code Section */}
-                    {qrCode && (
-                        <div className="mt-8 flex flex-col items-center animate-fade-in-up">
-                            <div className="bg-white p-4 rounded-2xl shadow-lg border border-slate-100 ring-1 ring-slate-50">
-                                <div className="opacity-90 mix-blend-multiply" dangerouslySetInnerHTML={{ __html: qrCode }} />
+                    {/* Share Link Section */}
+                    {quizUrl && (
+                        <div className="mt-8 flex flex-col items-center animate-fade-in-up w-full">
+                            <div className="bg-white p-4 rounded-2xl shadow-lg border border-slate-100 ring-1 ring-slate-50 w-full">
+                                <label className="block text-sm font-semibold text-slate-700 mb-2 ml-1">
+                                    Share Quiz
+                                </label>
+                                <div className="flex gap-2">
+                                    <input
+                                        type="text"
+                                        readOnly
+                                        value={quizUrl}
+                                        className="w-full bg-slate-50 border border-slate-200 rounded-xl py-2 px-4 text-slate-600 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500/10"
+                                    />
+                                    <button
+                                        onClick={() => {
+                                            navigator.clipboard.writeText(quizUrl);
+                                            alert('Link copied to clipboard!');
+                                        }}
+                                        className="flex-shrink-0 bg-indigo-50 text-indigo-600 hover:bg-indigo-100 p-2 rounded-xl transition-colors"
+                                        title="Copy Link"
+                                    >
+                                        <Copy className="w-5 h-5" />
+                                    </button>
+                                </div>
                             </div>
                             <p className="text-slate-500 text-sm font-medium mt-4 flex items-center gap-2 bg-white/50 px-3 py-1 rounded-full border border-slate-100">
-                                <Smartphone className="w-4 h-4 text-slate-400" />
-                                Scan to open on mobile
+                                <LinkIcon className="w-4 h-4 text-slate-400" />
+                                Share this link with participants
                             </p>
                         </div>
                     )}

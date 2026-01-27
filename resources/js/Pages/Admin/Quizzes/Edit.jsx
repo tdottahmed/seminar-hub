@@ -11,6 +11,7 @@ export default function Edit({ auth, event, quiz }) {
         title: quiz.title,
         description: quiz.description || "",
         time_limit_minutes: quiz.time_limit_minutes || "",
+        total_questions: quiz.total_questions || "",
         is_published: !!quiz.is_published,
     });
 
@@ -23,7 +24,7 @@ export default function Edit({ auth, event, quiz }) {
         <AdminLayout
             user={auth.user}
             header={
-                <h2 className="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
+                <h2 className="font-semibold text-xl text-gray-800 leading-tight">
                     Edit Quiz: {quiz.title}
                 </h2>
             }
@@ -32,8 +33,8 @@ export default function Edit({ auth, event, quiz }) {
 
             <div className="py-12">
                 <div className="max-w-7xl mx-auto sm:px-6 lg:px-8">
-                    <div className="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
-                        <div className="p-6 text-gray-900 dark:text-gray-100">
+                    <div className="bg-white overflow-hidden shadow-sm sm:rounded-lg">
+                        <div className="p-6 text-gray-900">
                             <form onSubmit={submit}>
                                 <div>
                                     <InputLabel htmlFor="title" value="Title" />
@@ -63,7 +64,7 @@ export default function Edit({ auth, event, quiz }) {
                                         id="description"
                                         name="description"
                                         value={data.description}
-                                        className="mt-1 block w-full border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 focus:border-indigo-500 dark:focus:border-indigo-600 focus:ring-indigo-500 dark:focus:ring-indigo-600 rounded-md shadow-sm"
+                                        className="mt-1 block w-full border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm"
                                         rows="4"
                                         onChange={(e) =>
                                             setData(
@@ -105,6 +106,33 @@ export default function Edit({ auth, event, quiz }) {
                                     />
                                 </div>
 
+                                <div className="mt-4">
+                                    <InputLabel
+                                        htmlFor="total_questions"
+                                        value="Total Questions"
+                                    />
+                                    <TextInput
+                                        id="total_questions"
+                                        type="number"
+                                        name="total_questions"
+                                        value={data.total_questions}
+                                        className="mt-1 block w-full"
+                                        onChange={(e) =>
+                                            setData(
+                                                "total_questions",
+                                                e.target.value
+                                            )
+                                        }
+                                    />
+                                    <p className="text-sm text-gray-500 mt-1">
+                                        Max number of questions to attempt (Overrides time-based calc).
+                                    </p>
+                                    <InputError
+                                        message={errors.total_questions}
+                                        className="mt-2"
+                                    />
+                                </div>
+
                                 <div className="block mt-4">
                                     <label className="flex items-center">
                                         <Checkbox
@@ -117,7 +145,7 @@ export default function Edit({ auth, event, quiz }) {
                                                 )
                                             }
                                         />
-                                        <span className="ml-2 text-sm text-gray-600 dark:text-gray-400">
+                                        <span className="ml-2 text-sm text-gray-600">
                                             Published
                                         </span>
                                     </label>
@@ -129,7 +157,7 @@ export default function Edit({ auth, event, quiz }) {
                                             "admin.events.quizzes.index",
                                             event.id
                                         )}
-                                        className="underline text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 dark:focus:ring-offset-gray-800"
+                                        className="underline text-sm text-gray-600 hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
                                     >
                                         Cancel
                                     </Link>

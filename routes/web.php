@@ -59,6 +59,7 @@ Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () 
     Route::resource('quizzes.questions', \App\Http\Controllers\Admin\QuestionController::class)->except(['show']);
     Route::post('quizzes/{quiz}/questions/reorder', [\App\Http\Controllers\Admin\QuestionController::class, 'reorder'])->name('quizzes.questions.reorder');
     Route::post('quizzes/{quiz}/questions/generate', [\App\Http\Controllers\Admin\QuestionController::class, 'generate'])->name('quizzes.questions.generate');
+    Route::get('/quizzes/{quiz}/results', [\App\Http\Controllers\Admin\QuizController::class, 'results'])->name('quizzes.results');
     
     // Registrations - both nested and standalone
     Route::resource('events.registrations', \App\Http\Controllers\Admin\RegistrationController::class)->only(['index']);

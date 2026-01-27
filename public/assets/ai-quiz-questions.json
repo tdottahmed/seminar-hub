@@ -1,0 +1,502 @@
+[
+  {
+    "quiz_id": 1,
+    "type": "multiple_choice",
+    "level": "Easy",
+    "question_text": "AI এর পূর্ণরূপ কী?",
+    "options": ["Advanced Internet", "Artificial Intelligence", "Automatic Interface", "Active Integration"],
+    "correct_answer": "Artificial Intelligence",
+    "points": 1,
+    "sort_order": 1
+  },
+  {
+    "quiz_id": 1,
+    "type": "true_false",
+    "level": "Easy",
+    "question_text": "AI মানুষের মতো তথ্য বিশ্লেষণ করে সিদ্ধান্ত নিতে পারে।",
+    "options": ["সত্য", "মিথ্যা"],
+    "correct_answer": "সত্য",
+    "points": 1,
+    "sort_order": 2
+  },
+  {
+    "quiz_id": 1,
+    "type": "multiple_choice",
+    "level": "Easy",
+    "question_text": "ChatGPT কোন ধরনের AI প্রযুক্তি?",
+    "options": ["Searching AI", "Generative AI", "Cleaning AI", "Offline AI"],
+    "correct_answer": "Generative AI",
+    "points": 1,
+    "sort_order": 3
+  },
+  {
+    "quiz_id": 1,
+    "type": "multiple_choice",
+    "level": "Easy",
+    "question_text": "স্মার্টফোনে ইংরেজি লেখা স্ক্যান করে সরাসরি অনুবাদ করার জন্য কোনটি সেরা?",
+    "options": ["Google Maps", "WhatsApp", "Google Lens", "Calculator"],
+    "correct_answer": "Google Lens",
+    "points": 1,
+    "sort_order": 4
+  },
+  {
+    "quiz_id": 1,
+    "type": "multiple_choice",
+    "level": "Easy",
+    "question_text": "AI-কে দেওয়া নির্দেশ বা হুকুমকে টেকনিক্যাল ভাষায় কী বলে?",
+    "options": ["Command", "Chat", "Prompt", "Script"],
+    "correct_answer": "Prompt",
+    "points": 1,
+    "sort_order": 5
+  },
+  {
+    "quiz_id": 1,
+    "type": "true_false",
+    "level": "Easy",
+    "question_text": "AI ব্যবহার করে ১ মিনিটে প্রফেশনাল সিভি (CV) তৈরি করা সম্ভব।",
+    "options": ["সত্য", "মিথ্যা"],
+    "correct_answer": "সত্য",
+    "points": 1,
+    "sort_order": 6
+  },
+  {
+    "quiz_id": 1,
+    "type": "multiple_choice",
+    "level": "Easy",
+    "question_text": "ভিডিওতে স্বয়ংক্রিয়ভাবে সাবটাইটেল বা ক্যাপশন যুক্ত করার এআই টুল কোনটি?",
+    "options": ["Spotify", "CapCut", "YouTube Studio", "MX Player"],
+    "correct_answer": "CapCut",
+    "points": 1,
+    "sort_order": 7
+  },
+  {
+    "quiz_id": 1,
+    "type": "multiple_choice",
+    "level": "Easy",
+    "question_text": "এআই দিয়ে ছবি তৈরির জন্য নিচের কোনটি ব্যবহার করা হয়?",
+    "options": ["Excel", "Bing Image Creator", "Zoom", "NotePad"],
+    "correct_answer": "Bing Image Creator",
+    "points": 1,
+    "sort_order": 8
+  },
+  {
+    "quiz_id": 1,
+    "type": "true_false",
+    "level": "Easy",
+    "question_text": "AI কি ইন্টারনেট কানেকশন ছাড়া কাজ করতে পারে?",
+    "options": ["হ্যাঁ", "না"],
+    "correct_answer": "না",
+    "points": 1,
+    "sort_order": 9
+  },
+  {
+    "quiz_id": 1,
+    "type": "multiple_choice",
+    "level": "Easy",
+    "question_text": "গুগলের তৈরি জনপ্রিয় এআই টুল কোনটি?",
+    "options": ["ChatGPT", "Gemini", "Claude", "Midjourney"],
+    "correct_answer": "Gemini",
+    "points": 1,
+    "sort_order": 10
+  },
+  {
+    "quiz_id": 1,
+    "type": "true_false",
+    "level": "Easy",
+    "question_text": "AI দিয়ে তৈরি নকল ভিডিও যা আসল মানুষের মতো দেখায় তাকে 'Deepfake' বলে।",
+    "options": ["সত্য", "মিথ্যা"],
+    "correct_answer": "সত্য",
+    "points": 1,
+    "sort_order": 11
+  },
+  {
+    "quiz_id": 1,
+    "type": "multiple_choice",
+    "level": "Easy",
+    "question_text": "ডিজাইন বা পোস্টার তৈরির সবচেয়ে জনপ্রিয় এআই ইন্টিগ্রেটেড টুল কোনটি?",
+    "options": ["Paint", "Canva", "Gallery", "Flashlight"],
+    "correct_answer": "Canva",
+    "points": 1,
+    "sort_order": 12
+  },
+  {
+    "quiz_id": 1,
+    "type": "multiple_choice",
+    "level": "Easy",
+    "question_text": "পড়াশোনার কোনো জটিল বিষয় সহজে বুঝে নেওয়ার জন্য কোনটি ব্যবহার করবেন?",
+    "options": ["Snapchat", "TikTok", "ChatGPT", "PUBG"],
+    "correct_answer": "ChatGPT",
+    "points": 1,
+    "sort_order": 13
+  },
+  {
+    "quiz_id": 1,
+    "type": "true_false",
+    "level": "Easy",
+    "question_text": "AI কি মানুষের মতো আবেগ বা অনুভূতি অনুভব করতে পারে?",
+    "options": ["হ্যাঁ", "না"],
+    "correct_answer": "না",
+    "points": 1,
+    "sort_order": 14
+  },
+  {
+    "quiz_id": 1,
+    "type": "multiple_choice",
+    "level": "Easy",
+    "question_text": "ইন্টারনেটে পাসওয়ার্ড বা OTP শেয়ার করা কি নিরাপদ?",
+    "options": ["মাঝে মাঝে নিরাপদ", "একদমই নিরাপদ নয়", "সবসময় নিরাপদ", "জানি না"],
+    "correct_answer": "একদমই নিরাপদ নয়",
+    "points": 1,
+    "sort_order": 15
+  },
+  {
+    "quiz_id": 1,
+    "type": "true_false",
+    "level": "Easy",
+    "question_text": "ChatGPT বাংলা ভাষা বুঝতে এবং বাংলায় উত্তর দিতে পারে।",
+    "options": ["সত্য", "মিথ্যা"],
+    "correct_answer": "সত্য",
+    "points": 1,
+    "sort_order": 16
+  },
+  {
+    "quiz_id": 1,
+    "type": "multiple_choice",
+    "level": "Easy",
+    "question_text": "প্রফেশনাল ইমেইল লেখার জন্য নিচের কোনটি কার্যকর?",
+    "options": ["এআই রাইটিং টুল", "ফোন বুক", "ক্যালকুলেটর", "অ্যালার্ম"],
+    "correct_answer": "এআই রাইটিং টুল",
+    "points": 1,
+    "sort_order": 17
+  },
+  {
+    "quiz_id": 1,
+    "type": "multiple_choice",
+    "level": "Easy",
+    "question_text": "AI এর মাধ্যমে আপনার সিভি (CV) কেমন হওয়া উচিত?",
+    "options": ["রঙিন ও বড়", "পরিষ্কার ও প্রফেশনাল", "ছবি দিয়ে ঠাসা", "হাতে লেখা"],
+    "correct_answer": "পরিষ্কার ও প্রফেশনাল",
+    "points": 1,
+    "sort_order": 18
+  },
+  {
+    "quiz_id": 1,
+    "type": "true_false",
+    "level": "Easy",
+    "question_text": "AI শিখলে ভবিষ্যতে চাকরির বাজারে সুযোগ বেড়ে যায়।",
+    "options": ["সত্য", "মিথ্যা"],
+    "correct_answer": "সত্য",
+    "points": 1,
+    "sort_order": 19
+  },
+  {
+    "quiz_id": 1,
+    "type": "multiple_choice",
+    "level": "Easy",
+    "question_text": "নিচের কোনটি এআই-এর সবচেয়ে বড় বৈশিষ্ট্য?",
+    "options": ["তথ্য মুখস্থ করা", "তথ্যের প্যাটার্ন চেনা ও শেখা", "কথা বলা", "গান শোনানো"],
+    "correct_answer": "তথ্যের প্যাটার্ন চেনা ও শেখা",
+    "points": 1,
+    "sort_order": 20
+  },
+  {
+    "quiz_id": 1,
+    "type": "multiple_choice",
+    "level": "Medium",
+    "question_text": "AI যখন কোনো ভুল তথ্য আত্মবিশ্বাসের সাথে দেয়, তাকে কী বলে?",
+    "options": ["Thinking", "Hallucination", "Error", "Gossip"],
+    "correct_answer": "Hallucination",
+    "points": 1,
+    "sort_order": 21
+  },
+  {
+    "quiz_id": 1,
+    "type": "multiple_choice",
+    "level": "Medium",
+    "question_text": "একটি ভালো প্রম্পট লেখার জন্য কোনটি সবচেয়ে গুরুত্বপূর্ণ?",
+    "options": ["কঠিন ভাষা", "সুনির্দিষ্ট প্রেক্ষাপট (Context)", "অনেক শব্দ", "ইমোজি"],
+    "correct_answer": "সুনির্দিষ্ট প্রেক্ষাপট (Context)",
+    "points": 1,
+    "sort_order": 22
+  },
+  {
+    "quiz_id": 1,
+    "type": "multiple_choice",
+    "level": "Medium",
+    "question_text": "'ATS Friendly CV' বলতে কী বোঝায়?",
+    "options": ["রঙিন সিভি", "সফটওয়্যার দ্বারা সহজে পড়া যায় এমন সিভি", "হাতে লেখা সিভি", "ছবি দিয়ে ঠাসা সিভি"],
+    "correct_answer": "সফটওয়্যার দ্বারা সহজে পড়া যায় এমন সিভি",
+    "points": 1,
+    "sort_order": 23
+  },
+  {
+    "quiz_id": 1,
+    "type": "true_false",
+    "level": "Medium",
+    "question_text": "AI কি মানুষের হয়ে ইন্টারভিউ প্রস্তুতি নিতে সাহায্য করতে পারে?",
+    "options": ["হ্যাঁ", "না"],
+    "correct_answer": "হ্যাঁ",
+    "points": 1,
+    "sort_order": 24
+  },
+  {
+    "quiz_id": 1,
+    "type": "multiple_choice",
+    "level": "Medium",
+    "question_text": "নিচের কোনটি টেক্সট থেকে ভিডিও তৈরির শক্তিশালী টুল?",
+    "options": ["Sora / Runway", "Facebook Lite", "Snapchat", "ShareIt"],
+    "correct_answer": "Sora / Runway",
+    "points": 1,
+    "sort_order": 25
+  },
+  {
+    "quiz_id": 1,
+    "type": "multiple_choice",
+    "level": "Medium",
+    "question_text": "AI যুগে 'Upskilling' বলতে কী বোঝায়?",
+    "options": ["ফোন আপগ্রেড করা", "পুরানো কাজ ভুলে যাওয়া", "নতুন প্রযুক্তি ও দক্ষতা শেখা", "বেশি গেম খেলা"],
+    "correct_answer": "নতুন প্রযুক্তি ও দক্ষতা শেখা",
+    "points": 1,
+    "sort_order": 26
+  },
+  {
+    "quiz_id": 1,
+    "type": "true_false",
+    "level": "Medium",
+    "question_text": "AI ব্যবহার করে নিজের কণ্ঠস্বর নকল করে অন্য ভাষায় কথা বলানো সম্ভব।",
+    "options": ["সত্য", "মিথ্যা"],
+    "correct_answer": "সত্য",
+    "points": 1,
+    "sort_order": 27
+  },
+  {
+    "quiz_id": 1,
+    "type": "multiple_choice",
+    "level": "Medium",
+    "question_text": "LinkedIn-এ প্রফেশনাল নেটওয়ার্কিংয়ের জন্য কোনটি জরুরি?",
+    "options": ["মজার ছবি দেওয়া", "সুন্দর ডিপি ও প্রফেশনাল হেডলাইন", "সারাদিন চ্যাট করা", "বেশি ভিডিও দেখা"],
+    "correct_answer": "সুন্দর ডিপি ও প্রফেশনাল হেডলাইন",
+    "points": 1,
+    "sort_order": 28
+  },
+  {
+    "quiz_id": 1,
+    "type": "multiple_choice",
+    "level": "Medium",
+    "question_text": "নিচের কোনটি একটি মাইক্রোসফট (Microsoft) এর AI অ্যাসিস্ট্যান্ট?",
+    "options": ["Siri", "Copilot", "Alexa", "Bixby"],
+    "correct_answer": "Copilot",
+    "points": 1,
+    "sort_order": 29
+  },
+  {
+    "quiz_id": 1,
+    "type": "true_false",
+    "level": "Medium",
+    "question_text": "AI কি নতুন কোড লিখতে বা প্রোগ্রামিংয়ের ভুল খুঁজে পেতে সাহায্য করতে পারে?",
+    "options": ["হ্যাঁ", "না"],
+    "correct_answer": "হ্যাঁ",
+    "points": 1,
+    "sort_order": 30
+  },
+  {
+    "quiz_id": 1,
+    "type": "multiple_choice",
+    "level": "Medium",
+    "question_text": "ইমেইল রাইটিং উন্নত করার প্রম্পটে 'Tone' বলতে কী বোঝায়?",
+    "options": ["লেখার আওয়াজ", "লেখার ধরন (যেমন: ফরমাল বা ক্যাজুয়াল)", "লেখার দৈর্ঘ্য", "লেখার ভাষা"],
+    "correct_answer": "লেখার ধরন (যেমন: ফরমাল বা ক্যাজুয়াল)",
+    "points": 1,
+    "sort_order": 31
+  },
+  {
+    "quiz_id": 1,
+    "type": "multiple_choice",
+    "level": "Medium",
+    "question_text": "ফ্রিল্যান্সিং ক্যারিয়ারে এআই-এর কাজ কোনটি হতে পারে?",
+    "options": ["ডাটা এন্ট্রি", "অটোমেটেড কন্টেন্ট রাইটিং", "গ্রাফিক ডিজাইন অ্যাসিস্ট্যান্স", "সবগুলোই"],
+    "correct_answer": "সবগুলোই",
+    "points": 1,
+    "sort_order": 32
+  },
+  {
+    "quiz_id": 1,
+    "type": "true_false",
+    "level": "Medium",
+    "question_text": "AI কি কখনো ভুলের ঊর্ধ্বে? (অর্থাৎ সে কি সবসময় সঠিক তথ্য দেয়?)",
+    "options": ["হ্যাঁ", "না"],
+    "correct_answer": "না",
+    "points": 1,
+    "sort_order": 33
+  },
+  {
+    "quiz_id": 1,
+    "type": "multiple_choice",
+    "level": "Medium",
+    "question_text": "একটি প্রম্পটে 'Role Playing' বলতে কী বোঝায়?",
+    "options": ["নাটক করা", "AI-কে একটি নির্দিষ্ট চরিত্র (যেমন: টিচার বা মেন্টর) দেওয়া", "গেম খেলা", "নাম পরিবর্তন করা"],
+    "correct_answer": "AI-কে একটি নির্দিষ্ট চরিত্র (যেমন: টিচার বা মেন্টর) দেওয়া",
+    "points": 1,
+    "sort_order": 34
+  },
+  {
+    "quiz_id": 1,
+    "type": "multiple_choice",
+    "level": "Medium",
+    "question_text": "আপনার সিভি-তে কী থাকা বাধ্যতামূলক?",
+    "options": ["প্রিয় সিনেমা", "পেশাদার দক্ষতা (Skills)", "উচ্চতা ও ওজন", "বন্ধুদের নাম"],
+    "correct_answer": "পেশাদার দক্ষতা (Skills)",
+    "points": 1,
+    "sort_order": 35
+  },
+  {
+    "quiz_id": 1,
+    "type": "true_false",
+    "level": "Medium",
+    "question_text": "AI ব্যবহার করে যেকোনো কঠিন ইংরেজি প্যারাগ্রাফকে সহজ ভাষায় রূপান্তর করা সম্ভব।",
+    "options": ["সত্য", "মিথ্যা"],
+    "correct_answer": "সত্য",
+    "points": 1,
+    "sort_order": 36
+  },
+  {
+    "quiz_id": 1,
+    "type": "multiple_choice",
+    "level": "Medium",
+    "question_text": "ইন্ডাস্ট্রি স্ট্যান্ডার্ড প্রফেশনাল হতে হলে কোন স্কিলটি এখন সবচেয়ে বেশি প্রয়োজন?",
+    "options": ["টাইপ রাইটিং", "এআই ও ডিজিটাল লিটারেসি", "সব মুখস্থ রাখা", "কঠিন পরিশ্রম"],
+    "correct_answer": "এআই ও ডিজিটাল লিটারেসি",
+    "points": 1,
+    "sort_order": 37
+  },
+  {
+    "quiz_id": 1,
+    "type": "true_false",
+    "level": "Medium",
+    "question_text": "AI কি মানুষের হয়ে সরাসরি শারীরিক কাজ (যেমন: চাষাবাদ) করতে পারে?",
+    "options": ["হ্যাঁ", "না"],
+    "correct_answer": "না",
+    "points": 1,
+    "sort_order": 38
+  },
+  {
+    "quiz_id": 1,
+    "type": "multiple_choice",
+    "level": "Medium",
+    "question_text": "যেকোনো নতুন বিষয় শেখার জন্য 'Feynman Technique' এআই-এর মাধ্যমে প্রয়োগ করার সেরা উপায় কী?",
+    "options": ["মুখস্থ করা", "AI-কে বলা 'আমাকে এমনভাবে বোঝাও যেন আমি ১০ বছরের বাচ্চা'", "বেশি করে পড়া", "কপি করা"],
+    "correct_answer": "AI-কে বলা 'আমাকে এমনভাবে বোঝাও যেন আমি ১০ বছরের বাচ্চা'",
+    "points": 1,
+    "sort_order": 39
+  },
+  {
+    "quiz_id": 1,
+    "type": "multiple_choice",
+    "level": "Medium",
+    "question_text": "ভবিষ্যতে সফল ক্যারিয়ারের জন্য কোনটি অপরিহার্য?",
+    "options": ["সার্টিফিকেটের স্তূপ", "ব্যবহারিক দক্ষতা ও প্রযুক্তির জ্ঞান", "চাকরি খোঁজা", "বেশি ঘুমানো"],
+    "correct_answer": "ব্যবহারিক দক্ষতা ও প্রযুক্তির জ্ঞান",
+    "points": 1,
+    "sort_order": 40
+  },
+  {
+    "quiz_id": 1,
+    "type": "multiple_choice",
+    "level": "Hard",
+    "question_text": "AI-এর ক্ষেত্রে 'Bias' (বৈষম্য) বলতে কী বোঝায়?",
+    "options": ["AI-এর উচ্চ গতি", " তথ্যের একপাক্ষিকতা বা ভুল পক্ষপাতিত্ব", "AI-এর মেমোরি", "ইন্টারনেট খরচ"],
+    "correct_answer": " তথ্যের একপাক্ষিকতা বা ভুল পক্ষপাতিত্ব",
+    "points": 1,
+    "sort_order": 41
+  },
+  {
+    "quiz_id": 1,
+    "type": "multiple_choice",
+    "level": "Hard",
+    "question_text": "'Prompt Engineering' এ 'Chain of Thought' বলতে কী বোঝায়?",
+    "options": ["কথা বলা", "AI-কে ধাপে ধাপে যুক্তি দিয়ে চিন্তা করতে বলা", "মাথা ব্যথা", "লিংক শেয়ার করা"],
+    "correct_answer": "AI-কে ধাপে ধাপে যুক্তি দিয়ে চিন্তা করতে বলা",
+    "points": 1,
+    "sort_order": 42
+  },
+  {
+    "quiz_id": 1,
+    "type": "true_false",
+    "level": "Hard",
+    "question_text": "AI কি কখনো মানুষের মতো মৌলিক এবং নতুন কোনো ফিলোসফি তৈরি করতে পারে?",
+    "options": ["হ্যাঁ", "না"],
+    "correct_answer": "না",
+    "points": 1,
+    "sort_order": 43
+  },
+  {
+    "quiz_id": 1,
+    "type": "multiple_choice",
+    "level": "Hard",
+    "question_text": "বড় বড় ভাষার মডেল (যেমন: GPT) কীভাবে কাজ করে?",
+    "options": ["শব্দ মুখস্থ করে", "পরের শব্দটি আসার সম্ভাবনা (Probability) হিসাব করে", "সরাসরি বই থেকে পড়ে", "মানুষের মন স্ক্যান করে"],
+    "correct_answer": "পরের শব্দটি আসার সম্ভাবনা (Probability) হিসাব করে",
+    "points": 1,
+    "sort_order": 44
+  },
+  {
+    "quiz_id": 1,
+    "type": "multiple_choice",
+    "level": "Hard",
+    "question_text": "AI যুগে আপনার ব্যক্তিগত ডাটা সুরক্ষা করার সবচেয়ে শক্তিশালী উপায় কোনটি?",
+    "options": ["পাসওয়ার্ড না দেওয়া", "Two-factor authentication (2FA) ব্যবহার করা", "ইন্টারনেট ব্যবহার না করা", "ছবি ডিলিট করা"],
+    "correct_answer": "Two-factor authentication (2FA) ব্যবহার করা",
+    "points": 1,
+    "sort_order": 45
+  },
+  {
+    "quiz_id": 1,
+    "type": "true_false",
+    "level": "Hard",
+    "question_text": "প্রচেষ্টা IT-এর '৬+৬ মডেল'-এ সফল হতে হলে আপনার কাছে AI কি আপনার প্রতিস্থাপন নাকি সহকারী?",
+    "options": ["প্রতিস্থাপন", "সহকারী"],
+    "correct_answer": "সহকারী",
+    "points": 1,
+    "sort_order": 46
+  },
+  {
+    "quiz_id": 1,
+    "type": "multiple_choice",
+    "level": "Hard",
+    "question_text": "ডিজিটাল সিকিউরিটির ক্ষেত্রে 'Phishing' বলতে কী বোঝায়?",
+    "options": ["মাছ ধরা", "প্রতারণামূলক লিংকের মাধ্যমে তথ্য চুরি", "গেম খেলা", "ভিডিও দেখা"],
+    "correct_answer": "প্রতারণামূলক লিংকের মাধ্যমে তথ্য চুরি",
+    "points": 1,
+    "sort_order": 47
+  },
+  {
+    "quiz_id": 1,
+    "type": "multiple_choice",
+    "level": "Hard",
+    "question_text": "সফল সফটওয়্যার ডেভেলপার হওয়ার জন্য কোনটি সবচেয়ে গুরুত্বপূর্ণ?",
+    "options": ["দামী ল্যাপটপ", "প্রবলেম সলভিং স্কিল ও লজিক্যাল থিংকিং", "বিলাসবহুল অফিস", "অনেক টাকা"],
+    "correct_answer": "প্রবলেম সলভিং স্কিল ও লজিক্যাল থিংকিং",
+    "points": 1,
+    "sort_order": 48
+  },
+  {
+    "quiz_id": 1,
+    "type": "true_false",
+    "level": "Hard",
+    "question_text": "'Multimodal AI' বলতে এমন এআই বোঝায় যা একসাথে টেক্সট, অডিও এবং ছবি বুঝতে পারে।",
+    "options": ["সত্য", "মিথ্যা"],
+    "correct_answer": "সত্য",
+    "points": 1,
+    "sort_order": 49
+  },
+  {
+    "quiz_id": 1,
+    "type": "multiple_choice",
+    "level": "Hard",
+    "question_text": "আগামীর জবে টিকে থাকতে হলে মানুষের কোন গুণটি AI কখনো রিপ্লেস করতে পারবে না?",
+    "options": ["তথ্য গণনা", "সৃজনশীলতা ও সহানুভূতি (Creativity & Empathy)", "দ্রুত টাইপ করা", "ছবি আঁকা"],
+    "correct_answer": "সৃজনশীলতা ও সহানুভূতি (Creativity & Empathy)",
+    "points": 1,
+    "sort_order": 50
+  }
+]

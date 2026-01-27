@@ -10,6 +10,7 @@ import {
     Clock,
     Eye,
     Filter,
+    Trophy,
 } from "lucide-react";
 import { useState } from "react";
 import clsx from "clsx";
@@ -44,16 +45,16 @@ export default function All({ auth, quizzes, filters = {} }) {
                 {/* Header */}
                 <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
                     <div>
-                        <h1 className="text-3xl font-bold text-slate-900 dark:text-white">
+                        <h1 className="text-3xl font-bold text-slate-900">
                             All Quizzes
                         </h1>
-                        <p className="text-slate-600 dark:text-slate-400 mt-1">
+                        <p className="text-slate-600 mt-1">
                             Manage all quizzes across all events
                         </p>
                     </div>
                     <Link
                         href={route("admin.events.index")}
-                        className="inline-flex items-center gap-2 px-4 py-2 text-sm font-medium text-slate-700 dark:text-slate-300 hover:text-indigo-600 dark:hover:text-indigo-400 transition"
+                        className="inline-flex items-center gap-2 px-4 py-2 text-sm font-medium text-slate-700 hover:text-indigo-600 transition"
                     >
                         <ArrowLeft size={18} />
                         Back to Events
@@ -61,7 +62,7 @@ export default function All({ auth, quizzes, filters = {} }) {
                 </div>
 
                 {/* Search and Filters */}
-                <div className="bg-white dark:bg-slate-800 rounded-xl shadow-sm border border-slate-200 dark:border-slate-700 p-4">
+                <div className="bg-white rounded-xl shadow-sm border border-slate-200 p-4">
                     <form onSubmit={handleSearch} className="flex gap-3">
                         <div className="flex-1 relative">
                             <Search
@@ -73,7 +74,7 @@ export default function All({ auth, quizzes, filters = {} }) {
                                 value={search}
                                 onChange={(e) => setSearch(e.target.value)}
                                 placeholder="Search quizzes by title..."
-                                className="w-full pl-10 pr-4 py-2 border border-slate-300 dark:border-slate-600 rounded-lg bg-white dark:bg-slate-700 text-slate-900 dark:text-white focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
+                                className="w-full pl-10 pr-4 py-2 border border-slate-300 rounded-lg bg-white text-slate-900 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
                             />
                         </div>
                         <PrimaryButton type="submit">Search</PrimaryButton>
@@ -86,13 +87,13 @@ export default function All({ auth, quizzes, filters = {} }) {
                         {quizzes.data.map((quiz) => (
                             <div
                                 key={quiz.id}
-                                className="bg-white dark:bg-slate-800 rounded-xl shadow-sm border border-slate-200 dark:border-slate-700 overflow-hidden hover:shadow-lg transition-all duration-200 group"
+                                className="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden hover:shadow-lg transition-all duration-200 group"
                             >
                                 <div className="p-6">
                                     {/* Header */}
                                     <div className="flex items-start justify-between mb-4">
                                         <div className="flex-1">
-                                            <h3 className="text-lg font-semibold text-slate-900 dark:text-white mb-1 group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition">
+                                            <h3 className="text-lg font-semibold text-slate-900 mb-1 group-hover:text-indigo-600 transition">
                                                 {quiz.title}
                                             </h3>
                                             <Link
@@ -100,7 +101,7 @@ export default function All({ auth, quizzes, filters = {} }) {
                                                     "admin.events.show",
                                                     quiz.event.id
                                                 )}
-                                                className="text-sm text-indigo-600 dark:text-indigo-400 hover:underline"
+                                                className="text-sm text-indigo-600 hover:underline"
                                             >
                                                 {quiz.event.title}
                                             </Link>
@@ -109,8 +110,8 @@ export default function All({ auth, quizzes, filters = {} }) {
                                             className={clsx(
                                                 "px-2.5 py-1 rounded-full text-xs font-semibold",
                                                 quiz.is_published
-                                                    ? "bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400"
-                                                    : "bg-slate-100 text-slate-800 dark:bg-slate-700 dark:text-slate-300"
+                                                    ? "bg-green-100 text-green-800"
+                                                    : "bg-slate-100 text-slate-800"
                                             )}
                                         >
                                             {quiz.is_published
@@ -121,13 +122,13 @@ export default function All({ auth, quizzes, filters = {} }) {
 
                                     {/* Description */}
                                     {quiz.description && (
-                                        <p className="text-sm text-slate-600 dark:text-slate-400 mb-4 line-clamp-2">
+                                        <p className="text-sm text-slate-600 mb-4 line-clamp-2">
                                             {quiz.description}
                                         </p>
                                     )}
 
                                     {/* Stats */}
-                                    <div className="flex items-center gap-4 mb-4 text-sm text-slate-500 dark:text-slate-400">
+                                    <div className="flex items-center gap-4 mb-4 text-sm text-slate-500">
                                         {quiz.time_limit_minutes && (
                                             <div className="flex items-center gap-1">
                                                 <Clock size={16} />
@@ -147,13 +148,20 @@ export default function All({ auth, quizzes, filters = {} }) {
                                     </div>
 
                                     {/* Actions */}
-                                    <div className="flex items-center gap-2 pt-4 border-t border-slate-200 dark:border-slate-700">
+                                    <div className="flex items-center gap-2 pt-4 border-t border-slate-200">
+                                        <Link
+                                            href={route("admin.quizzes.results", quiz.id)}
+                                            className="p-2 text-slate-600 hover:text-indigo-600 hover:bg-indigo-50 rounded-lg transition"
+                                            title="Results & Analytics"
+                                        >
+                                            <Trophy size={18} />
+                                        </Link>
                                         <Link
                                             href={route(
                                                 "admin.quizzes.questions.index",
                                                 quiz.id
                                             )}
-                                            className="flex-1 px-3 py-2 text-sm font-medium text-center text-indigo-600 dark:text-indigo-400 hover:bg-indigo-50 dark:hover:bg-indigo-900/20 rounded-lg transition"
+                                            className="flex-1 px-3 py-2 text-sm font-medium text-center text-indigo-600 hover:bg-indigo-50 rounded-lg transition"
                                         >
                                             Questions
                                         </Link>
@@ -162,7 +170,7 @@ export default function All({ auth, quizzes, filters = {} }) {
                                                 "admin.events.quizzes.edit",
                                                 [quiz.event.id, quiz.id]
                                             )}
-                                            className="p-2 text-slate-600 dark:text-slate-400 hover:text-indigo-600 dark:hover:text-indigo-400 hover:bg-indigo-50 dark:hover:bg-indigo-900/20 rounded-lg transition"
+                                            className="p-2 text-slate-600 hover:text-indigo-600 hover:bg-indigo-50 rounded-lg transition"
                                             title="Edit"
                                         >
                                             <Edit size={18} />
@@ -174,7 +182,7 @@ export default function All({ auth, quizzes, filters = {} }) {
                                                     quiz.event.id
                                                 )
                                             }
-                                            className="p-2 text-slate-600 dark:text-slate-400 hover:text-red-600 dark:hover:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg transition"
+                                            className="p-2 text-slate-600 hover:text-red-600 hover:bg-red-50 rounded-lg transition"
                                             title="Delete"
                                         >
                                             <Trash2 size={18} />
@@ -185,15 +193,15 @@ export default function All({ auth, quizzes, filters = {} }) {
                         ))}
                     </div>
                 ) : (
-                    <div className="bg-white dark:bg-slate-800 rounded-xl shadow-sm border border-slate-200 dark:border-slate-700 p-12 text-center">
+                    <div className="bg-white rounded-xl shadow-sm border border-slate-200 p-12 text-center">
                         <FileQuestion
                             className="mx-auto text-slate-400 mb-4"
                             size={48}
                         />
-                        <h3 className="text-lg font-semibold text-slate-900 dark:text-white mb-2">
+                        <h3 className="text-lg font-semibold text-slate-900 mb-2">
                             No quizzes found
                         </h3>
-                        <p className="text-slate-600 dark:text-slate-400 mb-6">
+                        <p className="text-slate-600 mb-6">
                             {search
                                 ? "Try adjusting your search terms."
                                 : "Get started by creating a quiz for an event."}
@@ -219,7 +227,7 @@ export default function All({ auth, quizzes, filters = {} }) {
                                     "px-4 py-2 rounded-lg text-sm font-medium transition",
                                     link.active
                                         ? "bg-indigo-600 text-white"
-                                        : "bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-700"
+                                        : "bg-white text-slate-700 border border-slate-200 hover:bg-slate-50"
                                 )}
                                 dangerouslySetInnerHTML={{ __html: link.label }}
                             />

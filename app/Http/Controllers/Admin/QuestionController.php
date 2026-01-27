@@ -108,7 +108,7 @@ class QuestionController extends Controller
                 $quiz->questions()->create([
                     'type' => 'multiple_choice',
                     'question_text' => $q['question_text'],
-                    'options' => json_encode($q['options']),
+                    'options' => $q['options'],
                     'correct_answer' => $q['correct_answer'],
                     'points' => $q['points'] ?? 1,
                     'sort_order' => 0

@@ -32,14 +32,14 @@ export default function Create({ auth, quiz }) {
     return (
         <AdminLayout
             user={auth.user}
-            header={<h2 className="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">Add Question to {quiz.title}</h2>}
+            header={<h2 className="font-semibold text-xl text-gray-800 leading-tight">Add Question to {quiz.title}</h2>}
         >
             <Head title="Add Question" />
 
             <div className="py-12">
                 <div className="max-w-7xl mx-auto sm:px-6 lg:px-8">
-                    <div className="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
-                        <div className="p-6 text-gray-900 dark:text-gray-100">
+                    <div className="bg-white overflow-hidden shadow-sm sm:rounded-lg">
+                        <div className="p-6 text-gray-900">
                             <form onSubmit={submit}>
                                 <div>
                                     <InputLabel htmlFor="type" value="Question Type" />
@@ -47,7 +47,7 @@ export default function Create({ auth, quiz }) {
                                         id="type"
                                         name="type"
                                         value={data.type}
-                                        className="mt-1 block w-full border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 focus:border-indigo-500 dark:focus:border-indigo-600 focus:ring-indigo-500 dark:focus:ring-indigo-600 rounded-md shadow-sm"
+                                        className="mt-1 block w-full border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm"
                                         onChange={(e) => setData('type', e.target.value)}
                                     >
                                         <option value="multiple_choice">Multiple Choice</option>
@@ -63,7 +63,7 @@ export default function Create({ auth, quiz }) {
                                         id="question_text"
                                         name="question_text"
                                         value={data.question_text}
-                                        className="mt-1 block w-full border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 focus:border-indigo-500 dark:focus:border-indigo-600 focus:ring-indigo-500 dark:focus:ring-indigo-600 rounded-md shadow-sm"
+                                        className="mt-1 block w-full border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm"
                                         rows="3"
                                         required
                                         onChange={(e) => setData('question_text', e.target.value)}
@@ -85,8 +85,8 @@ export default function Create({ auth, quiz }) {
                                 </div>
 
                                 {data.type === 'multiple_choice' && (
-                                    <div className="mt-6 border-t pt-4 dark:border-gray-700">
-                                        <h3 className="font-medium text-gray-900 dark:text-gray-100 mb-2">Options</h3>
+                                    <div className="mt-6 border-t pt-4">
+                                        <h3 className="font-medium text-gray-900 mb-2">Options</h3>
                                         {options.map((option, index) => (
                                             <div key={index} className="mt-2 flex items-center">
                                                 <input 
@@ -112,8 +112,8 @@ export default function Create({ auth, quiz }) {
                                 )}
                                 
                                 {data.type === 'true_false' && (
-                                     <div className="mt-6 border-t pt-4 dark:border-gray-700">
-                                        <h3 className="font-medium text-gray-900 dark:text-gray-100 mb-2">Correct Answer</h3>
+                                     <div className="mt-6 border-t pt-4">
+                                        <h3 className="font-medium text-gray-900 mb-2">Correct Answer</h3>
                                         <div className="flex items-center space-x-4">
                                             <label className="flex items-center">
                                                 <input type="radio" name="correct_answer" value="True" checked={data.correct_answer === 'True'} onChange={(e) => setData('correct_answer', e.target.value)} className="mr-2"/>
@@ -129,7 +129,7 @@ export default function Create({ auth, quiz }) {
                                 )}
                                 
                                 {data.type === 'short_answer' && (
-                                     <div className="mt-6 border-t pt-4 dark:border-gray-700">
+                                     <div className="mt-6 border-t pt-4">
                                         <InputLabel htmlFor="correct_answer" value="Correct Answer (Text match)" />
                                         <TextInput
                                             id="correct_answer"
@@ -146,7 +146,7 @@ export default function Create({ auth, quiz }) {
                                 <div className="flex items-center justify-end mt-4">
                                     <Link
                                         href={route('admin.quizzes.questions.index', quiz.id)}
-                                        className="underline text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 dark:focus:ring-offset-gray-800"
+                                        className="underline text-sm text-gray-600 hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
                                     >
                                         Cancel
                                     </Link>
