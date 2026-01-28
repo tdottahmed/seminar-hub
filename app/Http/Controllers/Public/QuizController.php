@@ -206,11 +206,21 @@ class QuizController extends Controller
             ? $quiz->questions()->sum('points') 
             : $questions->sum('points');
 
+        // Calculate duration string
+        $duration = '-';
+        if ($attempt->started_at && $attempt->completed_at) {
+            $diffInSeconds = \Carbon\Carbon::parse($attempt->started_at)->diffInSeconds(\Carbon\Carbon::parse($attempt->completed_at));
+            $minutes = floor($diffInSeconds / 60);
+            $seconds = $diffInSeconds % 60;
+            $duration = "{$minutes}m {$seconds}s";
+        }
+
         return Inertia::render('Public/Quiz/Result', [
             'quiz' => $quiz->load('event'),
             'attempt' => $attempt,
             'score' => $attempt->score,
             'total_points' => $totalPoints,
+            'duration' => $duration,
         ]);
     }
 }

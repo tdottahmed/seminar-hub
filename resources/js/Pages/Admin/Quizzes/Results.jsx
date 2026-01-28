@@ -102,6 +102,7 @@ export default function Results({ auth, quiz, stats, attempts }) {
                                     <th className="px-6 py-4">Participant</th>
                                     <th className="px-6 py-4">Contact</th>
                                     <th className="px-6 py-4 text-center">Score</th>
+                                    <th className="px-6 py-4 text-center">Time Taken</th>
                                     <th className="px-6 py-4 flex justify-end">Date</th>
                                 </tr>
                             </thead>
@@ -127,6 +128,11 @@ export default function Results({ auth, quiz, stats, attempts }) {
                                                 <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
                                                     {attempt.score} / {stats.max_possible_score}
                                                 </span>
+                                            </td>
+                                            <td className="px-6 py-4 text-center text-slate-600 font-mono text-xs">
+                                                {attempt.duration_seconds 
+                                                    ? `${Math.floor(attempt.duration_seconds / 60)}m ${attempt.duration_seconds % 60}s`
+                                                    : '-'}
                                             </td>
                                             <td className="px-6 py-4 text-right">
                                                 {new Date(attempt.completed_at).toLocaleDateString()} <br/>

@@ -66,10 +66,13 @@ class QuizController extends Controller
         ];
         
         // Leaderboard (completed attempts only)
+        // Sort by Score (DESC) and then by Duration (ASC) - assuming MySQL/MariaDB
         $attempts = $quiz->attempts()
+            ->select('*') // Select all columns first
+            ->selectRaw('TIMESTAMPDIFF(SECOND, started_at, completed_at) as duration_seconds')
             ->where('status', 'completed')
             ->orderByDesc('score')
-            ->orderBy('completed_at') // Tie-breaker: earlier completion
+            ->orderBy('duration_seconds') // Ascending duration (faster is better)
             ->paginate(20)
             ->withQueryString();
             

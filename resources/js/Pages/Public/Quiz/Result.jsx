@@ -2,7 +2,7 @@ import { Head, Link } from '@inertiajs/react';
 import { Trophy, CheckCircle, ArrowRight, XCircle, Home, RotateCw } from 'lucide-react';
 import clsx from 'clsx';
 
-export default function Result({ quiz, attempt, score, total_points }) {
+export default function Result({ quiz, attempt, score, total_points, duration }) {
     const percentage = Math.round((score / total_points) * 100);
     
     let gradeColor = 'text-green-600';
@@ -59,6 +59,7 @@ export default function Result({ quiz, attempt, score, total_points }) {
                                 </div>
                                 <div className="text-xs text-slate-400 uppercase tracking-wider font-bold mt-1">Score</div>
                             </div>
+
                             <div className="w-px h-12 bg-slate-200" />
                             <div className="text-center p-4 bg-slate-50 rounded-2xl min-w-[100px]">
                                 <div className="text-3xl font-extrabold text-slate-700">
@@ -66,6 +67,11 @@ export default function Result({ quiz, attempt, score, total_points }) {
                                 </div>
                                  <div className="text-xs text-slate-400 uppercase tracking-wider font-bold mt-1">Total</div>
                             </div>
+                        </div>
+
+                        <div className="flex items-center justify-center gap-2 mb-8 text-slate-500 font-medium bg-slate-50 py-2 px-4 rounded-full inline-flex self-center mx-auto">
+                            <RotateCw size={16} />
+                            <span>Time Taken: {duration}</span>
                         </div>
 
                         <div className="bg-slate-50 rounded-2xl p-5 mb-8 border border-slate-100">
