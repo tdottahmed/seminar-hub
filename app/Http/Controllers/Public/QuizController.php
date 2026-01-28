@@ -114,7 +114,7 @@ class QuizController extends Controller
         $attemptId = $request->query('attempt_id');
         $attempt = QuizAttempt::findOrFail($attemptId);
 
-        if ($attempt->quiz_id !== $quiz->id) {
+        if ((int)$attempt->quiz_id !== (int)$quiz->id) {
             abort(403);
         }
 
