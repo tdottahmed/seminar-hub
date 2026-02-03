@@ -6,6 +6,7 @@ import clsx from 'clsx';
 import InputLabel from '@/Components/InputLabel';
 import TextInput from '@/Components/TextInput';
 import PrimaryButton from '@/Components/PrimaryButton';
+import RichTextEditor from '@/Components/RichTextEditor';
 
 export default function Edit({ auth, program }) {
     const { data, setData, put, processing, errors } = useForm({
@@ -90,13 +91,11 @@ export default function Edit({ auth, program }) {
                                     </div>
                                     <div>
                                         <InputLabel value="Description" />
-                                        <textarea
-                                            className="mt-1 block w-full border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm"
-                                            rows="3"
+                                        <RichTextEditor
+                                            className="mt-1"
                                             value={data.description[activeTab]}
-                                            onChange={(e) => setData('description', { ...data.description, [activeTab]: e.target.value })}
+                                            onChange={(value) => setData('description', { ...data.description, [activeTab]: value })}
                                             placeholder={activeTab === 'en' ? "Brief description..." : "সংক্ষিপ্ত বিবরণ..."}
-                                            required
                                         />
                                     </div>
                                      <div>

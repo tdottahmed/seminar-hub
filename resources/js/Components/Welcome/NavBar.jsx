@@ -5,14 +5,15 @@ import { motion, AnimatePresence } from "framer-motion";
 import { createPortal } from "react-dom";
 import Logo from "./Logo";
 
+import { useLanguage } from '@/Contexts/LanguageContext';
+import { usePage } from '@inertiajs/react';
+
 export default function NavBar({
-    auth,
-    canLogin,
-    canRegister,
-    t,
-    lang,
-    setLang,
+    canLogin = false,
+    canRegister = false,
 }) {
+    const { auth } = usePage().props;
+    const { t, lang, setLang } = useLanguage();
     const [isScrolled, setIsScrolled] = useState(false);
     const [isOpen, setIsOpen] = useState(false);
 
@@ -36,12 +37,25 @@ export default function NavBar({
     const navLinks = [
         "home",
         "about",
+        "services",
+        "goals",
+        "team",
         "programs",
         "events",
-        "team",
         "gallery",
-        "testimonials",
     ];
+
+    const routeMap = {
+        home: "/",
+        about: route("about"),
+        services: route("services.index"),
+        goals: route("goals"),
+        team: route("teams.index"),
+        programs: "/#programs",
+        events: "/#events",
+        gallery: "/#gallery",
+        testimonials: "/#testimonials",
+    };
 
     return (
         <nav
@@ -60,14 +74,14 @@ export default function NavBar({
             {/* Desktop Navigation */}
             <div className="hidden lg:flex gap-8 items-center text-sm font-medium text-slate-300">
                 {navLinks.map((item) => (
-                    <a
+                    <Link
                         key={item}
-                        href={route().current('home') ? `#${item}` : `/#${item}`}
-                        className="hover:text-white transition relative hover:scale-105 group"
+                        href={routeMap[item]}
+                        className={`hover:text-white transition relative hover:scale-105 group ${route().current(item) ? 'text-white' : ''}`}
                     >
                         {t.nav[item]}
-                        <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-indigo-400 transition-all duration-300 group-hover:w-full"></span>
-                    </a>
+                        <span className={`absolute -bottom-1 left-0 w-0 h-0.5 bg-indigo-400 transition-all duration-300 group-hover:w-full ${route().current(item) || (routeMap[item].includes('#') && false) ? 'w-full' : ''}`}></span>
+                    </Link>
                 ))}
             </div>
 
@@ -164,19 +178,22 @@ export default function NavBar({
                             {/* Menu Content */}
                             <div className="flex flex-col p-6 gap-2 overflow-y-auto flex-1">
                                 {navLinks.map((item, index) => (
-                                    <motion.a
+                                    <Link
                                         key={item}
-                                        href={route().current('home') ? `#${item}` : `/#${item}`}
+                                        href={routeMap[item]}
                                         onClick={() => setIsOpen(false)}
-                                        initial={{ opacity: 0, x: 20 }}
-                                        animate={{ opacity: 1, x: 0 }}
-                                        transition={{
-                                            delay: 0.1 + index * 0.05,
-                                        }}
                                         className="text-xl font-medium text-slate-300 hover:text-white py-4 border-b border-white/10 last:border-0"
                                     >
-                                        {t.nav[item]}
-                                    </motion.a>
+                                        <motion.div
+                                            initial={{ opacity: 0, x: 20 }}
+                                            animate={{ opacity: 1, x: 0 }}
+                                            transition={{
+                                                delay: 0.1 + index * 0.05,
+                                            }}
+                                        >
+                                            {t.nav[item]}
+                                        </motion.div>
+                                    </Link>
                                 ))}
                             </div>
 

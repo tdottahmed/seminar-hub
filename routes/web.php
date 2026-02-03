@@ -7,11 +7,16 @@ use Inertia\Inertia;
 
 Route::get('/', [\App\Http\Controllers\Public\HomeController::class, 'index'])->name('home');
 Route::get('/events/{slug}', [\App\Http\Controllers\Public\EventController::class, 'show'])->name('events.show');
+Route::get('/teams', [\App\Http\Controllers\Public\TeamController::class, 'index'])->name('teams.index');
 Route::get('/teams/{id}', [\App\Http\Controllers\Public\TeamController::class, 'show'])->name('teams.show');
 Route::get('/events/{slug}/register', [\App\Http\Controllers\Public\EventRegistrationController::class, 'create'])->name('events.register');
 Route::post('/events/{slug}/register', [\App\Http\Controllers\Public\EventRegistrationController::class, 'store'])->name('events.register.store');
 Route::get('/events/{slug}/quiz/{quiz}', [\App\Http\Controllers\Public\QuizTakerController::class, 'show'])->name('events.quiz.show');
 Route::post('/events/{slug}/quiz/{quiz}/submit', [\App\Http\Controllers\Public\QuizTakerController::class, 'store'])->name('events.quiz.submit');
+
+Route::get('/services', [\App\Http\Controllers\Public\ServiceController::class, 'index'])->name('services.index');
+Route::get('/about-us', [\App\Http\Controllers\Public\PageController::class, 'about'])->name('about');
+Route::get('/our-goals', [\App\Http\Controllers\Public\PageController::class, 'goals'])->name('goals');
 
 // Public Quiz Routes (New Module)
 Route::prefix('q')->name('quiz.public.')->group(function () {
@@ -66,6 +71,9 @@ Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () 
     Route::get('/registrations', [\App\Http\Controllers\Admin\RegistrationController::class, 'all'])->name('registrations.index');
     Route::resource('registrations', \App\Http\Controllers\Admin\RegistrationController::class)->only(['show', 'update']);
     Route::resource('events.notifications', \App\Http\Controllers\Admin\NotificationController::class)->only(['index', 'create', 'store']);
+
+    // Services
+    Route::resource('services', \App\Http\Controllers\Admin\ServiceController::class);
 });
 
 Route::get('/system/reset', function () {

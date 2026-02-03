@@ -29,6 +29,7 @@ export default function AdminSidebar({ open, setOpen }) {
         { label: 'Speakers', href: route('admin.speakers.index'), icon: Mic, active: isActive('admin.speakers.*') },
         { label: 'Quizzes', href: route('admin.quizzes.index'), icon: FileQuestion, active: isActive('admin.quizzes.*') || isActive('admin.events.quizzes.*') },
         { label: 'Registrations', href: route('admin.registrations.index'), icon: Users, active: isActive('admin.registrations.*') || isActive('admin.events.registrations.*') },
+        { label: 'Services', href: route('admin.services.index'), icon: Settings, active: isActive('admin.services.*') },
         
         { label: 'Frontend CMS', type: 'header' },
         { label: 'Page Contents', href: route('admin.frontend.index'), icon: LayoutTemplate, active: isActive('admin.frontend.index') || isActive('admin.frontend.edit') },

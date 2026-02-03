@@ -32,6 +32,7 @@
         "react-countup": "^6.5.3",
         "react-hook-form": "^7.70.0",
         "react-parallax-tilt": "^1.7.315",
+        "react-quill": "^2.0.0",
         "swiper": "^12.0.3",
         "tailwind-merge": "^3.4.0",
         "zod": "^4.3.5"

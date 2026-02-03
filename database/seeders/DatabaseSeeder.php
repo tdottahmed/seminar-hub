@@ -5,6 +5,9 @@ namespace Database\Seeders;
 use App\Models\User;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
+use Database\Seeders\UserSeeder;
+use Database\Seeders\OurGoalsSeeder;
+use Database\Seeders\FounderSeeder;
 use Illuminate\Support\Facades\Hash;
 
 class DatabaseSeeder extends Seeder
@@ -70,6 +73,11 @@ class DatabaseSeeder extends Seeder
             'status' => 'approved',
         ]);
 
-        $this->call(\Database\Seeders\FrontendSectionSeeder::class);
+        $this->call([
+            UserSeeder::class,
+            FrontendSectionSeeder::class,
+            OurGoalsSeeder::class,
+            FounderSeeder::class,
+        ]);
     }
 }

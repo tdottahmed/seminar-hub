@@ -1,8 +1,8 @@
 import { Head } from "@inertiajs/react";
 import { useState } from "react";
-import NavBar from "../Components/Welcome/NavBar";
+import GuestLayout from "@/Layouts/GuestLayout";
+import { useLanguage } from "@/Contexts/LanguageContext";
 import HeroSection from "../Components/Welcome/HeroSection";
-import TrustedBySection from "../Components/Welcome/TrustedBySection";
 import StatsSection from "../Components/Welcome/StatsSection";
 import AboutSection from "../Components/Welcome/AboutSection";
 import EventsSection from "../Components/Welcome/EventsSection";
@@ -13,10 +13,6 @@ import TeamSection from "../Components/Welcome/TeamSection";
 import GallerySection from "../Components/Welcome/GallerySection";
 import FAQSection from "../Components/Welcome/FAQSection";
 import CTASection from "../Components/Welcome/CTASection";
-import NewsletterSection from "../Components/Welcome/NewsletterSection";
-import Footer from "../Components/Welcome/Footer";
-import FloatingActions from "../Components/Welcome/FloatingActions";
-import { translations } from "../Components/Welcome/data";
 
 export default function Welcome({
     auth,
@@ -39,12 +35,10 @@ export default function Welcome({
     faqSection,
     faqs = []
 }) {
-    const [lang, setLang] = useState("en");
-    const t = translations[lang];
-    const isBn = lang === "bn";
-
+    const { t, lang, isBn } = useLanguage();
+    
     return (
-        <div className="bg-slate-900 min-h-screen text-slate-200 selection:bg-indigo-500/30">
+        <GuestLayout canLogin={canLogin} canRegister={canRegister}>
             <Head>
                 <title>Welcome to Prochesta IT - Leading IT Training Institute</title>
                 <meta name="description" content="Welcome to Prochesta IT. We offer top-notch training in Web Development, Graphics Design, and more. Start your tech career with us." />
@@ -52,17 +46,7 @@ export default function Welcome({
                 <meta property="og:description" content="Welcome to Prochesta IT. We offer top-notch training in Web Development, Graphics Design, and more. Start your tech career with us." />
             </Head>
 
-            <NavBar
-                auth={auth}
-                canLogin={canLogin}
-                canRegister={canRegister}
-                t={t}
-                lang={lang}
-                setLang={setLang}
-            />
-
             <HeroSection t={t} isBn={isBn} lang={lang} content={heroSection?.content} />
-
 
             <StatsSection t={t} content={statsSection?.content} lang={lang} />
 
@@ -91,9 +75,6 @@ export default function Welcome({
 
             <CTASection t={t} />
 
-            <FloatingActions />
-
-            <Footer t={t} />
-        </div>
+        </GuestLayout>
     );
 }

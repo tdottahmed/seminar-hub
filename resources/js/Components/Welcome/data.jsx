@@ -80,6 +80,8 @@ export const translations = {
         nav: {
             home: "Home",
             about: "About",
+            services: "Services",
+            goals: "Our Goals",
             programs: "Programs",
             events: "Events",
             team: "Team",
@@ -305,6 +307,8 @@ export const translations = {
         nav: {
             home: "হোম",
             about: "আমাদের সম্পর্কে",
+            services: "সেবাসমূহ",
+            goals: "আমাদের লক্ষ্য",
             programs: "প্রোগ্রামসমূহ",
             events: "ইভেন্টসমূহ",
             team: "টিম",

@@ -116,6 +116,16 @@ class FrontendSectionSeeder extends Seeder
                         'button' => "সাবস্ক্রাইব"
                     ]
                 ]
+            ],
+            [
+                'slug' => 'about_us',
+                'title' => 'About Us Page Content',
+                'content' => [
+                    'title' => "About SeminarHub",
+                    'description' => "SeminarHub is a premier event management platform dedicated to bridging the gap between industry experts and eager learners. Founded in 2026, we have organized over 500 events globally.",
+                    'mission' => "To democratize access to professional knowledge.",
+                    'vision' => "A world where learning never stops."
+                ]
             ]
         ];
 

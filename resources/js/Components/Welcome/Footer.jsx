@@ -1,7 +1,10 @@
 import { Facebook, Twitter, Instagram, Linkedin } from "lucide-react";
 import Logo from "./Logo";
 
-export default function Footer({ t }) {
+import { useLanguage } from '@/Contexts/LanguageContext';
+
+export default function Footer() {
+    const { t } = useLanguage();
     return (
         <footer className="bg-slate-950 pt-16 pb-8 border-t border-white/10">
             <div className="container mx-auto px-6">
