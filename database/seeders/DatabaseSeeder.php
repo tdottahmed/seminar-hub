@@ -8,6 +8,7 @@ use Illuminate\Database\Seeder;
 use Database\Seeders\UserSeeder;
 use Database\Seeders\OurGoalsSeeder;
 use Database\Seeders\FounderSeeder;
+use Database\Seeders\ProgramsSeeder;
 use Illuminate\Support\Facades\Hash;
 
 class DatabaseSeeder extends Seeder
@@ -74,10 +75,11 @@ class DatabaseSeeder extends Seeder
         ]);
 
         $this->call([
-            UserSeeder::class,
+            ProgramsSeeder::class,
             FrontendSectionSeeder::class,
             OurGoalsSeeder::class,
             FounderSeeder::class,
+            CourseSeeder::class,
         ]);
     }
 }
