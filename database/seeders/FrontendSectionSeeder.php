@@ -121,10 +121,18 @@ class FrontendSectionSeeder extends Seeder
                 'slug' => 'about_us',
                 'title' => 'About Us Page Content',
                 'content' => [
-                    'title' => "About SeminarHub",
-                    'description' => "SeminarHub is a premier event management platform dedicated to bridging the gap between industry experts and eager learners. Founded in 2026, we have organized over 500 events globally.",
-                    'mission' => "To democratize access to professional knowledge.",
-                    'vision' => "A world where learning never stops."
+                    'en' => [
+                        'title' => "About SeminarHub",
+                        'description' => "SeminarHub is a premier event management platform dedicated to bridging the gap between industry experts and eager learners. Founded in 2026, we have organized over 500 events globally.",
+                        'mission' => "To democratize access to professional knowledge.",
+                        'vision' => "A world where learning never stops."
+                    ],
+                    'bn' => [
+                        'title' => "SeminarHub সম্পর্কে",
+                        'description' => "সেমিনারহাব একটি শীর্ষস্থানীয় ইভেন্ট ম্যানেজমেন্ট প্ল্যাটফর্ম যা শিল্প বিশেষজ্ঞ এবং আগ্রহী শিক্ষার্থীদের মধ্যে ব্যবধান ঘোচাতে নিবেদিত। ২০২৬ সালে প্রতিষ্ঠিত, আমরা বিশ্বব্যাপী ৫০০ টিরও বেশি ইভেন্ট আয়োজন করেছি।",
+                        'mission' => "পেশাগত জ্ঞানের অ্যাক্সেস সবার জন্য উন্মুক্ত করা।",
+                        'vision' => "এমন একটি বিশ্ব যেখানে শিক্ষা কখনই থামে না।"
+                    ]
                 ]
             ]
         ];

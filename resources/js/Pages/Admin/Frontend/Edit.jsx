@@ -6,6 +6,7 @@ import clsx from 'clsx';
 import InputLabel from '@/Components/InputLabel';
 import TextInput from '@/Components/TextInput';
 import PrimaryButton from '@/Components/PrimaryButton';
+import RichTextEditor from '@/Components/RichTextEditor';
 
 export default function Edit({ auth, section }) {
     const { data, setData, put, processing, errors } = useForm({
@@ -256,6 +257,27 @@ export default function Edit({ auth, section }) {
                         )}
                     </div>
                  );
+            }
+
+            const isRichTextField = key.toLowerCase().includes('bio') || key.toLowerCase().includes('description') || key.toLowerCase().includes('mission') || key.toLowerCase().includes('vision');
+            if (isRichTextField) {
+                return (
+                    <div key={key} className="mb-4">
+                        <InputLabel htmlFor={fieldKey} value={label} />
+                        <RichTextEditor
+                            id={fieldKey}
+                            className="mt-1"
+                            value={value}
+                            onChange={(newValue) => {
+                                const newContent = {
+                                    ...data.content,
+                                    [lang]: { ...data.content[lang], [key]: newValue }
+                                };
+                                setData('content', newContent);
+                            }}
+                        />
+                    </div>
+                );
             }
 
             return (
