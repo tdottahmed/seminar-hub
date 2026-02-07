@@ -16,4 +16,9 @@ class Course extends Model
         'is_active' => 'boolean',
         'price' => 'decimal:2',
     ];
+
+    public function enrollments()
+    {
+        return $this->hasMany(CourseEnrollment::class);
+    }
 }

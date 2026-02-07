@@ -11,6 +11,7 @@ Route::get('/events/{slug}', [\App\Http\Controllers\Public\EventController::clas
 Route::get('/teams', [\App\Http\Controllers\Public\TeamController::class, 'index'])->name('teams.index');
 Route::get('/courses', [\App\Http\Controllers\Public\CourseController::class, 'index'])->name('courses.index');
 Route::get('/courses/{slug}', [\App\Http\Controllers\Public\CourseController::class, 'show'])->name('courses.show');
+Route::post('/courses/{course}/enroll', [\App\Http\Controllers\Public\CourseEnrollmentController::class, 'store'])->name('courses.enroll');
 Route::get('/teams/{id}', [\App\Http\Controllers\Public\TeamController::class, 'show'])->name('teams.show');
 Route::get('/events/{slug}/register', [\App\Http\Controllers\Public\EventRegistrationController::class, 'create'])->name('events.register');
 Route::post('/events/{slug}/register', [\App\Http\Controllers\Public\EventRegistrationController::class, 'store'])->name('events.register.store');
@@ -62,6 +63,7 @@ Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () 
     Route::resource('faqs', \App\Http\Controllers\Admin\FaqController::class);
     Route::resource('programs', \App\Http\Controllers\Admin\ProgramController::class);
     Route::resource('courses', \App\Http\Controllers\Admin\CourseController::class);
+    Route::resource('course-enrollments', \App\Http\Controllers\Admin\CourseEnrollmentController::class)->only(['index', 'update', 'destroy']);
     // Quizzes - both nested and standalone
     Route::resource('events.quizzes', \App\Http\Controllers\Admin\QuizController::class);
     Route::get('/quizzes', [\App\Http\Controllers\Admin\QuizController::class, 'all'])->name('quizzes.index');
