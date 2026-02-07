@@ -61,7 +61,7 @@ export default function Show({ course }) {
                             </div>
                             <div className="flex items-center gap-4">
                                 <button className="px-8 py-3.5 rounded-full bg-gradient-to-r from-indigo-600 to-purple-600 text-white font-bold text-lg hover:from-indigo-500 hover:to-purple-500 transition shadow-lg shadow-indigo-500/30">
-                                    {localT.enroll}
+                                    {localT.enroll[lang]}
                                 </button>
                                 <div className="text-2xl font-bold text-white ml-2">
                                     {course.price ? (

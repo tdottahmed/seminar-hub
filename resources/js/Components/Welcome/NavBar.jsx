@@ -51,8 +51,8 @@ export default function NavBar({
         services: route("services.index"),
         goals: route("goals"),
         team: route("teams.index"),
-        programs: "/#programs",
-        events: "/#events",
+        programs: "/courses",
+        events: "/events",
         gallery: "/#gallery",
         testimonials: "/#testimonials",
     };

@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
 Route::get('/', [\App\Http\Controllers\Public\HomeController::class, 'index'])->name('home');
+Route::get('/events', [\App\Http\Controllers\Public\EventController::class, 'index'])->name('events.index');
 Route::get('/events/{slug}', [\App\Http\Controllers\Public\EventController::class, 'show'])->name('events.show');
 Route::get('/teams', [\App\Http\Controllers\Public\TeamController::class, 'index'])->name('teams.index');
 Route::get('/courses', [\App\Http\Controllers\Public\CourseController::class, 'index'])->name('courses.index');
